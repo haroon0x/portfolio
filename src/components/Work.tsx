@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useScrollAnimation, useStaggerAnimation } from '../hooks/useScrollAnimation';
 
 export default function Work() {
@@ -159,10 +160,13 @@ export default function Work() {
 
           {/* Enhanced View All Projects with 3D Effect */}
           <div className="text-center mt-32 transform-3d">
-            <button className="group inline-flex items-center space-x-4 bg-transparent border border-white/20 hover:border-blue-400/50 text-white hover:text-blue-400 px-10 py-5 rounded-full font-medium transition-all duration-500 btn-3d focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black relative overflow-hidden transform-gpu">
+            <Link 
+              to="/projects"
+              className="group inline-flex items-center space-x-4 bg-transparent border border-white/20 hover:border-blue-400/50 text-white hover:text-blue-400 px-10 py-5 rounded-full font-medium transition-all duration-500 btn-3d focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black relative overflow-hidden transform-gpu"
+            >
               <span className="text-lg relative z-10">View All Projects</span>
               <ArrowUpRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
