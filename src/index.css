@@ -66,6 +66,170 @@ body {
   border-radius: 4px;
 }
 
+/* 3D Perspective and Transform Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.transform-3d {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.hover-3d:hover {
+  transform: translateZ(10px) rotateX(5deg) rotateY(5deg);
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-3d:hover {
+  transform: translateY(-8px) rotateX(5deg) rotateY(2deg) translateZ(20px);
+}
+
+/* 3D Floating Animations */
+@keyframes float-3d {
+  0%, 100% {
+    transform: translateY(0px) translateZ(0px) rotateX(0deg);
+  }
+  33% {
+    transform: translateY(-10px) translateZ(5px) rotateX(2deg);
+  }
+  66% {
+    transform: translateY(-5px) translateZ(-3px) rotateX(-1deg);
+  }
+}
+
+@keyframes rotate-3d {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  33% {
+    transform: rotateX(5deg) rotateY(10deg) rotateZ(2deg);
+  }
+  66% {
+    transform: rotateX(-3deg) rotateY(-5deg) rotateZ(-1deg);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+}
+
+@keyframes pulse-3d {
+  0%, 100% {
+    transform: scale(1) translateZ(0px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1) translateZ(5px);
+    opacity: 1;
+  }
+}
+
+.animate-float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+}
+
+.animate-rotate-3d {
+  animation: rotate-3d 20s ease-in-out infinite;
+}
+
+.animate-pulse-3d {
+  animation: pulse-3d 3s ease-in-out infinite;
+}
+
+/* 3D Text Effects */
+.text-3d {
+  text-shadow: 
+    0 1px 0 rgba(255,255,255,0.1),
+    0 2px 0 rgba(255,255,255,0.05),
+    0 3px 0 rgba(255,255,255,0.03),
+    0 4px 8px rgba(0,0,0,0.3);
+}
+
+.text-3d-glow {
+  text-shadow: 
+    0 0 5px rgba(59, 130, 246, 0.5),
+    0 0 10px rgba(59, 130, 246, 0.3),
+    0 0 15px rgba(59, 130, 246, 0.2),
+    0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* 3D Button Effects */
+.btn-3d {
+  transform-style: preserve-3d;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  border-radius: inherit;
+  transform: translateZ(-2px) translateY(2px);
+  opacity: 0.3;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-3d:hover {
+  transform: translateY(-2px) translateZ(5px);
+}
+
+.btn-3d:hover::before {
+  transform: translateZ(-4px) translateY(4px);
+  opacity: 0.5;
+}
+
+/* 3D Card Layers */
+.card-layers {
+  position: relative;
+}
+
+.card-layers::before,
+.card-layers::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0.1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-layers::before {
+  transform: translateZ(-5px) translateX(-2px) translateY(-2px);
+}
+
+.card-layers::after {
+  transform: translateZ(-10px) translateX(-4px) translateY(-4px);
+  opacity: 0.05;
+}
+
+.card-layers:hover::before {
+  transform: translateZ(-8px) translateX(-3px) translateY(-3px);
+  opacity: 0.15;
+}
+
+.card-layers:hover::after {
+  transform: translateZ(-15px) translateX(-6px) translateY(-6px);
+  opacity: 0.08;
+}
+
 /* Modern Animations */
 @keyframes fadeInUp {
   from {
