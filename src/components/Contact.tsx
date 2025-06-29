@@ -101,9 +101,9 @@ export default function Contact() {
             variants={itemVariants}
           >
             <h2 className="text-fluid-5xl font-extralight text-white leading-none tracking-tighter mb-8">
-              Let's
+              Get In
               <span className="block gradient-text font-light mt-4">
-                Connect
+                Touch
               </span>
             </h2>
             <p className="text-fluid-lg text-white/60 font-light max-w-2xl mx-auto leading-relaxed text-balance">
