@@ -23,6 +23,12 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none; /* Ensure cursor is hidden on body as well */
+}
+
+/* Hide all default cursors */
+*, *::before, *::after {
+  cursor: none !important;
 }
 
 /* Enhanced Custom Animations */
@@ -157,6 +163,26 @@ body {
   }
 }
 
+@keyframes cursor-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes cursor-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Animation Classes */
 .animate-fade-in {
   animation: fade-in 1.2s ease-out forwards;
@@ -214,6 +240,14 @@ body {
   animation: slide-up 1s ease-out forwards;
 }
 
+.animate-cursor-pulse {
+  animation: cursor-pulse 2s ease-in-out infinite;
+}
+
+.animate-cursor-rotate {
+  animation: cursor-rotate 3s linear infinite;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
@@ -238,7 +272,7 @@ body {
   color: #ffffff;
 }
 
-/* Focus States */
+/* Focus States - Enhanced for custom cursor */
 *:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
@@ -366,8 +400,8 @@ p {
     transition-duration: 0.01ms !important;
   }
   
-  html {
-    cursor: auto; /* Show default cursor when reduced motion is preferred */
+  html, body, *, *::before, *::after {
+    cursor: auto !important; /* Show default cursor when reduced motion is preferred */
   }
 }
 
@@ -533,13 +567,14 @@ p {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
+    cursor: auto !important;
   }
 }
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
-  html {
-    cursor: auto; /* Show default cursor on touch devices */
+  html, body, *, *::before, *::after {
+    cursor: auto !important; /* Show default cursor on touch devices */
   }
   
   .hover-lift:hover,
@@ -605,4 +640,38 @@ p {
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Custom Cursor Enhancements */
+.cursor-magnetic {
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cursor-trail {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+/* Cursor interaction states */
+[data-cursor="project"] {
+  position: relative;
+}
+
+[data-cursor="project"]:hover {
+  transform: translateX(2px);
+}
+
+/* Enhanced cursor visibility */
+.cursor-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cursor-hidden {
+  opacity: 0;
+  visibility: hidden;
 }

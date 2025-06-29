@@ -25,10 +25,10 @@ export function useCursor() {
         return;
       }
       
-      if (target.matches('button, a, [role="button"]')) {
+      if (target.matches('button, a, [role="button"], input, textarea, select')) {
         setCursorVariant('button');
         setIsHovering(true);
-      } else if (target.matches('h1, h2, h3, h4, h5, h6, p, span')) {
+      } else if (target.matches('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"]')) {
         setCursorVariant('text');
         setIsHovering(true);
       } else if (target.closest('[data-cursor="project"]')) {
@@ -45,14 +45,38 @@ export function useCursor() {
       setIsHovering(false);
     };
 
-    window.addEventListener('mousemove', updateCursorPosition);
+    // Smooth cursor movement with requestAnimationFrame
+    let animationId: number;
+    const smoothUpdatePosition = (e: MouseEvent) => {
+      cancelAnimationFrame(animationId);
+      animationId = requestAnimationFrame(() => {
+        setPosition({ x: e.clientX, y: e.clientY });
+      });
+    };
+
+    window.addEventListener('mousemove', smoothUpdatePosition, { passive: true });
     document.addEventListener('mouseenter', handleMouseEnter, true);
     document.addEventListener('mouseleave', handleMouseLeave, true);
 
+    // Hide cursor when leaving window
+    const handleMouseLeaveWindow = () => {
+      setIsHovering(false);
+    };
+
+    const handleMouseEnterWindow = () => {
+      setIsHovering(false);
+    };
+
+    document.addEventListener('mouseleave', handleMouseLeaveWindow);
+    document.addEventListener('mouseenter', handleMouseEnterWindow);
+
     return () => {
-      window.removeEventListener('mousemove', updateCursorPosition);
+      window.removeEventListener('mousemove', smoothUpdatePosition);
       document.removeEventListener('mouseenter', handleMouseEnter, true);
       document.removeEventListener('mouseleave', handleMouseLeave, true);
+      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
+      document.removeEventListener('mouseenter', handleMouseEnterWindow);
+      cancelAnimationFrame(animationId);
     };
   }, []);
 
