@@ -16,12 +16,12 @@ export default function Footer() {
               Let's work together
             </h3>
             <a 
-              href="mailto:hello@portfolio.com"
+              href="mailto:hello@haroon0x.com"
               className="group inline-flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-lg px-3 py-2"
-              aria-label="Send email to hello@portfolio.com"
+              aria-label="Send email to hello@haroon0x.com"
             >
               <Mail size={18} />
-              <span className="font-medium">hello@portfolio.com</span>
+              <span className="font-medium">hello@haroon0x.com</span>
             </a>
           </div>
 
@@ -33,7 +33,7 @@ export default function Footer() {
             <div className="text-center md:text-left">
               <div className="text-xl font-light mb-2">
                 <span className="gradient-text">
-                  Portfolio
+                  haroon0x
                 </span>
               </div>
               <p className="text-white/50 text-sm font-light">

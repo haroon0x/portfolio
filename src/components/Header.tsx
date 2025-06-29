@@ -43,7 +43,7 @@ export default function Header() {
             aria-label="Go to top"
           >
             <span className="gradient-text group-hover:scale-105 transition-transform duration-300">
-              Portfolio
+              haroon0x
             </span>
           </button>
 
