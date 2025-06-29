@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ExternalLink, Github, Calendar, Tag, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github, Calendar, Tag, ArrowUpRight, Linkedin, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation, useStaggerAnimation } from '../hooks/useScrollAnimation';
 
@@ -156,6 +156,12 @@ export default function Projects() {
 
   const featuredProjects = allProjects.filter(p => p.featured);
 
+  const socialLinks = [
+    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/haroon0x', color: 'hover:text-blue-400' },
+    { name: 'X', icon: Twitter, url: 'https://x.com/haroon0x', color: 'hover:text-cyan-400' }
+  ];
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
@@ -172,6 +178,22 @@ export default function Projects() {
             
             <div className="text-xl font-bold">
               <span className="gradient-text">haroon0x</span>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex items-center space-x-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 text-white/60 ${social.color} transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg`}
+                  aria-label={`Visit ${social.name} profile`}
+                >
+                  <social.icon size={16} />
+                </a>
+              ))}
             </div>
           </div>
         </nav>
@@ -386,6 +408,22 @@ export default function Projects() {
               >
                 <span>hello@haroon0x.com</span>
               </a>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex justify-center items-center space-x-6">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-all duration-300 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${social.color}`}
+                  aria-label={`Visit ${social.name} profile`}
+                >
+                  <social.icon size={18} className="transition-all duration-300 group-hover:scale-110" />
+                </a>
+              ))}
             </div>
 
             <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />

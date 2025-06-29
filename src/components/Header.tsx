@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,6 +26,12 @@ export default function Header() {
     { name: 'About', id: 'about' },
     { name: 'Work', id: 'work' },
     { name: 'Services', id: 'services' }
+  ];
+
+  const socialLinks = [
+    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/haroon0x', color: 'hover:text-blue-400' },
+    { name: 'X', icon: Twitter, url: 'https://x.com/haroon0x', color: 'hover:text-cyan-400' }
   ];
 
   return (
@@ -62,20 +68,39 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isMenuOpen}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Social Links & Mobile Menu */}
+          <div className="flex items-center space-x-4">
+            {/* Social Links - Desktop */}
+            <div className="hidden md:flex items-center space-x-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 text-white/60 ${social.color} transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg`}
+                  aria-label={`Visit ${social.name} profile`}
+                >
+                  <social.icon size={18} />
+                </a>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         <div className={`md:hidden transition-all duration-500 overflow-hidden ${
-          isMenuOpen ? 'max-h-48 opacity-100 mt-8' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-64 opacity-100 mt-8' : 'max-h-0 opacity-0'
         }`}>
           <div className="space-y-4 pb-4">
             {navItems.map((item) => (
@@ -88,6 +113,22 @@ export default function Header() {
                 {item.name}
               </button>
             ))}
+            
+            {/* Mobile Social Links */}
+            <div className="flex items-center space-x-4 pt-4 px-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 text-white/60 ${social.color} transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg`}
+                  aria-label={`Visit ${social.name} profile`}
+                >
+                  <social.icon size={18} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </nav>
