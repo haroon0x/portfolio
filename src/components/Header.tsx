@@ -28,7 +28,6 @@ export default function Header() {
   const navItems = [
     { name: 'Work', id: 'work' },
     { name: 'About', id: 'about' },
-    { name: 'Blog', id: 'blog' },
     { name: 'Contact', id: 'contact' }
   ];
 
