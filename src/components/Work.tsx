@@ -65,11 +65,11 @@ export default function Work() {
   };
 
   return (
-    <section id="work" className="py-32 bg-black relative overflow-hidden">
+    <section id="work" className="py-16 sm:py-24 lg:py-32 bg-black relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <motion.div 
-          className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl"
+          className="absolute top-1/4 right-1/4 w-48 sm:w-64 h-48 sm:h-64 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3]
@@ -81,7 +81,7 @@ export default function Work() {
           }}
         />
         <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-48 h-48 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
+          className="absolute bottom-1/3 left-1/4 w-32 sm:w-48 h-32 sm:h-48 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 0.8, 1],
             opacity: [0.2, 0.4, 0.2]
@@ -95,7 +95,7 @@ export default function Work() {
         />
       </div>
 
-      <div className="max-w-4xl mx-auto px-8 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div 
           ref={ref}
           initial="hidden"
@@ -104,59 +104,59 @@ export default function Work() {
         >
           {/* Header */}
           <motion.div 
-            className="text-center mb-32"
+            className="text-center mb-16 sm:mb-24 lg:mb-32"
             variants={itemVariants}
           >
-            <h2 className="text-fluid-5xl font-extralight text-white leading-none tracking-tighter mb-8">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight text-white leading-none tracking-tighter mb-6 sm:mb-8">
               Selected
-              <span className="block gradient-text font-light mt-4">
+              <span className="block gradient-text font-light mt-2 sm:mt-4">
                 Work
               </span>
             </h2>
-            <p className="text-fluid-lg text-white/60 font-light max-w-2xl mx-auto leading-relaxed text-balance">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 font-light max-w-2xl mx-auto leading-relaxed text-balance px-4">
               A curated collection of projects that showcase the intersection of minimal design and functional excellence
             </p>
           </motion.div>
 
           {/* Projects */}
           <motion.div 
-            className="space-y-20"
+            className="space-y-12 sm:space-y-16 lg:space-y-20"
             variants={containerVariants}
           >
             {projects.map((project, index) => (
               <motion.div 
                 key={project.title}
-                className="group relative border-b border-white/10 pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30"
+                className="group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30"
                 variants={itemVariants}
-                whileHover={{ x: 8 }}
+                whileHover={{ x: 4 }}
               >
-                <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+                <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
                   
                   {/* Project Number */}
-                  <div className="md:col-span-2 space-y-4">
+                  <div className="md:col-span-2 space-y-3 sm:space-y-4">
                     <motion.div 
-                      className="text-fluid-3xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-500"
+                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-500"
                       whileHover={{ scale: 1.1 }}
                     >
                       {String(index + 1).padStart(2, '0')}
                     </motion.div>
-                    <div className="text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-500">
+                    <div className="text-xs sm:text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-500">
                       {project.year}
                     </div>
                   </div>
 
                   {/* Main Content */}
-                  <div className="md:col-span-7 space-y-6">
-                    <div className="space-y-3">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="md:col-span-7 space-y-4 sm:space-y-6">
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
                         <motion.h3 
-                          className="text-fluid-2xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-500"
+                          className="text-xl sm:text-2xl md:text-3xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-500"
                           whileHover={{ x: 4 }}
                         >
                           {project.title}
                         </motion.h3>
                         <motion.span 
-                          className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-500"
+                          className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-xs sm:text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-500"
                           whileHover={{ scale: 1.05 }}
                         >
                           {project.category}
@@ -164,7 +164,7 @@ export default function Work() {
                       </div>
                     </div>
                     
-                    <p className="text-fluid-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-500 text-pretty">
+                    <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-500 text-pretty">
                       {project.description}
                     </p>
 
@@ -173,7 +173,7 @@ export default function Work() {
                       {project.tech.map((tech, techIndex) => (
                         <motion.span 
                           key={tech}
-                          className="px-3 py-1 bg-zinc-900/50 text-white/60 text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
+                          className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
                           whileHover={{ scale: 1.05, y: -2 }}
                           transition={{ delay: techIndex * 0.05 }}
                         >
@@ -184,10 +184,10 @@ export default function Work() {
                   </div>
 
                   {/* Status & Action */}
-                  <div className="md:col-span-3 flex flex-col items-start md:items-end space-y-4">
+                  <div className="md:col-span-3 flex flex-col items-start md:items-end space-y-3 sm:space-y-4">
                     <div className="flex items-center space-x-2">
                       <motion.div 
-                        className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                        className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-500 ${
                           project.status === 'Live' 
                             ? 'bg-green-400 shadow-glow-green' 
                             : 'bg-yellow-400 shadow-glow-yellow'
@@ -202,18 +202,18 @@ export default function Work() {
                           ease: "easeInOut"
                         }}
                       />
-                      <span className="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-500">
+                      <span className="text-xs sm:text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-500">
                         {project.status}
                       </span>
                     </div>
 
                     <motion.button 
-                      className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2"
+                      className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
                       whileHover={{ x: 4, y: -2 }}
                       aria-label={`View ${project.title} project details`}
                     >
-                      <span className="text-sm">View Project</span>
-                      <ArrowUpRight size={14} />
+                      <span>View Project</span>
+                      <ArrowUpRight size={12} className="sm:w-[14px] sm:h-[14px]" />
                     </motion.button>
                   </div>
                 </div>
@@ -226,7 +226,7 @@ export default function Work() {
                   transition={{ duration: 0.7 }}
                 />
                 <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-blue-500/2 to-cyan-500/2 rounded-lg -m-4"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/2 to-cyan-500/2 rounded-lg -m-2 sm:-m-4"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.7 }}
@@ -237,21 +237,21 @@ export default function Work() {
 
           {/* View All Projects */}
           <motion.div 
-            className="text-center mt-32"
+            className="text-center mt-16 sm:mt-24 lg:mt-32"
             variants={itemVariants}
           >
             <Link to="/projects">
               <motion.button
-                className="group inline-flex items-center space-x-4 bg-transparent border border-white/20 hover:border-blue-400/50 text-white hover:text-blue-400 px-10 py-5 rounded-full font-medium btn-modern focus-ring"
+                className="group inline-flex items-center space-x-3 sm:space-x-4 bg-transparent border border-white/20 hover:border-blue-400/50 text-white hover:text-blue-400 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-full font-medium btn-modern focus-ring text-base sm:text-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-lg">View All Projects</span>
+                <span>View All Projects</span>
                 <motion.div
                   whileHover={{ x: 4, y: -4 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight size={16} className="sm:w-[18px] sm:h-[18px]" />
                 </motion.div>
               </motion.button>
             </Link>

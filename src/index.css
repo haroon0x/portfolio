@@ -31,7 +31,13 @@ body {
 
 /* Modern Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+
+@media (min-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -362,6 +368,14 @@ body {
   box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
+.shadow-glow-green {
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.shadow-glow-yellow {
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
+}
+
 /* Accessibility Improvements */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -527,4 +541,39 @@ input, textarea, select {
 
 .space-modern-xl > * + * {
   margin-top: 3rem;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  /* Improve touch targets */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better text readability on mobile */
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Optimize for tablet touch */
+  button, a {
+    min-height: 48px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Optimize for retina displays */
+  .gradient-text {
+    -webkit-font-smoothing: antialiased;
+  }
 }
