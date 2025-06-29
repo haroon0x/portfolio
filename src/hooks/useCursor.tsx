@@ -18,6 +18,13 @@ export function useCursor() {
     const handleMouseEnter = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       
+      // Check if target is an Element and has the matches method
+      if (!target || typeof target.matches !== 'function') {
+        setCursorVariant('default');
+        setIsHovering(false);
+        return;
+      }
+      
       if (target.matches('button, a, [role="button"]')) {
         setCursorVariant('button');
         setIsHovering(true);
