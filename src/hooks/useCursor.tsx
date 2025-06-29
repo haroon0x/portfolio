@@ -18,23 +18,48 @@ export function useCursor() {
     const handleMouseEnter = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       
-      // Check if target is an Element and has the matches method
-      if (!target || typeof target.matches !== 'function') {
+      // Enhanced target checking with better fallbacks
+      if (!target) {
         setCursorVariant('default');
         setIsHovering(false);
         return;
       }
       
-      if (target.matches('button, a, [role="button"], input, textarea, select')) {
+      // Check for interactive elements
+      if (target.tagName === 'BUTTON' || 
+          target.tagName === 'A' || 
+          target.getAttribute('role') === 'button' ||
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.closest('button') ||
+          target.closest('a') ||
+          target.closest('[role="button"]')) {
         setCursorVariant('button');
         setIsHovering(true);
-      } else if (target.matches('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"]')) {
+      } 
+      // Check for text elements
+      else if (target.tagName === 'H1' || 
+               target.tagName === 'H2' || 
+               target.tagName === 'H3' || 
+               target.tagName === 'H4' || 
+               target.tagName === 'H5' || 
+               target.tagName === 'H6' || 
+               target.tagName === 'P' || 
+               target.tagName === 'SPAN' ||
+               target.classList.contains('text-') ||
+               target.closest('p') ||
+               target.closest('h1, h2, h3, h4, h5, h6')) {
         setCursorVariant('text');
         setIsHovering(true);
-      } else if (target.closest('[data-cursor="project"]')) {
+      } 
+      // Check for project cards
+      else if (target.closest('[data-cursor="project"]')) {
         setCursorVariant('project');
         setIsHovering(true);
-      } else {
+      } 
+      // Default state
+      else {
         setCursorVariant('default');
         setIsHovering(false);
       }
@@ -54,28 +79,31 @@ export function useCursor() {
       });
     };
 
-    window.addEventListener('mousemove', smoothUpdatePosition, { passive: true });
+    // Add event listeners to document for global coverage
+    document.addEventListener('mousemove', smoothUpdatePosition, { passive: true });
     document.addEventListener('mouseenter', handleMouseEnter, true);
     document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener('mouseover', handleMouseEnter, true);
 
-    // Hide cursor when leaving window
-    const handleMouseLeaveWindow = () => {
-      setIsHovering(false);
-    };
-
+    // Handle cursor visibility when entering/leaving window
     const handleMouseEnterWindow = () => {
       setIsHovering(false);
     };
 
-    document.addEventListener('mouseleave', handleMouseLeaveWindow);
+    const handleMouseLeaveWindow = () => {
+      setIsHovering(false);
+    };
+
     document.addEventListener('mouseenter', handleMouseEnterWindow);
+    document.addEventListener('mouseleave', handleMouseLeaveWindow);
 
     return () => {
-      window.removeEventListener('mousemove', smoothUpdatePosition);
+      document.removeEventListener('mousemove', smoothUpdatePosition);
       document.removeEventListener('mouseenter', handleMouseEnter, true);
       document.removeEventListener('mouseleave', handleMouseLeave, true);
-      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
+      document.removeEventListener('mouseover', handleMouseEnter, true);
       document.removeEventListener('mouseenter', handleMouseEnterWindow);
+      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
       cancelAnimationFrame(animationId);
     };
   }, []);

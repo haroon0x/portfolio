@@ -26,8 +26,13 @@ body {
   cursor: none; /* Ensure cursor is hidden on body as well */
 }
 
-/* Hide all default cursors */
+/* Hide all default cursors globally */
 *, *::before, *::after {
+  cursor: none !important;
+}
+
+/* Ensure cursor is visible throughout the app */
+#root, #root * {
   cursor: none !important;
 }
 
