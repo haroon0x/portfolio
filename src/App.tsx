@@ -6,20 +6,27 @@ import About from './components/About';
 import Work from './components/Work';
 import Services from './components/Services';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
+import ScrollProgress from './components/ScrollProgress';
+import PageTransition from './components/PageTransition';
 
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-black text-white">
-        <Header />
-        <main>
-          <Hero />
-          <About />
-          <Work />
-          <Services />
-        </main>
-        <Footer />
-      </div>
+      <PageTransition>
+        <div className="min-h-screen bg-black text-white">
+          <CustomCursor />
+          <ScrollProgress />
+          <Header />
+          <main>
+            <Hero />
+            <About />
+            <Work />
+            <Services />
+          </main>
+          <Footer />
+        </div>
+      </PageTransition>
     </ThemeProvider>
   );
 }
