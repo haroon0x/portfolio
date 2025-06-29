@@ -25,7 +25,9 @@ export default function Header() {
   const navItems = [
     { name: 'About', id: 'about' },
     { name: 'Work', id: 'work' },
-    { name: 'Services', id: 'services' }
+    { name: 'Services', id: 'services' },
+    { name: 'Blog', id: 'blog' },
+    { name: 'Contact', id: 'contact' }
   ];
 
   const socialLinks = [
@@ -100,7 +102,7 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         <div className={`md:hidden transition-all duration-500 overflow-hidden ${
-          isMenuOpen ? 'max-h-64 opacity-100 mt-8' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-80 opacity-100 mt-8' : 'max-h-0 opacity-0'
         }`}>
           <div className="space-y-4 pb-4">
             {navItems.map((item) => (
