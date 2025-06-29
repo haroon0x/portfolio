@@ -11,297 +11,280 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-black perspective-2000">
-      {/* 3D Background Elements */}
+    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-black perspective-3000">
+      {/* Enhanced 3D Background Elements */}
       <div className="absolute inset-0 preserve-3d">
-        {/* Animated Background Grid with 3D depth */}
-        <div className="absolute inset-0 opacity-20 transform-3d">
+        {/* 3D Animated Background Grid */}
+        <div className="absolute inset-0 opacity-30 transform-3d">
           <div 
             className="absolute inset-0"
             style={{ 
               backgroundImage: `
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+                linear-gradient(90deg, rgba(59, 130, 246, 0.2) 1px, transparent 1px),
+                linear-gradient(rgba(59, 130, 246, 0.2) 1px, transparent 1px)
               `,
-              backgroundSize: '100px 100px',
-              animation: 'grid-move 20s linear infinite',
-              transform: 'translateZ(-50px)'
+              backgroundSize: '120px 120px',
+              animation: 'grid-3d-move 25s linear infinite',
+              transform: 'translateZ(-150px) rotateX(15deg)'
             }}
           />
         </div>
 
-        {/* 3D Floating Geometric Shapes */}
+        {/* Large 3D Floating Geometric Shapes */}
         <motion.div 
-          className="absolute top-1/4 left-1/6 w-16 h-16 border border-white/10 rounded-lg preserve-3d"
+          className="absolute top-1/6 left-1/6 w-32 h-32 border-2 border-white/20 rounded-2xl preserve-3d shape-3d"
           animate={{ 
             rotateX: [0, 360],
             rotateY: [0, 180],
-            translateZ: [0, 20, 0]
+            translateZ: [0, 50, 0]
+          }}
+          transition={{ 
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{ transform: 'translateZ(80px)' }}
+        />
+        
+        <motion.div 
+          className="absolute top-1/4 right-1/5 w-24 h-24 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-3xl preserve-3d shape-3d"
+          animate={{ 
+            rotateX: [0, -180],
+            rotateZ: [0, 360],
+            translateZ: [0, -30, 0],
+            scale: [1, 1.2, 1]
           }}
           transition={{ 
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
-          }}
-          style={{ transform: 'translateZ(30px)' }}
-        />
-        
-        <motion.div 
-          className="absolute top-1/3 right-1/4 w-12 h-12 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl preserve-3d"
-          animate={{ 
-            rotateX: [0, -180],
-            rotateZ: [0, 360],
-            translateZ: [0, -15, 0]
-          }}
-          transition={{ 
-            duration: 15,
-            repeat: Infinity,
             ease: "easeInOut"
           }}
-          style={{ transform: 'translateZ(20px)' }}
+          style={{ transform: 'translateZ(60px)' }}
         />
 
         <motion.div 
-          className="absolute bottom-1/3 left-1/3 w-8 h-8 border border-cyan-400/20 rounded-full preserve-3d"
+          className="absolute bottom-1/4 left-1/4 w-20 h-20 border-2 border-cyan-400/30 rounded-full preserve-3d shape-3d"
           animate={{ 
             rotateY: [0, 360],
-            translateZ: [0, 25, 0],
-            scale: [1, 1.2, 1]
+            translateZ: [0, 40, 0],
+            scale: [1, 1.3, 1]
           }}
           transition={{ 
-            duration: 12,
+            duration: 18,
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          style={{ transform: 'translateZ(15px)' }}
+          style={{ transform: 'translateZ(70px)' }}
         />
+
+        {/* Orbiting 3D Elements */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 preserve-3d">
+          <motion.div 
+            className="w-16 h-16 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-xl"
+            style={{ transform: 'translateZ(120px)' }}
+            animate={{ rotateY: [0, 360] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
       </div>
 
-      {/* 3D Floating Particles */}
+      {/* Enhanced 3D Floating Particles */}
       <div className="absolute inset-0 pointer-events-none preserve-3d">
         <motion.div 
-          className="absolute top-1/4 left-1/6 w-2 h-2 bg-blue-400/40 rounded-full"
-          animate={{ 
-            y: [0, -30, 0],
-            opacity: [0.4, 1, 0.4],
-            scale: [1, 1.2, 1],
-            rotateZ: [0, 180, 360]
-          }}
-          transition={{ 
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          style={{ transform: 'translateZ(40px)' }}
+          className="absolute top-1/5 left-1/8 w-4 h-4 bg-blue-400/60 rounded-full animate-pulse-3d-enhanced"
+          style={{ transform: 'translateZ(100px)' }}
         />
         
         <motion.div 
-          className="absolute top-1/3 right-1/4 w-1 h-1 bg-cyan-400/60 rounded-full"
-          animate={{ 
-            y: [0, -20, 0],
-            opacity: [0.6, 1, 0.6],
-            translateZ: [0, 10, 0]
+          className="absolute top-1/3 right-1/6 w-3 h-3 bg-cyan-400/80 rounded-full animate-pulse-3d-enhanced"
+          style={{ 
+            transform: 'translateZ(80px)',
+            animationDelay: '1s'
           }}
-          transition={{ 
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-          style={{ transform: 'translateZ(25px)' }}
         />
         
         <motion.div 
-          className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 bg-blue-300/50 rounded-full"
-          animate={{ 
-            y: [0, -25, 0],
-            opacity: [0.5, 0.9, 0.5],
-            rotateX: [0, 360],
-            translateZ: [0, -5, 0]
+          className="absolute bottom-1/4 left-1/3 w-5 h-5 bg-blue-300/70 rounded-full animate-pulse-3d-enhanced"
+          style={{ 
+            transform: 'translateZ(90px)',
+            animationDelay: '2s'
           }}
-          transition={{ 
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
+        />
+
+        <motion.div 
+          className="absolute top-2/3 right-1/4 w-2 h-2 bg-cyan-300/90 rounded-full animate-pulse-3d-enhanced"
+          style={{ 
+            transform: 'translateZ(110px)',
+            animationDelay: '0.5s'
           }}
-          style={{ transform: 'translateZ(35px)' }}
         />
       </div>
 
-      {/* Main Content with 3D Transform */}
+      {/* Main Content with Enhanced 3D Transform */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto preserve-3d">
         <motion.div 
           className="space-y-12 transform-3d"
-          initial={{ opacity: 0, translateZ: -100 }}
+          initial={{ opacity: 0, translateZ: -200 }}
           animate={{ opacity: 1, translateZ: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          {/* Main Title with 3D Text Effect */}
+          {/* Enhanced Main Title with 3D Text Effect */}
           <div className="space-y-8">
             <motion.div
-              initial={{ opacity: 0, y: 50, translateZ: -50 }}
+              initial={{ opacity: 0, y: 80, translateZ: -100 }}
               animate={{ opacity: 1, y: 0, translateZ: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.3 }}
               className="preserve-3d"
             >
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-none tracking-tighter text-3d">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-none tracking-tighter text-3d-enhanced">
                 <motion.span 
                   className="block text-white mb-4"
-                  initial={{ opacity: 0, x: -50, rotateY: -15 }}
+                  initial={{ opacity: 0, x: -80, rotateY: -25 }}
                   animate={{ opacity: 1, x: 0, rotateY: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  style={{ transform: 'translateZ(20px)' }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  style={{ transform: 'translateZ(50px)' }}
                 >
                   Digital
                 </motion.span>
                 <motion.span 
-                  className="block gradient-text font-light relative text-3d-glow"
-                  initial={{ opacity: 0, x: 50, rotateY: 15 }}
+                  className="block gradient-text font-light relative text-3d-glow-enhanced"
+                  initial={{ opacity: 0, x: 80, rotateY: 25 }}
                   animate={{ opacity: 1, x: 0, rotateY: 0 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
-                  style={{ transform: 'translateZ(30px)' }}
+                  transition={{ duration: 1, delay: 0.7 }}
+                  style={{ transform: 'translateZ(70px)' }}
                 >
                   Minimalist
-                  {/* 3D Underline effect */}
+                  {/* Enhanced 3D Underline effect */}
                   <motion.div 
-                    className="absolute -bottom-2 left-0 h-px bg-gradient-to-r from-blue-400/0 via-blue-400/60 to-blue-400/0"
-                    initial={{ width: 0, translateZ: -10 }}
+                    className="absolute -bottom-4 left-0 h-1 bg-gradient-to-r from-blue-400/0 via-blue-400/80 to-blue-400/0 rounded-full"
+                    initial={{ width: 0, translateZ: -20 }}
                     animate={{ width: "100%", translateZ: 0 }}
-                    transition={{ duration: 1, delay: 1.2 }}
-                    style={{ transform: 'translateZ(10px)' }}
+                    transition={{ duration: 1.5, delay: 1.5 }}
+                    style={{ transform: 'translateZ(30px)' }}
                   />
                 </motion.span>
               </h1>
             </motion.div>
             
-            {/* 3D Tagline with Icons */}
+            {/* Enhanced 3D Tagline with Icons */}
             <motion.div 
-              className="flex items-center justify-center space-x-8 text-white/60 preserve-3d"
-              initial={{ opacity: 0, y: 30, translateZ: -30 }}
+              className="flex items-center justify-center space-x-12 text-white/60 preserve-3d"
+              initial={{ opacity: 0, y: 50, translateZ: -60 }}
               animate={{ opacity: 1, y: 0, translateZ: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 1, delay: 1.0 }}
             >
               <motion.div 
-                className="flex items-center space-x-2 card-3d"
+                className="flex items-center space-x-3 card-3d"
                 whileHover={{ 
-                  scale: 1.05, 
+                  scale: 1.1, 
                   color: "#3b82f6",
-                  translateZ: 10,
+                  translateZ: 25,
+                  rotateY: 10
+                }}
+                transition={{ duration: 0.4 }}
+                style={{ transform: 'translateZ(40px)' }}
+              >
+                <Code size={24} />
+                <span className="text-base font-light">Code</span>
+              </motion.div>
+              <div className="w-px h-8 bg-white/30" style={{ transform: 'translateZ(20px)' }} />
+              <motion.div 
+                className="flex items-center space-x-3 card-3d"
+                whileHover={{ 
+                  scale: 1.1, 
+                  color: "#06b6d4",
+                  translateZ: 25,
+                  rotateY: -10
+                }}
+                transition={{ duration: 0.4 }}
+                style={{ transform: 'translateZ(40px)' }}
+              >
+                <Palette size={24} />
+                <span className="text-base font-light">Design</span>
+              </motion.div>
+              <div className="w-px h-8 bg-white/30" style={{ transform: 'translateZ(20px)' }} />
+              <motion.div 
+                className="flex items-center space-x-3 card-3d"
+                whileHover={{ 
+                  scale: 1.1, 
+                  color: "#0ea5e9",
+                  translateZ: 25,
                   rotateY: 5
                 }}
-                transition={{ duration: 0.3 }}
-                style={{ transform: 'translateZ(15px)' }}
+                transition={{ duration: 0.4 }}
+                style={{ transform: 'translateZ(40px)' }}
               >
-                <Code size={18} />
-                <span className="text-sm font-light">Code</span>
-              </motion.div>
-              <div className="w-px h-4 bg-white/20" style={{ transform: 'translateZ(5px)' }} />
-              <motion.div 
-                className="flex items-center space-x-2 card-3d"
-                whileHover={{ 
-                  scale: 1.05, 
-                  color: "#06b6d4",
-                  translateZ: 10,
-                  rotateY: -5
-                }}
-                transition={{ duration: 0.3 }}
-                style={{ transform: 'translateZ(15px)' }}
-              >
-                <Palette size={18} />
-                <span className="text-sm font-light">Design</span>
-              </motion.div>
-              <div className="w-px h-4 bg-white/20" style={{ transform: 'translateZ(5px)' }} />
-              <motion.div 
-                className="flex items-center space-x-2 card-3d"
-                whileHover={{ 
-                  scale: 1.05, 
-                  color: "#0ea5e9",
-                  translateZ: 10,
-                  rotateY: 3
-                }}
-                transition={{ duration: 0.3 }}
-                style={{ transform: 'translateZ(15px)' }}
-              >
-                <Zap size={18} />
-                <span className="text-sm font-light">Experience</span>
+                <Zap size={24} />
+                <span className="text-base font-light">Experience</span>
               </motion.div>
             </motion.div>
 
             <motion.p 
               className="text-lg sm:text-xl md:text-2xl text-white/70 font-light tracking-wide max-w-3xl mx-auto leading-relaxed text-balance"
-              initial={{ opacity: 0, y: 20, translateZ: -20 }}
+              initial={{ opacity: 0, y: 30, translateZ: -40 }}
               animate={{ opacity: 1, y: 0, translateZ: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-              style={{ transform: 'translateZ(10px)' }}
+              transition={{ duration: 1, delay: 1.2 }}
+              style={{ transform: 'translateZ(30px)' }}
             >
               Crafting purposeful digital experiences through thoughtful design and precise execution
             </motion.p>
           </div>
 
-          {/* 3D CTA Button */}
+          {/* Enhanced 3D CTA Button */}
           <motion.div
-            initial={{ opacity: 0, y: 20, translateZ: -40 }}
+            initial={{ opacity: 0, y: 40, translateZ: -80 }}
             animate={{ opacity: 1, y: 0, translateZ: 0 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
+            transition={{ duration: 1, delay: 1.6 }}
             className="preserve-3d"
           >
             <motion.button 
               onClick={scrollToWork}
-              className="group relative inline-flex items-center space-x-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-full font-medium backdrop-blur-sm btn-3d focus-ring"
+              className="group relative inline-flex items-center space-x-4 bg-white/8 hover:bg-white/15 border-2 border-white/30 hover:border-white/60 text-white px-10 py-5 rounded-full font-medium backdrop-blur-sm btn-3d-enhanced focus-ring text-lg"
               whileHover={{ 
-                scale: 1.05,
-                translateZ: 15,
-                rotateX: -5,
-                boxShadow: "0 15px 35px rgba(59, 130, 246, 0.3)"
+                scale: 1.08,
+                translateZ: 30,
+                rotateX: -8,
               }}
-              whileTap={{ scale: 0.95, translateZ: 5 }}
-              style={{ transform: 'translateZ(20px)' }}
+              whileTap={{ scale: 0.95, translateZ: 10 }}
+              style={{ transform: 'translateZ(50px)' }}
             >
               <span>Explore Work</span>
               <motion.div
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ y: [0, 5, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <ArrowDown size={16} />
+                <ArrowDown size={20} />
               </motion.div>
-              
-              {/* 3D Glow effect */}
-              <motion.div 
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-cyan-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ transform: 'translateZ(-5px)' }}
-                initial={false}
-              />
             </motion.button>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* 3D Scroll Indicator */}
+      {/* Enhanced 3D Scroll Indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block preserve-3d"
-        initial={{ opacity: 0, translateZ: -30 }}
+        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 hidden sm:block preserve-3d"
+        initial={{ opacity: 0, translateZ: -60 }}
         animate={{ opacity: 1, translateZ: 0 }}
-        transition={{ delay: 2 }}
-        style={{ transform: 'translateZ(25px)' }}
+        transition={{ delay: 2.5 }}
+        style={{ transform: 'translateZ(60px)' }}
       >
-        <div className="flex flex-col items-center space-y-3">
+        <div className="flex flex-col items-center space-y-4">
           <motion.div 
-            className="w-px h-16 bg-gradient-to-b from-transparent via-white/30 to-transparent"
+            className="w-0.5 h-20 bg-gradient-to-b from-transparent via-white/40 to-transparent rounded-full"
             animate={{ 
-              scaleY: [1, 0.7, 1],
-              translateZ: [0, 5, 0]
+              scaleY: [1, 0.6, 1],
+              translateZ: [0, 10, 0]
             }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           />
-          <div className="text-xs text-white/30 font-light tracking-widest uppercase">Scroll</div>
+          <div className="text-xs text-white/40 font-light tracking-widest uppercase">Scroll</div>
         </div>
       </motion.div>
 
       <style jsx>{`
-        @keyframes grid-move {
-          0% { transform: translate(0, 0) translateZ(-50px); }
-          100% { transform: translate(100px, 100px) translateZ(-50px); }
+        @keyframes grid-3d-move {
+          0% { transform: translate(0, 0) translateZ(-150px) rotateX(15deg); }
+          100% { transform: translate(120px, 120px) translateZ(-150px) rotateX(15deg); }
         }
       `}</style>
     </section>
