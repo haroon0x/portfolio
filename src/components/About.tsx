@@ -32,10 +32,7 @@ export default function About() {
               
               <div className="space-y-8 text-lg text-white/70 leading-relaxed font-light">
                 <p className="transform-3d">
-                  I believe in the power of simplicity. Every pixel, every interaction, every decision is made with intention and purpose.
-                </p>
-                <p className="transform-3d">
-                  My approach combines minimalist aesthetics with functional excellence, creating digital experiences that feel effortless yet sophisticated.
+                  A backend developer and AI enthusiast passionate about building intelligent systems that solve real-world problems. I specialize in backend architecture, agentic AI systems, and fullstack SaaS tools with a focus on healthtech and automation. I'm currently pursuing my B.Tech in Artificial Intelligence and Machine Learning at Mar Athanasius College of Engineering. My goal is to bridge complex data systems with everyday usability, leveraging frameworks like FastAPI, ADK, LangGraph, and time-series modeling. I'm a firm believer in learning by building, and I'm always exploring how AI can be made more agentic, personalized, and human-aware.
                 </p>
               </div>
 
