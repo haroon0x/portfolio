@@ -1,10 +1,16 @@
 import React from 'react';
-import { ArrowUp, Mail } from 'lucide-react';
+import { ArrowUp, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const socialLinks = [
+    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/haroon0x', color: 'hover:text-blue-400' },
+    { name: 'X', icon: Twitter, url: 'https://x.com/haroon0x', color: 'hover:text-cyan-400' }
+  ];
 
   return (
     <footer className="bg-zinc-950 border-t border-white/10 py-16">
@@ -23,6 +29,22 @@ export default function Footer() {
               <Mail size={18} />
               <span className="font-medium">hello@haroon0x.com</span>
             </a>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex justify-center items-center space-x-6">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-all duration-300 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${social.color}`}
+                aria-label={`Visit ${social.name} profile`}
+              >
+                <social.icon size={18} className="transition-all duration-300 group-hover:scale-110" />
+              </a>
+            ))}
           </div>
 
           {/* Divider */}

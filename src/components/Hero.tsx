@@ -11,88 +11,60 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-dark-gradient">
-      {/* Animated Background Elements */}
+    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-black">
+      {/* Minimal Background Elements */}
       <div className="absolute inset-0">
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl"
-          animate={{ 
-            y: [0, -20, 0],
-            rotate: [0, 5, 0],
-            scale: [1, 1.05, 1]
-          }}
-          transition={{ 
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 right-1/3 w-24 h-24 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl"
-          animate={{ 
-            y: [0, 15, 0],
-            rotate: [0, -3, 0],
-            scale: [1, 0.95, 1]
-          }}
-          transition={{ 
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
-        
         {/* Subtle Grid Pattern */}
         <div 
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-[0.02]"
           style={{ 
             backgroundImage: `
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+              linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+              linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)
             `,
             backgroundSize: '80px 80px'
           }}
         />
         
-        {/* Floating Particles */}
+        {/* Minimal Floating Elements */}
         <motion.div 
-          className="absolute top-1/2 left-1/6 w-2 h-2 bg-blue-400/30 rounded-full"
+          className="absolute top-1/4 left-1/4 w-1 h-1 bg-white/20 rounded-full"
           animate={{ 
-            y: [0, -30, 0],
-            opacity: [0.3, 0.8, 0.3]
+            y: [0, -20, 0],
+            opacity: [0.2, 0.6, 0.2]
           }}
           transition={{ 
-            duration: 4,
+            duration: 6,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
+            ease: "easeInOut"
           }}
         />
         <motion.div 
-          className="absolute bottom-1/4 right-1/6 w-1 h-1 bg-cyan-400/40 rounded-full"
+          className="absolute bottom-1/3 right-1/3 w-1 h-1 bg-white/30 rounded-full"
           animate={{ 
-            y: [0, -20, 0],
-            opacity: [0.4, 0.9, 0.4]
+            y: [0, -15, 0],
+            opacity: [0.3, 0.7, 0.3]
           }}
           transition={{ 
-            duration: 5,
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 3
+            delay: 2
           }}
         />
       </div>
 
-      <div className="relative z-10 text-center px-8 max-w-5xl mx-auto">
+      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <motion.div 
           className="space-y-12"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
+          {/* Main Title */}
           <div className="space-y-8">
             <motion.h1 
-              className="text-fluid-6xl font-extralight leading-none tracking-tighter"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-none tracking-tighter"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -116,15 +88,39 @@ export default function Hero() {
             </motion.h1>
             
             <motion.p 
-              className="text-fluid-xl text-white/70 font-light tracking-wide max-w-2xl mx-auto leading-relaxed text-balance"
+              className="text-lg sm:text-xl md:text-2xl text-white/60 font-light tracking-wide max-w-3xl mx-auto leading-relaxed text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              Crafting clean, purposeful digital experiences through thoughtful design and precise execution
+              Crafting purposeful digital experiences through thoughtful design and precise execution
             </motion.p>
           </div>
 
+          {/* Simple Stats or Skills */}
+          <motion.div 
+            className="flex items-center justify-center space-x-12 text-white/40"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+          >
+            <div className="text-center">
+              <div className="text-2xl font-light text-white/80 mb-1">5+</div>
+              <div className="text-xs uppercase tracking-wider">Years</div>
+            </div>
+            <div className="w-px h-8 bg-white/20" />
+            <div className="text-center">
+              <div className="text-2xl font-light text-white/80 mb-1">50+</div>
+              <div className="text-xs uppercase tracking-wider">Projects</div>
+            </div>
+            <div className="w-px h-8 bg-white/20" />
+            <div className="text-center">
+              <div className="text-2xl font-light text-white/80 mb-1">∞</div>
+              <div className="text-xs uppercase tracking-wider">Ideas</div>
+            </div>
+          </motion.div>
+
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -132,12 +128,12 @@ export default function Hero() {
           >
             <motion.button 
               onClick={scrollToWork}
-              className="group inline-flex items-center space-x-3 bg-white hover:bg-white/90 text-black px-8 py-4 rounded-full font-medium btn-modern focus-ring"
+              className="group inline-flex items-center space-x-3 bg-white hover:bg-white/90 text-black px-8 py-4 rounded-full font-medium btn-modern focus-ring text-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="View my work"
             >
-              <span className="text-lg">View Work</span>
+              <span>View Work</span>
               <motion.div
                 animate={{ y: [0, 3, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -149,20 +145,20 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Minimal Scroll Indicator */}
       <motion.div 
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
       >
         <div className="flex flex-col items-center space-y-2">
           <motion.div 
-            className="w-px h-16 bg-gradient-to-b from-transparent via-white/40 to-transparent"
+            className="w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"
             animate={{ scaleY: [1, 0.8, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
-          <div className="text-xs text-white/40 font-light tracking-wider uppercase">Scroll</div>
+          <div className="text-xs text-white/30 font-light tracking-wider uppercase">Scroll</div>
         </div>
       </motion.div>
     </section>
