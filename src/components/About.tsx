@@ -30,11 +30,11 @@ export default function About() {
                 </span>
               </h2>
               
-              <div className="space-y-8 text-lg text-white/70 leading-relaxed font-light">
-                <p className="transform-3d">
+              <div className="space-y-6 sm:space-y-8 text-base sm:text-lg text-white/70 leading-relaxed font-light">
+                <p>
                   I believe in the power of simplicity. Every pixel, every interaction, every decision is made with intention and purpose.
                 </p>
-                <p className="transform-3d">
+                <p>
                   My approach combines minimalist aesthetics with functional excellence, creating digital experiences that feel effortless yet sophisticated.
                 </p>
               </div>
