@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Github, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
@@ -9,36 +8,44 @@ export default function Work() {
 
   const projects = [
     {
-      title: 'Minimal Banking',
-      category: 'Fintech',
-      description: 'Clean, intuitive banking interface focused on user experience and accessibility. Designed to simplify complex financial data into digestible, actionable insights.',
+      title: 'Containerized Agent',
+      category: 'AI/ML',
+      description: 'A secure, containerized code execution agent with shell, GUI, and orchestration support. Features isolated environments for safe code execution.',
       year: '2024',
-      tech: ['React', 'TypeScript', 'Tailwind', 'Framer Motion'],
-      status: 'Live'
+      tech: ['Python', 'Docker', 'Containerization', 'Security'],
+      status: 'Development',
+      githubUrl: 'https://github.com/haroon0x/Containerized-agent',
+      liveUrl: null
     },
     {
-      title: 'Studio Portfolio',
-      category: 'Creative',
-      description: 'Elegant portfolio showcasing architectural photography with minimal design principles. Every element carefully crafted to highlight the beauty of space and form.',
+      title: 'CrawlWise - The GEOAgent',
+      category: 'Web Development',
+      description: 'An intelligent web crawling agent that discovers marketing opportunities and generates tailored content for SEO optimization.',
       year: '2024',
-      tech: ['Next.js', 'Framer Motion', 'GSAP', 'Sanity'],
-      status: 'Live'
+      tech: ['TypeScript', 'React', 'AI/ML', 'Web Crawling'],
+      status: 'Live',
+      githubUrl: 'https://github.com/haroon0x/CrawlWise',
+      liveUrl: 'https://crawlwise.netlify.app/'
     },
     {
-      title: 'Health Dashboard',
-      category: 'Healthcare',
-      description: 'Comprehensive health monitoring platform with clean data visualization. Transforming complex medical data into clear, understandable visual narratives.',
-      year: '2023',
-      tech: ['Vue.js', 'D3.js', 'Node.js', 'MongoDB'],
-      status: 'Development'
+      title: 'PromoAgent',
+      category: 'AI/ML',
+      description: 'An autonomous agent built with LangGraph that discovers marketing opportunities on Reddit and generates tailored content without getting blocked.',
+      year: '2024',
+      tech: ['Python', 'LangGraph', 'AI/ML', 'Marketing'],
+      status: 'Live',
+      githubUrl: 'https://github.com/haroon0x/PromoAgent',
+      liveUrl: 'https://promoagent.onrender.com/'
     },
     {
-      title: 'E-Commerce Minimal',
-      category: 'Retail',
-      description: 'Streamlined shopping experience with focus on product presentation and usability. Reducing friction in the customer journey while maintaining visual elegance.',
-      year: '2023',
-      tech: ['React', 'Shopify', 'Stripe', 'GraphQL'],
-      status: 'Live'
+      title: 'TheAgent - CLI Code Agent',
+      category: 'Development Tools',
+      description: 'A CLI Code Agent for automated Python code documentation, migration, refactoring, and analysis with intelligent code processing.',
+      year: '2024',
+      tech: ['Python', 'CLI', 'Code Analysis', 'Automation'],
+      status: 'Development',
+      githubUrl: 'https://github.com/haroon0x/TheAgent',
+      liveUrl: null
     }
   ];
 
@@ -108,13 +115,13 @@ export default function Work() {
             variants={itemVariants}
           >
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight text-white leading-none tracking-tighter mb-6 sm:mb-8">
-              Selected
+              Proof of
               <span className="block gradient-text font-light mt-2 sm:mt-4">
                 Work
               </span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-white/60 font-light max-w-2xl mx-auto leading-relaxed text-balance px-4">
-              A curated collection of projects that showcase the intersection of minimal design and functional excellence
+              A showcase of AI/ML projects and intelligent systems I've built-from containerized agents to autonomous tools.
             </p>
           </motion.div>
 
@@ -207,14 +214,34 @@ export default function Work() {
                       </span>
                     </div>
 
-                    <motion.button 
-                      className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
-                      whileHover={{ x: 4, y: -2 }}
-                      aria-label={`View ${project.title} project details`}
-                    >
-                      <span>View Project</span>
-                      <ArrowUpRight size={12} className="sm:w-[14px] sm:h-[14px]" />
-                    </motion.button>
+                    <div className="flex items-center space-x-2">
+                      {project.githubUrl && (
+                        <motion.a 
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                          whileHover={{ x: 4, y: -2 }}
+                          aria-label={`View ${project.title} code on GitHub`}
+                        >
+                          <Github size={12} className="sm:w-[14px] sm:h-[14px]" />
+                          <span>Code</span>
+                        </motion.a>
+                      )}
+                      {project.liveUrl && (
+                        <motion.a 
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                          whileHover={{ x: 4, y: -2 }}
+                          aria-label={`View ${project.title} live demo`}
+                        >
+                          <span>Live</span>
+                          <ExternalLink size={12} className="sm:w-[14px] sm:h-[14px]" />
+                        </motion.a>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -233,28 +260,6 @@ export default function Work() {
                 />
               </motion.div>
             ))}
-          </motion.div>
-
-          {/* View All Projects */}
-          <motion.div 
-            className="text-center mt-16 sm:mt-24 lg:mt-32"
-            variants={itemVariants}
-          >
-            <Link to="/projects">
-              <motion.button
-                className="group inline-flex items-center space-x-3 sm:space-x-4 bg-transparent border border-white/20 hover:border-blue-400/50 text-white hover:text-blue-400 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-full font-medium btn-modern focus-ring text-base sm:text-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>View All Projects</span>
-                <motion.div
-                  whileHover={{ x: 4, y: -4 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ArrowUpRight size={16} className="sm:w-[18px] sm:h-[18px]" />
-                </motion.div>
-              </motion.button>
-            </Link>
           </motion.div>
         </motion.div>
       </div>

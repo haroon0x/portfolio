@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Mail, Github, Linkedin, Twitter } from 'lucide-react';
+import { ArrowUp, Mail, Github, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -8,8 +8,7 @@ export default function Footer() {
 
   const socialLinks = [
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/haroon0x', color: 'hover:text-blue-400' },
-    { name: 'X', icon: Twitter, url: 'https://x.com/haroon0x', color: 'hover:text-cyan-400' }
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' }
   ];
 
   return (
@@ -19,15 +18,15 @@ export default function Footer() {
           {/* Contact */}
           <div className="space-y-4">
             <h3 className="text-3xl font-light text-white tracking-tight">
-              Let's work together
+              Let's build something amazing
             </h3>
             <a 
-              href="mailto:hello@haroon0x.com"
+              href="mailto:haroon@example.com"
               className="group inline-flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-lg px-3 py-2"
-              aria-label="Send email to hello@haroon0x.com"
+              aria-label="Send email to haroon@example.com"
             >
               <Mail size={18} />
-              <span className="font-medium">hello@haroon0x.com</span>
+              <span className="font-medium">haroon@example.com</span>
             </a>
           </div>
 
@@ -59,7 +58,7 @@ export default function Footer() {
                 </span>
               </div>
               <p className="text-white/50 text-sm font-light">
-                © 2024 All rights reserved
+                AI/ML Engineer • Open Source Contributor
               </p>
             </div>
 

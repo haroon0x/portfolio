@@ -5,10 +5,10 @@ export default function About() {
   const { ref, isVisible } = useScrollAnimation();
 
   const skills = [
-    { skill: 'Design Systems', level: 95 },
-    { skill: 'Frontend Development', level: 90 },
-    { skill: 'User Experience', level: 88 },
-    { skill: 'Brand Strategy', level: 85 }
+    { skill: 'Python & AI/ML', level: 95 },
+    { skill: 'Deep Learning', level: 90 },
+    { skill: 'Containerization', level: 88 },
+    { skill: 'Web Development', level: 85 }
   ];
 
   return (
@@ -26,16 +26,19 @@ export default function About() {
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight text-white leading-none tracking-tighter">
                 About
                 <span className="block gradient-text font-light mt-2">
-                  Philosophy
+                  Me
                 </span>
               </h2>
               
               <div className="space-y-6 sm:space-y-8 text-base sm:text-lg text-white/70 leading-relaxed font-light">
                 <p>
-                  I believe in the power of simplicity. Every pixel, every interaction, every decision is made with intention and purpose.
+                  I'm passionate about exploring the frontiers of artificial intelligence and machine learning. My journey involves building intelligent systems that solve real-world problems through innovative AI solutions.
                 </p>
                 <p>
-                  My approach combines minimalist aesthetics with functional excellence, creating digital experiences that feel effortless yet sophisticated.
+                  From developing containerized AI agents to creating autonomous systems, I focus on creating robust, scalable solutions that bridge the gap between cutting-edge research and practical applications.
+                </p>
+                <p>
+                  When I'm not coding, I contribute to open-source projects and explore new technologies in the AI/ML ecosystem.
                 </p>
               </div>
 

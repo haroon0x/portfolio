@@ -7,32 +7,36 @@ export default function Projects() {
 
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'Modern e-commerce solution with advanced filtering, real-time inventory, and seamless checkout experience.',
-      image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-      category: 'Full-Stack'
+      title: 'Containerized Agent',
+      description: 'A secure, containerized code execution agent with shell, GUI, and orchestration support. Features isolated environments for safe code execution.',
+      tech: ['Python', 'Docker', 'Containerization', 'Security'],
+      category: 'AI/ML',
+      githubUrl: 'https://github.com/haroon0x/Containerized-agent',
+      liveUrl: null
     },
     {
-      title: 'Design System',
-      description: 'Comprehensive design system with reusable components, documentation, and accessibility guidelines.',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['React', 'Storybook', 'TypeScript', 'Figma'],
-      category: 'UI/UX'
+      title: 'CrawlWise - The GEOAgent',
+      description: 'An intelligent web crawling agent that discovers marketing opportunities and generates tailored content for SEO optimization.',
+      tech: ['TypeScript', 'React', 'AI/ML', 'Web Crawling'],
+      category: 'Web Development',
+      githubUrl: 'https://github.com/haroon0x/CrawlWise',
+      liveUrl: 'https://crawlwise.netlify.app/'
     },
     {
-      title: 'Analytics Dashboard',
-      description: 'Real-time analytics dashboard with interactive charts, data visualization, and customizable reports.',
-      image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['React', 'D3.js', 'Python', 'PostgreSQL'],
-      category: 'Data Visualization'
+      title: 'PromoAgent',
+      description: 'An autonomous agent built with LangGraph that discovers marketing opportunities on Reddit and generates tailored content without getting blocked.',
+      tech: ['Python', 'LangGraph', 'AI/ML', 'Marketing'],
+      category: 'AI/ML',
+      githubUrl: 'https://github.com/haroon0x/PromoAgent',
+      liveUrl: 'https://promoagent.onrender.com/'
     },
     {
-      title: 'Mobile App',
-      description: 'Cross-platform mobile application with offline capabilities and push notifications.',
-      image: 'https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['React Native', 'Firebase', 'Redux', 'TypeScript'],
-      category: 'Mobile'
+      title: 'TheAgent - CLI Code Agent',
+      description: 'A CLI Code Agent for automated Python code documentation, migration, refactoring, and analysis with intelligent code processing.',
+      tech: ['Python', 'CLI', 'Code Analysis', 'Automation'],
+      category: 'Development Tools',
+      githubUrl: 'https://github.com/haroon0x/TheAgent',
+      liveUrl: null
     }
   ];
 
@@ -65,38 +69,44 @@ export default function Projects() {
                 }`}
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
-                {/* Project Image */}
-                <div className="relative h-64 overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Project Links */}
-                  <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:scale-110 transition-transform duration-200">
-                      <ExternalLink size={16} />
-                    </button>
-                    <button className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:scale-110 transition-transform duration-200">
-                      <Github size={16} />
-                    </button>
+                {/* Project Header */}
+                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                    <div className="flex space-x-2">
+                      {project.githubUrl && (
+                        <a 
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors duration-200"
+                        >
+                          <Github size={16} className="text-gray-600 dark:text-gray-300" />
+                        </a>
+                      )}
+                      {project.liveUrl && (
+                        <a 
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors duration-200"
+                        >
+                          <ExternalLink size={16} className="text-gray-600 dark:text-gray-300" />
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                   {/* Category Badge */}
-                  <div className="absolute bottom-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-full text-xs font-medium">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium">
                       {project.category}
                     </span>
-                  </div>
                 </div>
 
                 {/* Project Content */}
                 <div className="p-6 space-y-4">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors duration-300">
-                    {project.title}
-                  </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                     {project.description}
                   </p>
@@ -106,18 +116,38 @@ export default function Projects() {
                     {project.tech.map((tech) => (
                       <span 
                         key={tech}
-                        className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium"
+                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
 
-                  {/* View Project Button */}
-                  <button className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
-                    <span>View Project</span>
+                  {/* Action Buttons */}
+                  <div className="flex items-center space-x-4 pt-2">
+                    {project.githubUrl && (
+                      <a 
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-medium hover:text-purple-700 dark:hover:text-purple-300 transition-colors duration-300"
+                      >
+                        <span>View Code</span>
+                        <Github size={16} />
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a 
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-medium hover:text-purple-700 dark:hover:text-purple-300 transition-colors duration-300"
+                      >
+                        <span>Live Demo</span>
                     <ArrowRight size={16} />
-                  </button>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -125,10 +155,15 @@ export default function Projects() {
 
           {/* View All Projects */}
           <div className="text-center mt-12">
-            <button className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105">
+            <a 
+              href="https://github.com/haroon0x"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105"
+            >
               <span>View All Projects</span>
               <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
         </div>
       </div>

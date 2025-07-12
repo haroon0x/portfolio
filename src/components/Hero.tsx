@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Hero() {
@@ -9,6 +9,12 @@ export default function Hero() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const socialLinks = [
+    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' },
+    { name: 'Email', icon: Mail, url: 'mailto:haroon@example.com', color: 'hover:text-green-400' }
+  ];
 
   return (
     <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-black">
@@ -67,64 +73,88 @@ export default function Hero() {
               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-none tracking-tighter"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
               <motion.span 
                 className="block text-white mb-4"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               >
-                Digital
+                AI/ML
               </motion.span>
               <motion.span 
                 className="block gradient-text font-light"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
               >
-                Minimalist
+                Engineer
               </motion.span>
             </motion.h1>
             
             <motion.p 
-              className="text-lg sm:text-xl md:text-2xl text-white/60 font-light tracking-wide max-w-3xl mx-auto leading-relaxed text-balance"
+              className="text-lg sm:text-xl md:text-2xl text-white/60 font-light tracking-wide max-w-4xl mx-auto leading-relaxed text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
             >
-              Crafting purposeful digital experiences through thoughtful design and precise execution
+              Exploring deep neural nets and building intelligent systems. 
+              <br />
+              <span className="text-white/80">AI/ML Engineer • Open Source Contributor</span>
             </motion.p>
           </div>
 
-          {/* Simple Stats or Skills */}
+          {/* Skills/Tech Stack */}
           <motion.div 
-            className="flex items-center justify-center space-x-12 text-white/40"
+            className="flex items-center justify-center space-x-8 text-white/40"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
           >
             <div className="text-center">
-              <div className="text-2xl font-light text-white/80 mb-1">5+</div>
-              <div className="text-xs uppercase tracking-wider">Years</div>
+              <div className="text-2xl font-light text-white/80 mb-1">Python</div>
+              <div className="text-xs uppercase tracking-wider">AI/ML</div>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div className="text-center">
-              <div className="text-2xl font-light text-white/80 mb-1">50+</div>
-              <div className="text-xs uppercase tracking-wider">Projects</div>
+              <div className="text-2xl font-light text-white/80 mb-1">React</div>
+              <div className="text-xs uppercase tracking-wider">Frontend</div>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div className="text-center">
-              <div className="text-2xl font-light text-white/80 mb-1">∞</div>
-              <div className="text-xs uppercase tracking-wider">Ideas</div>
+              <div className="text-2xl font-light text-white/80 mb-1">Docker</div>
+              <div className="text-xs uppercase tracking-wider">DevOps</div>
             </div>
+          </motion.div>
+
+          {/* Social Links */}
+          <motion.div 
+            className="flex items-center justify-center space-x-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.4 }}
+          >
+            {socialLinks.map((social) => (
+              <motion.a
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-3 text-white/60 ${social.color} transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg`}
+                whileHover={{ y: -2 }}
+                aria-label={`Visit ${social.name} profile`}
+              >
+                <social.icon size={20} />
+              </motion.a>
+            ))}
           </motion.div>
 
           {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
+            transition={{ duration: 0.8, delay: 1.6 }}
           >
             <motion.button 
               onClick={scrollToWork}
@@ -133,7 +163,7 @@ export default function Hero() {
               whileTap={{ scale: 0.95 }}
               aria-label="View my work"
             >
-              <span>View Work</span>
+              <span>View Proof of Work</span>
               <motion.div
                 animate={{ y: [0, 3, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
