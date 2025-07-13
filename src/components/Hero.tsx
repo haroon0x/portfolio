@@ -13,7 +13,7 @@ export default function Hero() {
   const socialLinks = [
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
     { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' },
-    { name: 'Email', icon: Mail, url: 'mailto:haroon@example.com', color: 'hover:text-green-400' }
+    { name: 'Email', icon: Mail, url: 'mailto:haroonbmc0@gmail.com', color: 'hover:text-green-400' }
   ];
 
   return (

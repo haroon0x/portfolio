@@ -21,12 +21,12 @@ export default function Footer() {
               Let's build something amazing
             </h3>
             <a 
-              href="mailto:haroon@example.com"
+              href="mailto:haroonbmc0@gmail.com"
               className="group inline-flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-lg px-3 py-2"
-              aria-label="Send email to haroon@example.com"
+              aria-label="Send email to haroonbmc0@gmail.com"
             >
               <Mail size={18} />
-              <span className="font-medium">haroon@example.com</span>
+              <span className="font-medium">haroonbmc0@gmail.com</span>
             </a>
           </div>
 
