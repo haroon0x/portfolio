@@ -1,12 +1,12 @@
 import React from 'react';
 import { Github, ExternalLink } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
-export default function Work() {
+export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
   const { ref, isVisible } = useScrollAnimation();
 
-  const projects = [
+  const baseProjects = [
     {
       title: 'Containerized Agent',
       category: 'AI/ML',
@@ -58,6 +58,16 @@ export default function Work() {
       liveUrl: 'https://percolation-hypotheses.onrender.com/'
     },
     {
+      title: 'WeCode-Ai-Learning',
+      category: 'AI/ML EdTech',
+      description: 'GENAI-powered teaching assistant for Data Structures and Algorithms. Features adaptive learning methods (Socratic, Feynman, custom), dynamic user expertise assessment, and a multi-model AI architecture.',
+      year: '2023',
+      tech: ['Python', 'React', 'Flask', 'AI/ML', 'EdTech'],
+      status: 'Live',
+      githubUrl: 'https://github.com/haroon0x/WeCode-Ai-Learning',
+      liveUrl: 'https://wecode-ai-learning.onrender.com/'
+    },
+    {
       title: 'Neural Network From Scratch',
       category: 'Machine Learning',
       description: 'Educational project implementing neural networks from scratch in both Python and Java, focusing on core concepts, forward/backward propagation, and optimization without high-level libraries.',
@@ -68,6 +78,10 @@ export default function Work() {
       liveUrl: null
     }
   ];
+
+  const projects = order === 'latest'
+    ? [...baseProjects].sort((a, b) => b.year.localeCompare(a.year))
+    : baseProjects;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -146,98 +160,104 @@ export default function Work() {
           </motion.div>
 
           {/* Projects */}
-          <motion.div 
-            className="space-y-12 sm:space-y-16 lg:space-y-20"
-            variants={containerVariants}
-          >
-            {projects.map((project, index) => (
-              <a
-                key={project.title}
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30"
-                style={{ textDecoration: 'none' }}
-              >
-                <motion.div 
-                  variants={itemVariants}
-                  whileHover={{ x: 4 }}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={order}
+              className="space-y-12 sm:space-y-16 lg:space-y-20"
+              variants={containerVariants}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+            >
+              {projects.map((project, index) => (
+                <a
+                  key={project.title}
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30"
+                  style={{ textDecoration: 'none' }}
                 >
-                  <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
-                    {/* Project Number */}
-                    <div className="md:col-span-2 space-y-3 sm:space-y-4">
+                  <motion.div
+                    variants={itemVariants}
+                    whileHover={{ x: 4 }}
+                  >
+                    <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
+                  {/* Project Number */}
+                  <div className="md:col-span-2 space-y-3 sm:space-y-4">
+                    <motion.div 
+                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-500"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </motion.div>
+                    <div className="text-xs sm:text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-500">
+                      {project.year}
+                    </div>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="md:col-span-7 space-y-4 sm:space-y-6">
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+                        <motion.h3 
+                          className="text-xl sm:text-2xl md:text-3xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-500"
+                          whileHover={{ x: 4 }}
+                        >
+                          {project.title}
+                        </motion.h3>
+                        <motion.span 
+                          className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-xs sm:text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-500"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {project.category}
+                        </motion.span>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-500 text-pretty">
+                      {project.description}
+                    </p>
+
+                    {/* Tech Stack */}
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech, techIndex) => (
+                        <motion.span 
+                          key={tech}
+                          className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          transition={{ delay: techIndex * 0.05 }}
+                        >
+                          {tech}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Status & Action */}
+                  <div className="md:col-span-3 flex flex-col items-start md:items-end space-y-3 sm:space-y-4">
+                    <div className="flex items-center space-x-2">
                       <motion.div 
-                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-500"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {String(index + 1).padStart(2, '0')}
-                      </motion.div>
-                      <div className="text-xs sm:text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-500">
-                        {project.year}
-                      </div>
+                        className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-500 ${
+                          project.status === 'Live' 
+                            ? 'bg-green-400' 
+                            : 'bg-yellow-400'
+                        }`}
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          opacity: [0.7, 1, 0.7]
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      <span className="text-xs sm:text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-500">
+                        {project.status}
+                      </span>
                     </div>
-
-                    {/* Main Content */}
-                    <div className="md:col-span-7 space-y-4 sm:space-y-6">
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
-                          <motion.h3 
-                            className="text-xl sm:text-2xl md:text-3xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-500"
-                            whileHover={{ x: 4 }}
-                          >
-                            {project.title}
-                          </motion.h3>
-                          <motion.span 
-                            className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-xs sm:text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-500"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            {project.category}
-                          </motion.span>
-                        </div>
-                      </div>
-                      
-                      <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-500 text-pretty">
-                        {project.description}
-                      </p>
-
-                      {/* Tech Stack */}
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((tech, techIndex) => (
-                          <motion.span 
-                            key={tech}
-                            className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            transition={{ delay: techIndex * 0.05 }}
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Status & Action */}
-                    <div className="md:col-span-3 flex flex-col items-start md:items-end space-y-3 sm:space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <motion.div 
-                          className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-500 ${
-                            project.status === 'Live' 
-                              ? 'bg-green-400' 
-                              : 'bg-yellow-400'
-                          }`}
-                          animate={{ 
-                            scale: [1, 1.2, 1],
-                            opacity: [0.7, 1, 0.7]
-                          }}
-                          transition={{ 
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        />
-                        <span className="text-xs sm:text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-500">
-                          {project.status}
-                        </span>
-                      </div>
 
                       <div className="flex items-center space-x-2">
                         {project.githubUrl && (
@@ -253,36 +273,37 @@ export default function Work() {
                             href={project.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
-                            whileHover={{ x: 4, y: -2 }}
+                      className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                      whileHover={{ x: 4, y: -2 }}
                             aria-label={`View ${project.title} live demo`}
                             onClick={e => e.stopPropagation()}
-                          >
+                    >
                             <span>Live</span>
                             <ExternalLink size={12} className="sm:w-[14px] sm:h-[14px]" />
                           </motion.a>
                         )}
                       </div>
-                    </div>
                   </div>
+                </div>
 
-                  {/* Hover Effects */}
-                  <motion.div 
-                    className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.7 }}
-                  />
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500/2 to-cyan-500/2 rounded-lg -m-2 sm:-m-4"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.7 }}
-                  />
-                </motion.div>
+                {/* Hover Effects */}
+                <motion.div 
+                  className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400"
+                  initial={{ width: 0 }}
+                  whileHover={{ width: "100%" }}
+                  transition={{ duration: 0.7 }}
+                />
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/2 to-cyan-500/2 rounded-lg -m-2 sm:-m-4"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.7 }}
+                />
+              </motion.div>
               </a>
             ))}
-          </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>

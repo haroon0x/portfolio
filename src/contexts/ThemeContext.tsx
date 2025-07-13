@@ -7,8 +7,15 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const getInitialTheme = () => {
+  const saved = localStorage.getItem('theme');
+  if (saved) return saved === 'dark';
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) return true;
+  return false;
+};
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDark, setIsDark] = useState(true); // Default to dark theme
+  const [isDark, setIsDark] = useState(getInitialTheme);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
