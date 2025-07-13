@@ -27,8 +27,7 @@ export default function Header() {
 
   // Minimal navigation - only essential sections
   const navItems = [
-    { name: 'Work', id: 'work' },
-    { name: 'About', id: 'about' }
+    { name: 'Work', id: 'work' }
   ];
 
   const socialLinks = [
