@@ -138,7 +138,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div 
-          ref={ref}
+          ref={ref as React.RefObject<HTMLDivElement>}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
           variants={containerVariants}
@@ -161,29 +161,30 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
 
           {/* Projects */}
           <AnimatePresence mode="wait">
-            <motion.div
+          <motion.div 
               key={order}
-              className="space-y-12 sm:space-y-16 lg:space-y-20"
-              variants={containerVariants}
+            className="space-y-12 sm:space-y-16 lg:space-y-20"
+            variants={containerVariants}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-            >
-              {projects.map((project, index) => (
+              transition={{ duration: 0.5, ease: 'anticipate' }}
+          >
+            {projects.map((project, index) => (
                 <a
                   key={project.title}
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30"
+                  className="block group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   style={{ textDecoration: 'none' }}
                 >
-                  <motion.div
-                    variants={itemVariants}
-                    whileHover={{ x: 4 }}
-                  >
-                    <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
+              <motion.div 
+                variants={itemVariants}
+                whileHover={{ x: 4, scale: 1.01 }}
+                transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+              >
+                <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
                   {/* Project Number */}
                   <div className="md:col-span-2 space-y-3 sm:space-y-4">
                     <motion.div 
@@ -226,8 +227,8 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
                         <motion.span 
                           key={tech}
                           className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          transition={{ delay: techIndex * 0.05 }}
+                          whileHover={{ scale: 1.08, y: -2 }}
+                          transition={{ delay: techIndex * 0.04, type: 'spring', stiffness: 180, damping: 20 }}
                         >
                           {tech}
                         </motion.span>
@@ -263,6 +264,8 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
                         {project.githubUrl && (
                           <motion.span 
                             className="pointer-events-none group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                            whileHover={{ scale: 1.08 }}
+                            transition={{ type: 'spring', stiffness: 180, damping: 20 }}
                           >
                             <Github size={12} className="sm:w-[14px] sm:h-[14px]" />
                             <span>Code</span>
@@ -302,7 +305,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
               </motion.div>
               </a>
             ))}
-            </motion.div>
+          </motion.div>
           </AnimatePresence>
         </motion.div>
       </div>
