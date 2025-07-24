@@ -27,7 +27,8 @@ export default function Header() {
 
   // Minimal navigation - only essential sections
   const navItems = [
-    { name: 'Work', id: 'work' }
+    { name: 'Work', id: 'work' },
+    { name: 'Resume', url: '/ai_engineer_resume.html' }
   ];
 
   const socialLinks = [
@@ -58,15 +59,29 @@ export default function Header() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-white/70 hover:text-white transition-all duration-300 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
-                aria-label={`Go to ${item.name} section`}
-              >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-500" />
-              </button>
+              'url' in item && item.url ? (
+                <a
+                  key={item.name}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/70 hover:text-white transition-all duration-300 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                  aria-label={`Open ${item.name}`}
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-500" />
+                </a>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => item.id && scrollToSection(item.id)}
+                  className="text-white/70 hover:text-white transition-all duration-300 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                  aria-label={`Go to ${item.name} section`}
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-500" />
+                </button>
+              )
             ))}
           </div>
 
@@ -117,14 +132,27 @@ export default function Header() {
             {/* Navigation Links */}
             <div className="space-y-2 sm:space-y-3">
               {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
-                  aria-label={`Go to ${item.name} section`}
-                >
-                  {item.name}
-                </button>
+                'url' in item && item.url ? (
+                  <a
+                    key={item.name}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
+                    aria-label={`Open ${item.name}`}
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <button
+                    key={item.id}
+                    onClick={() => item.id && scrollToSection(item.id)}
+                    className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
+                    aria-label={`Go to ${item.name} section`}
+                  >
+                    {item.name}
+                  </button>
+                )
               ))}
             </div>
             

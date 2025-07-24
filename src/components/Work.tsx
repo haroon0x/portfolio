@@ -137,6 +137,31 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Work Experience Section */}
+        <motion.div 
+          className="mb-16 sm:mb-24 lg:mb-32"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-white leading-none tracking-tighter mb-6">
+            Work <span className="gradient-text font-light">Experience</span>
+          </h2>
+          <div className="space-y-8">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <span className="text-lg font-medium text-white">AI Solutions Engineer Intern</span>
+                <span className="text-white/50 text-sm flex items-center gap-2">Alchemyst AI
+                  <a href="https://storage.googleapis.com/alchemyst-agent-builder-internships/muhammed_haroon.png" target="_blank" rel="noopener noreferrer" className="ml-1 inline-block align-middle" aria-label="View Internship Certificate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="inline-block text-blue-400 hover:text-blue-600" style={{verticalAlign:'middle'}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m5-3v6m0 0L10 21m8-8H9" /></svg>
+                  </a>
+                </span>
+                <span className="text-white/50 text-sm">May 2024 - July 2024</span>
+              </div>
+              <p className="text-white/60 text-sm mt-2">Built and deployed AI agents for real-world use cases at <a href='https://getalchemystai.com/' target='_blank' rel='noopener noreferrer' className='underline text-blue-400 hover:text-blue-600'>Alchemyst AI</a>. Focused on agent architecture, automation, and hands-on solutions engineering in a fast-paced startup environment.</p>
+            </div>
+          </div>
+        </motion.div>
         <motion.div 
           ref={ref as React.RefObject<HTMLDivElement>}
           initial="hidden"
