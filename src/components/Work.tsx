@@ -79,6 +79,8 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
     }
   ];
 
+  
+
   const projects = order === 'latest'
     ? [...baseProjects].sort((a, b) => b.year.localeCompare(a.year))
     : baseProjects;

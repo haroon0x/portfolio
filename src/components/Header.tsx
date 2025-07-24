@@ -28,7 +28,7 @@ export default function Header() {
   // Minimal navigation - only essential sections
   const navItems = [
     { name: 'Work', id: 'work' },
-    { name: 'Resume', url: '/ai_engineer_resume.html' }
+    { name: 'Resume', url: '/ai_engineer_resume.html' }, 
   ];
 
   const socialLinks = [
