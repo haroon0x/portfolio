@@ -38,7 +38,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
       isScrolled 
         ? 'bg-black/95 backdrop-blur-xl border-b border-white/10'
         : 'bg-transparent'
@@ -65,21 +65,23 @@ export default function Header() {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/70 hover:text-white transition-all duration-300 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                  className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
                   aria-label={`Open ${item.name}`}
+                  tabIndex={0}
                 >
                   {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-500" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
                 </a>
               ) : (
                 <button
                   key={item.id}
                   onClick={() => item.id && scrollToSection(item.id)}
-                  className="text-white/70 hover:text-white transition-all duration-300 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                  className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
                   aria-label={`Go to ${item.name} section`}
+                  tabIndex={0}
                 >
                   {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-500" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
                 </button>
               )
             ))}
@@ -125,7 +127,7 @@ export default function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className={`lg:hidden transition-all duration-500 overflow-hidden ${
+        <div className={`lg:hidden transition-all duration-300 overflow-hidden ${
           isMenuOpen ? 'max-h-96 opacity-100 mt-4 sm:mt-6' : 'max-h-0 opacity-0'
         }`}>
           <div className="bg-zinc-950/95 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 space-y-3 sm:space-y-4">

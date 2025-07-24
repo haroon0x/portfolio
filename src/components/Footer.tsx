@@ -33,17 +33,18 @@ export default function Footer() {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center items-center space-x-6">
+          <div className="flex justify-center items-center space-x-6 mt-4">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-all duration-300 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${social.color}`}
+                className={`group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-all duration-200 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${social.color}`}
                 aria-label={`Visit ${social.name} profile`}
+                tabIndex={0}
               >
-                <social.icon size={18} className="transition-all duration-300 group-hover:scale-110" />
+                <social.icon size={18} className="transition-all duration-200 group-hover:scale-110" />
               </a>
             ))}
           </div>

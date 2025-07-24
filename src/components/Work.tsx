@@ -139,10 +139,10 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Work Experience Section */}
         <motion.div 
-          className="mb-16 sm:mb-24 lg:mb-32"
-          initial={{ opacity: 0, y: 30 }}
+          className="mb-12 sm:mb-20 lg:mb-28"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-white leading-none tracking-tighter mb-6">
             Work <span className="gradient-text font-light">Experience</span>
@@ -152,7 +152,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <span className="text-lg font-medium text-white">AI Solutions Engineer Intern</span>
                 <span className="text-white/50 text-sm flex items-center gap-2">Alchemyst AI
-                  <a href="https://storage.googleapis.com/alchemyst-agent-builder-internships/muhammed_haroon.png" target="_blank" rel="noopener noreferrer" className="ml-1 inline-block align-middle" aria-label="View Internship Certificate">
+                  <a href="https://storage.googleapis.com/alchemyst-agent-builder-internships/muhammed_haroon.png" target="_blank" rel="noopener noreferrer" className="ml-1 inline-block align-middle focus:ring-2 focus:ring-blue-500 rounded" aria-label="View Internship Certificate" tabIndex={0} style={{willChange:'transform,opacity'}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="inline-block text-blue-400 hover:text-blue-600" style={{verticalAlign:'middle'}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m5-3v6m0 0L10 21m8-8H9" /></svg>
                   </a>
                 </span>
@@ -170,7 +170,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
         >
           {/* Header */}
           <motion.div 
-            className="text-center mb-16 sm:mb-24 lg:mb-32"
+            className="text-center mb-12 sm:mb-20 lg:mb-28"
             variants={itemVariants}
           >
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight text-white leading-none tracking-tighter mb-6 sm:mb-8">
@@ -180,20 +180,19 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
               </span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-white/60 font-light max-w-2xl mx-auto leading-relaxed text-balance px-4">
-              A showcase of AI/ML projects and intelligent systems I've built-from containerized agents to autonomous tools.
+              A showcase of AI/ML projects and intelligent systems I've built—from containerized agents to autonomous tools.
             </p>
           </motion.div>
-
           {/* Projects */}
           <AnimatePresence mode="wait">
           <motion.div 
               key={order}
-            className="space-y-12 sm:space-y-16 lg:space-y-20"
+            className="space-y-10 sm:space-y-14 lg:space-y-16"
             variants={containerVariants}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.5, ease: 'anticipate' }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: 'anticipate' }}
           >
             {projects.map((project, index) => (
                 <a
@@ -201,131 +200,128 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block group relative border-b border-white/10 pb-12 sm:pb-16 lg:pb-20 last:border-b-0 last:pb-0 transition-all duration-700 hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                  style={{ textDecoration: 'none' }}
+                  className="block group relative border-b border-white/10 pb-10 sm:pb-14 lg:pb-16 last:border-b-0 last:pb-0 transition-all duration-500 hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-xl bg-zinc-900/40 hover:bg-zinc-900/60"
+                  style={{ textDecoration: 'none', willChange: 'transform,opacity' }}
+                  aria-label={`View ${project.title} on GitHub`}
+                  tabIndex={0}
                 >
               <motion.div 
                 variants={itemVariants}
-                whileHover={{ x: 4, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                whileHover={{ x: 2, scale: 1.01 }}
+                transition={{ type: 'spring', stiffness: 120, damping: 18, duration: 0.3 }}
               >
                 <div className="grid md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start">
                   {/* Project Number */}
                   <div className="md:col-span-2 space-y-3 sm:space-y-4">
                     <motion.div 
-                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-500"
-                      whileHover={{ scale: 1.1 }}
+                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white/20 leading-none group-hover:text-white/40 transition-all duration-300"
+                      whileHover={{ scale: 1.08 }}
                     >
                       {String(index + 1).padStart(2, '0')}
                     </motion.div>
-                    <div className="text-xs sm:text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-500">
+                    <div className="text-xs sm:text-sm text-white/50 font-medium tracking-wider uppercase group-hover:text-blue-400/70 transition-colors duration-300">
                       {project.year}
                     </div>
                   </div>
-
                   {/* Main Content */}
                   <div className="md:col-span-7 space-y-4 sm:space-y-6">
                     <div className="space-y-2 sm:space-y-3">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
                         <motion.h3 
-                          className="text-xl sm:text-2xl md:text-3xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-500"
-                          whileHover={{ x: 4 }}
+                          className="text-xl sm:text-2xl md:text-3xl font-light text-white tracking-tight group-hover:gradient-text transition-all duration-300"
+                          whileHover={{ x: 2 }}
                         >
                           {project.title}
                         </motion.h3>
                         <motion.span 
-                          className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-xs sm:text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-500"
-                          whileHover={{ scale: 1.05 }}
+                          className="inline-flex items-center px-3 py-1 bg-white/5 text-white/70 text-xs sm:text-sm font-medium rounded-full border border-white/10 w-fit group-hover:border-blue-400/30 group-hover:bg-blue-400/5 transition-all duration-300"
+                          whileHover={{ scale: 1.03 }}
                         >
                           {project.category}
                         </motion.span>
                       </div>
                     </div>
-                    
-                    <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-500 text-pretty">
+                    <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light group-hover:text-white/90 transition-colors duration-300 text-pretty">
                       {project.description}
                     </p>
-
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-2">
                       {project.tech.map((tech, techIndex) => (
                         <motion.span 
                           key={tech}
-                          className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
-                          whileHover={{ scale: 1.08, y: -2 }}
-                          transition={{ delay: techIndex * 0.04, type: 'spring', stiffness: 180, damping: 20 }}
+                          className="px-2 sm:px-3 py-1 bg-zinc-900/50 text-white/60 text-xs sm:text-sm font-medium rounded-md border border-white/10 hover:border-white/20 transition-all duration-200 group-hover:border-blue-400/30 group-hover:bg-blue-400/5"
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          transition={{ delay: techIndex * 0.03 }}
                         >
                           {tech}
                         </motion.span>
                       ))}
                     </div>
                   </div>
-
                   {/* Status & Action */}
                   <div className="md:col-span-3 flex flex-col items-start md:items-end space-y-3 sm:space-y-4">
                     <div className="flex items-center space-x-2">
                       <motion.div 
-                        className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-500 ${
+                        className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                           project.status === 'Live' 
                             ? 'bg-green-400' 
                             : 'bg-yellow-400'
                         }`}
                         animate={{ 
-                          scale: [1, 1.2, 1],
+                          scale: [1, 1.15, 1],
                           opacity: [0.7, 1, 0.7]
                         }}
                         transition={{ 
-                          duration: 2,
+                          duration: 1.2,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
                       />
-                      <span className="text-xs sm:text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-500">
+                      <span className="text-xs sm:text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors duration-300">
                         {project.status}
                       </span>
                     </div>
-
-                      <div className="flex items-center space-x-2">
-                        {project.githubUrl && (
-                          <motion.span 
-                            className="pointer-events-none group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
-                            whileHover={{ scale: 1.08 }}
-                            transition={{ type: 'spring', stiffness: 180, damping: 20 }}
-                          >
-                            <Github size={12} className="sm:w-[14px] sm:h-[14px]" />
-                            <span>Code</span>
-                          </motion.span>
-                        )}
-                        {project.liveUrl && (
-                          <motion.a 
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                      className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-300 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
-                      whileHover={{ x: 4, y: -2 }}
-                            aria-label={`View ${project.title} live demo`}
-                            onClick={e => e.stopPropagation()}
-                    >
-                            <span>Live</span>
-                            <ExternalLink size={12} className="sm:w-[14px] sm:h-[14px]" />
-                          </motion.a>
-                        )}
-                      </div>
+                    <div className="flex items-center space-x-2">
+                      {project.githubUrl && (
+                        <motion.span 
+                          className="pointer-events-none group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-200 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <Github size={12} className="sm:w-[14px] sm:h-[14px]" />
+                          <span>Code</span>
+                        </motion.span>
+                      )}
+                      {project.liveUrl && (
+                        <motion.a 
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/btn inline-flex items-center space-x-2 text-white/70 hover:text-blue-400 transition-all duration-200 font-medium focus-ring rounded-lg px-3 py-2 text-xs sm:text-sm"
+                          whileHover={{ x: 2, y: -2 }}
+                          aria-label={`View ${project.title} live demo`}
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <span>Live</span>
+                          <ExternalLink size={12} className="sm:w-[14px] sm:h-[14px]" />
+                        </motion.a>
+                      )}
+                    </div>
                   </div>
                 </div>
-
                 {/* Hover Effects */}
                 <motion.div 
                   className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400"
                   initial={{ width: 0 }}
                   whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.7 }}
+                  transition={{ duration: 0.4 }}
+                  style={{willChange:'width'}}
                 />
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-r from-blue-500/2 to-cyan-500/2 rounded-lg -m-2 sm:-m-4"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
-                  transition={{ duration: 0.7 }}
+                  transition={{ duration: 0.4 }}
+                  style={{willChange:'opacity'}}
                 />
               </motion.div>
               </a>
