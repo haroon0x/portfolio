@@ -158,7 +158,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="inline-block text-blue-400 hover:text-blue-600" style={{verticalAlign:'middle'}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m5-3v6m0 0L10 21m8-8H9" /></svg>
                   </a>
                 </span>
-                <span className="text-white/50 text-sm">May 2024 - July 2024</span>
+                <span className="text-white/50 text-sm">May 2025 - July 2025</span>
               </div>
               <p className="text-white/60 text-sm mt-2">Built and deployed AI agents for real-world use cases at <a href='https://getalchemystai.com/' target='_blank' rel='noopener noreferrer' className='underline text-blue-400 hover:text-blue-600'>Alchemyst AI</a>. Focused on agent architecture, automation, and hands-on solutions engineering in a fast-paced startup environment.</p>
             </div>
