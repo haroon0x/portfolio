@@ -27,13 +27,17 @@ const PullRequests = () => {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPRs = async () => {
       try {
         const prs = await Promise.all(
           prUrls.map(async (url) => {
-            const [, , , owner, repo, , prNumber] = url.split('/');
+            const urlParts = url.split('/');
+            const owner = urlParts[3];
+            const repo = urlParts[4];
+            const prNumber = urlParts[6];
             const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
             
             const response = await fetch(apiUrl, {
@@ -47,6 +51,18 @@ const PullRequests = () => {
             if (!response.ok) throw new Error('Failed to fetch PR data');
             
             const data = await response.json();
+
+            const langResponse = await fetch(data.repository_url + '/languages', {
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                // 'Authorization': 'token YOUR_GITHUB_TOKEN'
+              }
+            });
+
+            if (!langResponse.ok) throw new Error('Failed to fetch language data');
+
+            const langData = await langResponse.json();
+            const languages = Object.keys(langData);
             
             return {
               title: data.title,
@@ -57,7 +73,7 @@ const PullRequests = () => {
               date: new Date(data.created_at).toLocaleDateString(),
               additions: data.additions || 0,
               deletions: data.deletions || 0,
-              languages: ["Loading..."] 
+              languages
             };
           })
         );
@@ -65,6 +81,7 @@ const PullRequests = () => {
         setPullRequests(prs);
       } catch (error) {
         console.error('Error fetching PR data:', error);
+        setError('Failed to fetch pull requests. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -72,6 +89,8 @@ const PullRequests = () => {
 
     fetchPRs();
   }, []);
+
+  console.log(pullRequests);
 
   return (
     <PageTransition>
@@ -125,6 +144,10 @@ const PullRequests = () => {
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="w-8 h-8 animate-spin text-white/60" />
+                </div>
+              ) : error ? (
+                <div className="flex items-center justify-center py-12">
+                  <p className="text-red-500">{error}</p>
                 </div>
               ) : pullRequests.map((pr, index) => (
                 <motion.div
