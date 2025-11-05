@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Github, Linkedin, Sun, Moon } from 'lucide-react';
 import { Twitter } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import { Link } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,10 +26,10 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
-  // Minimal navigation - only essential sections
   const navItems = [
     { name: 'Work', id: 'work' },
-    { name: 'Resume', url: '/ai_engineer_resume.html' }, 
+    { name: 'Pull Requests', url: '/pull-requests' },
+    { name: 'Resume', url: 'https://drive.google.com/file/d/1Lg-j32yIQ9TKW6jnEvebK4tJffZ6MIS2/view?usp=sharing' }, 
   ];
 
   const socialLinks = [
@@ -60,18 +61,31 @@ export default function Header() {
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               'url' in item && item.url ? (
-                <a
-                  key={item.name}
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
-                  aria-label={`Open ${item.name}`}
-                  tabIndex={0}
-                >
-                  {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
-                </a>
+                item.url.startsWith('/') ? (
+                  <Link
+                    key={item.name}
+                    to={item.url}
+                    className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                    aria-label={`Go to ${item.name}`}
+                    tabIndex={0}
+                  >
+                    {item.name}
+                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
+                  </Link>
+                ) : (
+                  <a
+                    key={item.name}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
+                    aria-label={`Open ${item.name}`}
+                    tabIndex={0}
+                  >
+                    {item.name}
+                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
+                  </a>
+                )
               ) : (
                 <button
                   key={item.id}
@@ -135,16 +149,28 @@ export default function Header() {
             <div className="space-y-2 sm:space-y-3">
               {navItems.map((item) => (
                 'url' in item && item.url ? (
-                  <a
-                    key={item.name}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
-                    aria-label={`Open ${item.name}`}
-                  >
-                    {item.name}
-                  </a>
+                  item.url.startsWith('/') ? (
+                    <Link
+                      key={item.name}
+                      to={item.url}
+                      className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
+                      aria-label={`Go to ${item.name}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <a
+                      key={item.name}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
+                      aria-label={`Open ${item.name}`}
+                    >
+                      {item.name}
+                    </a>
+                  )
                 ) : (
                   <button
                     key={item.id}

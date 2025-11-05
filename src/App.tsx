@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider } from './contexts/ThemeProvider';
 import Home from './pages/Home';
+import PullRequests from './pages/PullRequests';
 import ScrollProgress from './components/ScrollProgress';
 import PageTransition from './components/PageTransition';
 
@@ -14,6 +15,7 @@ function App() {
             <ScrollProgress />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/pull-requests" element={<PullRequests />} />
             </Routes>
           </div>
         </PageTransition>

@@ -165,7 +165,7 @@ export default function Work({ order }: { order: 'relevancy' | 'latest' }) {
           </div>
         </motion.div>
         <motion.div 
-          ref={ref as React.RefObject<HTMLDivElement>}
+          ref={ref as RefObject<HTMLDivElement>}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
           variants={containerVariants}
