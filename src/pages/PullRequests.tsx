@@ -34,51 +34,65 @@ const PullRequests = () => {
       try {
         const prs = await Promise.all(
           prUrls.map(async (url) => {
-            const urlParts = url.split('/');
-            const owner = urlParts[3];
-            const repo = urlParts[4];
-            const prNumber = urlParts[6];
-            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
-            
-            const response = await fetch(apiUrl, {
-              headers: {
-                'Accept': 'application/vnd.github.v3+json',
-                // Add your GitHub token here if you have one to increase rate limit
-                // 'Authorization': 'token YOUR_GITHUB_TOKEN'
+            try {
+              const urlParts = url.split('/');
+              const owner = urlParts[3];
+              const repo = urlParts[4];
+              const prNumber = urlParts[6];
+              const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
+              
+              const response = await fetch(apiUrl, {
+                headers: {
+                  'Accept': 'application/vnd.github.v3+json',
+                  'Authorization': `token ${import.meta.env.VITE_GITHUB_TOKEN}`
+                }
+              });
+              
+              if (!response.ok) {
+                throw new Error(`Failed to fetch PR data: ${response.status}`);
               }
-            });
-            
-            if (!response.ok) throw new Error('Failed to fetch PR data');
-            
-            const data = await response.json();
+              
+              const data = await response.json();
 
-            const langResponse = await fetch(data.repository_url + '/languages', {
-              headers: {
-                'Accept': 'application/vnd.github.v3+json',
-                // 'Authorization': 'token YOUR_GITHUB_TOKEN'
+              // Try to fetch languages, but don't fail if it's not available
+              let languages = [];
+              if (data.head && data.head.repo && data.head.repo.languages_url) {
+                try {
+                  const langResponse = await fetch(data.head.repo.languages_url, {
+                    headers: {
+                      'Accept': 'application/vnd.github.v3+json',
+                      'Authorization': `token ${import.meta.env.VITE_GITHUB_TOKEN}`
+                    }
+                  });
+
+                  if (langResponse.ok) {
+                    const langData = await langResponse.json();
+                    languages = Object.keys(langData);
+                  }
+                } catch (langError) {
+                  // Silently ignore language fetch errors
+                }
               }
-            });
-
-            if (!langResponse.ok) throw new Error('Failed to fetch language data');
-
-            const langData = await langResponse.json();
-            const languages = Object.keys(langData);
-            
-            return {
-              title: data.title,
-              repo: `${owner}/${repo}`,
-              url: data.html_url,
-              description: data.body?.slice(0, 150) + '...' || 'No description provided',
-              status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed") as "Merged" | "Open" | "Closed",
-              date: new Date(data.created_at).toLocaleDateString(),
-              additions: data.additions || 0,
-              deletions: data.deletions || 0,
-              languages
-            };
+              
+              return {
+                title: data.title,
+                repo: `${owner}/${repo}`,
+                url: data.html_url,
+                description: data.body?.slice(0, 150) + '...' || 'No description provided',
+                status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed") as "Merged" | "Open" | "Closed",
+                date: new Date(data.created_at).toLocaleDateString(),
+                additions: data.additions || 0,
+                deletions: data.deletions || 0,
+                languages
+              };
+            } catch (error) {
+              return null;
+            }
           })
         );
         
-        setPullRequests(prs);
+        const validPRs = prs.filter(pr => pr !== null);
+        setPullRequests(validPRs);
       } catch (error) {
         console.error('Error fetching PR data:', error);
         setError('Failed to fetch pull requests. Please try again later.');
@@ -89,8 +103,6 @@ const PullRequests = () => {
 
     fetchPRs();
   }, []);
-
-  console.log(pullRequests);
 
   return (
     <PageTransition>
