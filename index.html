@@ -1,52 +1,60 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>haroon0x |</title>
-    <meta name="description" content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
-    <meta name="keywords" content="AI, ML, Machine Learning, Portfolio, AI Agents, React, Python, Haroon, Alchemyst AI" />
-    <meta name="author" content="Muhammed Haroon" />
-    <!-- Open Graph -->
-    <meta property="og:title" content="haroon0x | AI/ML Engineer Portfolio" />
-    <meta property="og:description" content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://haroon0x.onrender.com/" />
-    <meta property="og:image" content="/vite.svg" />
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="haroon0x | AI/ML Engineer Portfolio" />
-    <meta name="twitter:description" content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
-    <meta name="twitter:image" content="/vite.svg" />
-    <meta name="twitter:site" content="@skywalkerr0x" />
-    <!-- Performance: Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHVPNSB7K1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-EHVPNSB7K1');
-    </script>
-    <script>
-      (function() {
-        try {
-          const saved = localStorage.getItem('theme');
-          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || (!saved && systemDark)) {
-            document.documentElement.classList.add('dark');
-          }
-        } catch (e) {}
-      })();
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>haroon0x |</title>
+  <meta name="description"
+    content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
+  <meta name="keywords" content="AI, ML, Machine Learning, Portfolio, AI Agents, React, Python, Haroon, Alchemyst AI" />
+  <meta name="author" content="Muhammed Haroon" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="haroon0x | AI/ML Engineer Portfolio" />
+  <meta property="og:description"
+    content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://haroon0x.onrender.com/" />
+  <meta property="og:image" content="/vite.svg" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="haroon0x | AI/ML Engineer Portfolio" />
+  <meta name="twitter:description"
+    content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
+  <meta name="twitter:image" content="/vite.svg" />
+  <meta name="twitter:site" content="@skywalkerr0x" />
+  <!-- Performance: Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHVPNSB7K1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-EHVPNSB7K1');
+  </script>
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('theme');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && systemDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

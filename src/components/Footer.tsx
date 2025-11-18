@@ -60,9 +60,6 @@ export default function Footer() {
                   haroon0x
                 </span>
               </div>
-              <p className="text-white/50 text-sm font-light">
-                AI/ML Engineer • Open Source Contributor
-              </p>
             </div>
 
             <button

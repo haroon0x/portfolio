@@ -3,6 +3,7 @@ import { Menu, X, Github, Linkedin, Sun, Moon } from 'lucide-react';
 import { Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
+import { motion } from 'framer-motion';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,9 +40,13 @@ export default function Header() {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
+    <motion.header 
+    initial={{ y: -100, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ duration: 0.5, ease: 'easeOut' }}
+    className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
       isScrolled 
-        ? 'bg-black/95 backdrop-blur-xl border-b border-white/10'
+        ? 'bg-black/80 backdrop-blur-lg border-b border-white/10 shadow-lg shadow-black/20'
         : 'bg-transparent'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6">
@@ -204,6 +209,6 @@ export default function Header() {
           </div>
         </div>
       </nav>
-    </header>
+    </motion.header>
   );
 }

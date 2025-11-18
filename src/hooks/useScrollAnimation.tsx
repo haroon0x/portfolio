@@ -7,13 +7,15 @@ interface UseScrollAnimationOptions {
 
 export function useScrollAnimation<T extends HTMLElement = HTMLElement>(options: UseScrollAnimationOptions = {}) {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<T>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true);
+          setHasAnimated(true);
         }
       },
       {
@@ -32,9 +34,9 @@ export function useScrollAnimation<T extends HTMLElement = HTMLElement>(options:
         observer.unobserve(currentRef);
       }
     };
-  }, [options.threshold, options.rootMargin]);
+  }, [options.threshold, options.rootMargin, hasAnimated]);
 
-  return { ref, isVisible };
+  return { ref, isVisible, hasAnimated };
 }
 
 export function useParallax() {
@@ -83,7 +85,6 @@ export function useAdvancedScrollAnimation() {
 export function useStaggerAnimation(itemCount: number, delay: number = 0.1) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLElement>(null);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

@@ -43,8 +43,7 @@ const PullRequests = () => {
               
               const response = await fetch(apiUrl, {
                 headers: {
-                  'Accept': 'application/vnd.github.v3+json',
-                  'Authorization': `token ${import.meta.env.VITE_GITHUB_TOKEN}`
+                  'Accept': 'application/vnd.github.v3+json'
                 }
               });
               
@@ -60,8 +59,7 @@ const PullRequests = () => {
                 try {
                   const langResponse = await fetch(data.head.repo.languages_url, {
                     headers: {
-                      'Accept': 'application/vnd.github.v3+json',
-                      'Authorization': `token ${import.meta.env.VITE_GITHUB_TOKEN}`
+                      'Accept': 'application/vnd.github.v3+json'
                     }
                   });
 
@@ -69,7 +67,7 @@ const PullRequests = () => {
                     const langData = await langResponse.json();
                     languages = Object.keys(langData);
                   }
-                } catch (langError) {
+                } catch {
                   // Silently ignore language fetch errors
                 }
               }
@@ -85,7 +83,7 @@ const PullRequests = () => {
                 deletions: data.deletions || 0,
                 languages
               };
-            } catch (error) {
+            } catch {
               return null;
             }
           })
