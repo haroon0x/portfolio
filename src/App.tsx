@@ -7,24 +7,27 @@ import ScrollProgress from './components/ScrollProgress';
 import PageTransition from './components/PageTransition';
 import Hero from './components/Hero';
 import SmoothScroll from './components/SmoothScroll';
+import HandsBackground from './components/HandsBackground';
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <SmoothScroll />
-        <PageTransition>
-          <div className="min-h-screen bg-black text-white">
-            <ScrollProgress />
-            <Routes>
-              <Route path="/" element={<><Hero /><Home /></>} />
-              <Route path="/pull-requests" element={<PullRequests />} />
-            </Routes>
-          </div>
-        </PageTransition>
+        <HandsBackground>
+          <PageTransition>
+            <div className="min-h-screen text-text-primary">
+              <ScrollProgress />
+              <Routes>
+                <Route path="/" element={<><Hero /><Home /></>} />
+                <Route path="/pull-requests" element={<PullRequests />} />
+              </Routes>
+            </div>
+          </PageTransition>
+        </HandsBackground>
       </Router>
     </ThemeProvider>
   );
 }
 
-export default App
+export default App;

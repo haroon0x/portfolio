@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Sun, Moon } from 'lucide-react';
-import { Twitter } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Sun, Moon, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import Magnetic from './Magnetic';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +14,7 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,7 +30,7 @@ export default function Header() {
   const navItems = [
     { name: 'Work', id: 'work' },
     { name: 'Pull Requests', url: '/pull-requests' },
-    { name: 'Resume', url: 'https://drive.google.com/file/d/1Lg-j32yIQ9TKW6jnEvebK4tJffZ6MIS2/view?usp=sharing' }, 
+    { name: 'Resume', url: 'https://drive.google.com/file/d/1Lg-j32yIQ9TKW6jnEvebK4tJffZ6MIS2/view?usp=sharing' },
   ];
 
   const socialLinks = [
@@ -40,175 +40,172 @@ export default function Header() {
   ];
 
   return (
-    <motion.header 
-    initial={{ y: -100, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.5, ease: 'easeOut' }}
-    className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
-      isScrolled 
-        ? 'bg-black/80 backdrop-blur-lg border-b border-white/10 shadow-lg shadow-black/20'
-        : 'bg-transparent'
-    }`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6">
-        <div className="flex items-center justify-between">
+    <>
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none"
+      >
+        <nav className={`
+          pointer-events-auto
+          flex items-center justify-between gap-6
+          px-6 py-3
+          rounded-full
+          bg-zinc-900/40 backdrop-blur-xl
+          border border-white/10
+          shadow-lg shadow-black/10
+          transition-all duration-500
+          ${isScrolled ? 'bg-zinc-900/60 shadow-xl' : ''}
+        `}>
           {/* Logo */}
-          <button 
+          <button
             onClick={() => scrollToSection('hero')}
-            className="text-lg sm:text-xl font-bold group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-2 py-1"
+            className="text-lg font-bold group focus:outline-none"
             aria-label="Go to top"
           >
-            <span className="gradient-text group-hover:scale-105 transition-transform duration-300">
+            <span className="text-white group-hover:text-accent transition-colors duration-300">
               haroon0x
             </span>
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
-              'url' in item && item.url ? (
-                item.url.startsWith('/') ? (
-                  <Link
-                    key={item.name}
-                    to={item.url}
-                    className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
-                    aria-label={`Go to ${item.name}`}
-                    tabIndex={0}
-                  >
-                    {item.name}
-                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
-                  </Link>
-                ) : (
-                  <a
-                    key={item.name}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
-                    aria-label={`Open ${item.name}`}
-                    tabIndex={0}
-                  >
-                    {item.name}
-                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
-                  </a>
-                )
-              ) : (
-                <button
-                  key={item.id}
-                  onClick={() => item.id && scrollToSection(item.id)}
-                  className="text-white/70 hover:text-white transition-all duration-200 font-medium tracking-wide relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg px-3 py-2"
-                  aria-label={`Go to ${item.name} section`}
-                  tabIndex={0}
-                >
-                  {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300" />
-                </button>
-              )
-            ))}
-          </div>
-
-          {/* Right Side - Theme Toggle, Social Links & Mobile Menu */}
-          <div className="flex items-center space-x-1 sm:space-x-2">
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 sm:p-2.5 text-white/60 hover:text-white transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
-            </button>
-
-            {/* Social Links - Desktop & Tablet */}
-            <div className="hidden sm:flex items-center space-x-1">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`p-2 sm:p-2.5 text-white/60 ${social.color} transition-all duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg`}
-                  aria-label={`Visit ${social.name} profile`}
-                >
-                  <social.icon size={14} className="sm:w-4 sm:h-4" />
-                </a>
-              ))}
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 sm:p-2.5 text-white/70 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg ml-1"
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isMenuOpen}
-            >
-              {isMenuOpen ? <X size={18} className="sm:w-5 sm:h-5" /> : <Menu size={18} className="sm:w-5 sm:h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className={`lg:hidden transition-all duration-300 overflow-hidden ${
-          isMenuOpen ? 'max-h-96 opacity-100 mt-4 sm:mt-6' : 'max-h-0 opacity-0'
-        }`}>
-          <div className="bg-zinc-950/95 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6 space-y-3 sm:space-y-4">
-            {/* Navigation Links */}
-            <div className="space-y-2 sm:space-y-3">
-              {navItems.map((item) => (
-                'url' in item && item.url ? (
+              <Magnetic key={item.name}>
+                {'url' in item && item.url ? (
                   item.url.startsWith('/') ? (
                     <Link
-                      key={item.name}
                       to={item.url}
-                      className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
-                      aria-label={`Go to ${item.name}`}
-                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                     >
                       {item.name}
                     </Link>
                   ) : (
                     <a
-                      key={item.name}
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
-                      aria-label={`Open ${item.name}`}
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                     >
                       {item.name}
                     </a>
                   )
                 ) : (
                   <button
-                    key={item.id}
                     onClick={() => item.id && scrollToSection(item.id)}
-                    className="block w-full text-left text-white/70 hover:text-white transition-colors duration-300 font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 text-base sm:text-lg"
-                    aria-label={`Go to ${item.name} section`}
+                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                   >
                     {item.name}
                   </button>
-                )
+                )}
+              </Magnetic>
+            ))}
+          </div>
+
+          {/* Right Side - Theme & Socials */}
+          <div className="flex items-center gap-3 pl-3 border-l border-white/10">
+            <Magnetic>
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300"
+              >
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+            </Magnetic>
+
+            <div className="hidden sm:flex items-center gap-1">
+              {socialLinks.map((social) => (
+                <Magnetic key={social.name}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`block p-2 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-all duration-300`}
+                  >
+                    <social.icon size={16} />
+                  </a>
+                </Magnetic>
               ))}
             </div>
-            
-            {/* Mobile Social Links */}
-            <div className="pt-3 sm:pt-4 border-t border-white/10">
-              <div className="flex items-center justify-center space-x-3 sm:space-x-4">
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors duration-300"
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </nav>
+      </motion.header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-24 left-4 right-4 z-40 md:hidden"
+          >
+            <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl">
+              <div className="flex flex-col space-y-2">
+                {navItems.map((item) => (
+                  'url' in item && item.url ? (
+                    item.url.startsWith('/') ? (
+                      <Link
+                        key={item.name}
+                        to={item.url}
+                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <a
+                        key={item.name}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                      >
+                        {item.name}
+                      </a>
+                    )
+                  ) : (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        item.id && scrollToSection(item.id);
+                        setIsMenuOpen(false);
+                      }}
+                      className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                    >
+                      {item.name}
+                    </button>
+                  )
+                ))}
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-3 sm:p-3.5 bg-zinc-900/50 border border-white/10 rounded-xl text-white/60 ${social.color} transition-all duration-300 hover:scale-110 hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950`}
-                    aria-label={`Visit ${social.name} profile`}
+                    className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-all duration-300`}
                   >
-                    <social.icon size={16} className="sm:w-[18px] sm:h-[18px]" />
+                    <social.icon size={20} />
                   </a>
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </nav>
-    </motion.header>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

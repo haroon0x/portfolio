@@ -47,7 +47,7 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-[#0a0a0a]">
+    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-transparent">
       {/* 3D Background Elements */}
       <div className="absolute inset-0 perspective-1000">
         {/* Floating Geometric Shapes */}
@@ -141,14 +141,14 @@ export default function Hero() {
           {/* Main Heading */}
           <div className="space-y-4">
             <motion.h1
-              className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight tracking-tight"
+              className="font-heading text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-tight tracking-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Building the Future
+              Building Intelligent
               <br />
-              <span className="text-accent">with Intelligence</span>
+              <span className="text-accent font-light">Systems</span>
             </motion.h1>
 
             {/* Rotating Role */}
