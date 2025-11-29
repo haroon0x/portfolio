@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Loader2, Calendar, FileCode, GitCommit } from "lucide-react";
 import { Link } from 'react-router-dom';
 import PageTransition from "../components/PageTransition";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useEffect, useState } from "react";
+import Magnetic from "../components/Magnetic";
 
 interface PullRequest {
   title: string;
@@ -54,8 +55,8 @@ const PullRequests = () => {
 
               const data = await response.json();
 
-              // Try to fetch languages, but don't fail if it's not available
-              let languages = [];
+              // Try to fetch languages
+              let languages: string[] = [];
               if (data.head && data.head.repo && data.head.repo.languages_url) {
                 try {
                   const langResponse = await fetch(data.head.repo.languages_url, {
@@ -66,7 +67,7 @@ const PullRequests = () => {
 
                   if (langResponse.ok) {
                     const langData = await langResponse.json();
-                    languages = Object.keys(langData);
+                    languages = Object.keys(langData).slice(0, 3); // Limit to top 3
                   }
                 } catch {
                   // Silently ignore language fetch errors
@@ -77,9 +78,9 @@ const PullRequests = () => {
                 title: data.title,
                 repo: `${owner}/${repo}`,
                 url: data.html_url,
-                description: data.body?.slice(0, 150) + '...' || 'No description provided',
+                description: data.body?.slice(0, 120) + '...' || 'No description provided',
                 status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed") as "Merged" | "Open" | "Closed",
-                date: new Date(data.created_at).toLocaleDateString(),
+                date: new Date(data.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
                 additions: data.additions || 0,
                 deletions: data.deletions || 0,
                 languages
@@ -90,7 +91,7 @@ const PullRequests = () => {
           })
         );
 
-        const validPRs = prs.filter(pr => pr !== null);
+        const validPRs = prs.filter((pr): pr is PullRequest => pr !== null);
         setPullRequests(validPRs);
       } catch (error) {
         console.error('Error fetching PR data:', error);
@@ -105,115 +106,128 @@ const PullRequests = () => {
 
   return (
     <PageTransition>
-      <section className="py-20 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <Link
-            to="/"
-            className="group inline-flex items-center gap-2 text-white/60 hover:text-white/90 transition-colors duration-300 mb-8"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
-            <span className="text-sm font-light">Back to Home</span>
-          </Link>
+      <section className="min-h-screen py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12">
+            <Magnetic>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-sm"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span className="text-sm font-medium">Back to Home</span>
+              </Link>
+            </Magnetic>
+          </div>
 
           <div
             ref={ref}
             className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
               }`}
           >
-            {/* Subtle Grid Pattern */}
-            <div
-              className="absolute inset-0 opacity-[0.02]"
-              style={{
-                backgroundImage: `
-                  linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                  linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-                `,
-                backgroundSize: '80px 80px'
-              }}
-            />
-
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <motion.div
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <GitPullRequest className="w-6 h-6 text-white/60" />
-                </motion.div>
-                <h2 className="text-4xl font-light text-white/90">
-                  Pull Requests
+            <div className="mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex items-center gap-4 mb-6"
+              >
+                <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent">
+                  <GitPullRequest className="w-8 h-8" />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white">
+                  Open Source <span className="text-accent">Contributions</span>
                 </h2>
-              </div>
-              <p className="text-lg text-white/60 max-w-3xl mx-auto font-light">
-                Contributing to open source through meaningful code improvements and feature additions.
+              </motion.div>
+              <p className="text-xl text-white/60 max-w-2xl font-light leading-relaxed">
+                Impactful contributions to the open source ecosystem, ranging from feature implementations to core architectural improvements.
               </p>
             </div>
 
-            <div className="space-y-6">
-              {loading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-white/60" />
-                </div>
-              ) : error ? (
-                <div className="flex items-center justify-center py-12">
-                  <p className="text-red-500">{error}</p>
-                </div>
-              ) : pullRequests.map((pr, index) => (
-                <motion.div
-                  key={index}
-                  className={`group relative ${isVisible ? 'animate-fade-in' : ''
-                    }`}
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  <div className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-purple-600/5 to-pink-600/5 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
-                  <a
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-64 rounded-3xl bg-white/5 animate-pulse border border-white/10" />
+                ))}
+              </div>
+            ) : error ? (
+              <div className="p-8 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">
+                {error}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {pullRequests.map((pr, index) => (
+                  <motion.a
+                    key={index}
                     href={pr.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative block bg-zinc-900/30 backdrop-blur-sm border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all duration-300"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="group relative flex flex-col p-6 md:p-8 rounded-3xl bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-accent/50 transition-all duration-500 overflow-hidden"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-light text-white group-hover:text-purple-400 transition-colors duration-300 flex items-center gap-2">
-                          {pr.title}
-                          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </h3>
-                        <p className="text-white/40 mt-1 font-light">{pr.repo}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`px-3 py-1 rounded-full text-xs ${pr.status === "Merged" ? "bg-purple-500/10 text-purple-300 border border-purple-500/20" :
-                            pr.status === "Open" ? "bg-green-500/10 text-green-300 border border-green-500/20" :
-                              "bg-red-500/10 text-red-300 border border-red-500/20"
-                          }`}>
-                          {pr.status}
-                        </span>
-                        <span className="text-sm text-white/40">{pr.date}</span>
-                      </div>
-                    </div>
+                    {/* Hover Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    <p className="text-white/60 mb-4 font-light">{pr.description}</p>
-
-                    <div className="flex flex-wrap items-center gap-4">
-                      <div className="flex items-center gap-4 text-sm font-light">
-                        <span className="text-green-400/60">+{pr.additions}</span>
-                        <span className="text-red-400/60">−{pr.deletions}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {pr.languages.map((lang, i) => (
-                          <span
-                            key={i}
-                            className="px-2 py-1 rounded-full text-xs bg-white/5 text-white/60 border border-white/10"
-                          >
-                            {lang}
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                          <div className={`
+                            px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5
+                            ${pr.status === "Merged"
+                              ? "bg-purple-500/10 text-purple-300 border-purple-500/20"
+                              : pr.status === "Open"
+                                ? "bg-green-500/10 text-green-300 border-green-500/20"
+                                : "bg-red-500/10 text-red-300 border-red-500/20"
+                            }
+                          `}>
+                            <GitPullRequest className="w-3 h-3" />
+                            {pr.status}
+                          </div>
+                          <span className="text-xs text-white/40 flex items-center gap-1.5">
+                            <Calendar className="w-3 h-3" />
+                            {pr.date}
                           </span>
-                        ))}
+                        </div>
+
+                        <div className="p-2 rounded-full bg-white/5 text-white/40 group-hover:text-white group-hover:bg-accent transition-all duration-300">
+                          <ArrowUpRight className="w-4 h-4" />
+                        </div>
+                      </div>
+
+                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors duration-300 line-clamp-2">
+                        {pr.title}
+                      </h3>
+
+                      <div className="flex items-center gap-2 text-sm text-white/50 mb-4 font-mono">
+                        <GitCommit className="w-4 h-4" />
+                        <span>{pr.repo}</span>
+                      </div>
+
+                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                        {pr.description}
+                      </p>
+
+                      <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
+                        <div className="flex items-center gap-3 text-xs font-mono">
+                          <span className="text-green-400 bg-green-400/10 px-2 py-1 rounded">+{pr.additions}</span>
+                          <span className="text-red-400 bg-red-400/10 px-2 py-1 rounded">-{pr.deletions}</span>
+                        </div>
+
+                        <div className="flex gap-2">
+                          {pr.languages.map((lang) => (
+                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">
+                              {lang}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </a>
-                </motion.div>
-              ))}
-            </div>
+                  </motion.a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

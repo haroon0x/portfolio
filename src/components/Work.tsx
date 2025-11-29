@@ -29,7 +29,7 @@ export default function Work({ order = 'all' }: WorkProps) {
       tags: ['Python', 'LangGraph', 'Marketing'],
       github: 'https://github.com/haroon0x/PromoAgent',
       link: 'https://promoagent.onrender.com/',
-      size: 'medium' as const
+      size: 'small' as const
     },
     {
       title: 'TheAgent - CLI Code Agent',
@@ -44,7 +44,7 @@ export default function Work({ order = 'all' }: WorkProps) {
       tags: ['Python', 'NLP', 'Research'],
       github: 'https://github.com/haroon0x/percolation-hypotheses-gen',
       link: 'https://percolation-hypotheses.onrender.com/',
-      size: 'medium' as const
+      size: 'wide' as const
     },
     {
       title: 'Neural Network From Scratch',

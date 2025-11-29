@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <Header />
       <main>
-        <Work order="latest" />
+        <Work order="all" />
       </main>
       <Footer />
     </>
