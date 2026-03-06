@@ -47,7 +47,6 @@ const PullRequests = () => {
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // desc for merged first
   const [filterStatus, setFilterStatus] = useState<"all" | "merged" | "open">("all");
   const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
 
