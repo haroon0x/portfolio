@@ -19,10 +19,27 @@ interface PullRequest {
 }
 
 const prUrls = [
-  "https://github.com/gemma-facet/cloud-services/pull/82",
-  "https://github.com/gemma-facet/synthetic-data-kit/pull/1",
-  "https://github.com/gemma-facet/synthetic-data-kit/pull/2",
-  "https://github.com/sktime/sktime/pull/7795",
+  "https://github.com/openclaw/openclaw/pull/36310",
+  "https://github.com/kubeflow/docs-agent/pull/101",
+  "https://github.com/kubeflow/docs-agent/pull/50",
+  "https://github.com/kubeflow/docs-agent/pull/35",
+  "https://github.com/kubeflow/docs-agent/pull/33",
+  "https://github.com/kubeflow/docs-agent/pull/30",
+  "https://github.com/kubeflow/pipelines/pull/12746",
+  "https://github.com/mem0ai/mem0/pull/3471",
+  "https://github.com/mem0ai/mem0/pull/3487",
+  "https://github.com/meta-llama/synthetic-data-kit/pull/78",
+  "https://github.com/OWASP-BLT/BLT/pull/4803",
+  "https://github.com/google-deepmind/optax/pull/1519",
+  "https://github.com/google-deepmind/optax/pull/1520",
+  "https://github.com/kubeflow/katib/pull/2604",
+  "https://github.com/kubeflow/katib/pull/2607",
+  "https://github.com/kubeflow/katib/pull/2608",
+  "https://github.com/kubeflow/docs-agent/pull/6",
+  "https://github.com/kubeflow/sdk/pull/251",
+  "https://github.com/kubeflow/docs-agent/pull/27",
+  "https://github.com/kubeflow/pipelines/pull/12730",
+  "https://github.com/kubeflow/docs-agent/pull/8",
 ];
 
 const PullRequests = () => {
