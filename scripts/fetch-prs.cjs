@@ -23,9 +23,16 @@ const prUrls = [
   "https://github.com/kubeflow/docs-agent/pull/27",
   "https://github.com/kubeflow/pipelines/pull/12730",
   "https://github.com/kubeflow/docs-agent/pull/8",
+  "https://github.com/gemma-facet/cloud-services/pull/82",
+  "https://github.com/gemma-facet/synthetic-data-kit/pull/1",
+  "https://github.com/gemma-facet/synthetic-data-kit/pull/2",
+  "https://github.com/sktime/sktime/pull/7795",
 ];
 
 const topRepos = [
+  "gemma-facet/cloud-services",
+  "gemma-facet/synthetic-data-kit",
+  "sktime/sktime",
   "kubeflow/docs-agent",
   "kubeflow/pipelines",
   "kubeflow/katib",
