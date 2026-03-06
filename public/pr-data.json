@@ -318,6 +318,70 @@
       "isTopRepo": true
     },
     {
+      "title": "Integrate synthetic data kit to preprocessing module",
+      "repo": "gemma-facet/cloud-services",
+      "url": "https://github.com/gemma-facet/cloud-services/pull/82",
+      "description": "## Description\r\nIntegrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing m...",
+      "status": "Merged",
+      "date": "Nov 13, 2025",
+      "additions": 1717,
+      "deletions": 940,
+      "languages": [
+        "Python",
+        "HCL",
+        "Makefile"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Update llm client to support gemini",
+      "repo": "gemma-facet/synthetic-data-kit",
+      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/1",
+      "description": "\r\nAdd Gemini support to llm client and add python-dotenv to dependecies\r\n## Description\r\nAdded Gemini support and added ...",
+      "status": "Merged",
+      "date": "Oct 23, 2025",
+      "additions": 52,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Update lance_utils.py to use newer lance.dataset API",
+      "repo": "gemma-facet/synthetic-data-kit",
+      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/2",
+      "description": "# Pull Request\r\n\r\nUpdate lance_utils.py to use newer lance.dataset API\r\n\r\n## Description\r\n - Update imports in lance_uti...",
+      "status": "Merged",
+      "date": "Oct 29, 2025",
+      "additions": 4,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "[DOC] Added example  for 'AlignerNaive' and 'AlignerLuckyDtw' ",
+      "repo": "sktime/sktime",
+      "url": "https://github.com/sktime/sktime/pull/7795",
+      "description": "<!--\r\nWelcome to sktime, and thanks for contributing!\r\nPlease have a look at our contribution guide:\r\nhttps://www.sktime...",
+      "status": "Merged",
+      "date": "Feb 9, 2025",
+      "additions": 30,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat(config): add per-chat-type model routing (DM vs Group Chat)",
       "repo": "openclaw/openclaw",
       "url": "https://github.com/openclaw/openclaw/pull/36310",
@@ -335,6 +399,9 @@
     }
   ],
   "topRepos": [
+    "gemma-facet/cloud-services",
+    "gemma-facet/synthetic-data-kit",
+    "sktime/sktime",
     "kubeflow/docs-agent",
     "kubeflow/pipelines",
     "kubeflow/katib",
@@ -344,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-06T08:48:15.262Z",
-  "total": 21,
+  "lastUpdated": "2026-03-06T08:57:30.806Z",
+  "total": 25,
   "open": 19,
-  "merged": 2
+  "merged": 6
 }
