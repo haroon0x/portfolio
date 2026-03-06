@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Loader2, Calendar, FileCode, GitCommit } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star } from "lucide-react";
 import { Link } from 'react-router-dom';
 import PageTransition from "../components/PageTransition";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
@@ -16,110 +16,80 @@ interface PullRequest {
   additions: number;
   deletions: number;
   languages: string[];
+  isTopRepo?: boolean;
 }
 
-const prUrls = [
-  "https://github.com/openclaw/openclaw/pull/36310",
-  "https://github.com/kubeflow/docs-agent/pull/101",
-  "https://github.com/kubeflow/docs-agent/pull/50",
-  "https://github.com/kubeflow/docs-agent/pull/35",
-  "https://github.com/kubeflow/docs-agent/pull/33",
-  "https://github.com/kubeflow/docs-agent/pull/30",
-  "https://github.com/kubeflow/pipelines/pull/12746",
-  "https://github.com/mem0ai/mem0/pull/3471",
-  "https://github.com/mem0ai/mem0/pull/3487",
-  "https://github.com/meta-llama/synthetic-data-kit/pull/78",
-  "https://github.com/OWASP-BLT/BLT/pull/4803",
-  "https://github.com/google-deepmind/optax/pull/1519",
-  "https://github.com/google-deepmind/optax/pull/1520",
-  "https://github.com/kubeflow/katib/pull/2604",
-  "https://github.com/kubeflow/katib/pull/2607",
-  "https://github.com/kubeflow/katib/pull/2608",
-  "https://github.com/kubeflow/docs-agent/pull/6",
-  "https://github.com/kubeflow/sdk/pull/251",
-  "https://github.com/kubeflow/docs-agent/pull/27",
-  "https://github.com/kubeflow/pipelines/pull/12730",
-  "https://github.com/kubeflow/docs-agent/pull/8",
-];
+interface PRData {
+  prs: PullRequest[];
+  topRepos: string[];
+  lastUpdated: string;
+  total: number;
+  open: number;
+  merged: number;
+}
 
 const PullRequests = () => {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
-  const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
+  const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
-    const fetchPRs = async () => {
+    const fetchData = async () => {
       try {
-        const prs = await Promise.all(
-          prUrls.map(async (url) => {
-            try {
-              const urlParts = url.split('/');
-              const owner = urlParts[3];
-              const repo = urlParts[4];
-              const prNumber = urlParts[6];
-              const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
-
-              const response = await fetch(apiUrl, {
-                headers: {
-                  'Accept': 'application/vnd.github.v3+json'
-                }
-              });
-
-              if (!response.ok) {
-                throw new Error(`Failed to fetch PR data: ${response.status}`);
-              }
-
-              const data = await response.json();
-
-              // Try to fetch languages
-              let languages: string[] = [];
-              if (data.head && data.head.repo && data.head.repo.languages_url) {
-                try {
-                  const langResponse = await fetch(data.head.repo.languages_url, {
-                    headers: {
-                      'Accept': 'application/vnd.github.v3+json'
-                    }
-                  });
-
-                  if (langResponse.ok) {
-                    const langData = await langResponse.json();
-                    languages = Object.keys(langData).slice(0, 3); // Limit to top 3
-                  }
-                } catch {
-                  // Silently ignore language fetch errors
-                }
-              }
-
-              return {
-                title: data.title,
-                repo: `${owner}/${repo}`,
-                url: data.html_url,
-                description: data.body?.slice(0, 120) + '...' || 'No description provided',
-                status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed") as "Merged" | "Open" | "Closed",
-                date: new Date(data.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
-                additions: data.additions || 0,
-                deletions: data.deletions || 0,
-                languages
-              };
-            } catch {
-              return null;
-            }
-          })
-        );
-
-        const validPRs = prs.filter((pr): pr is PullRequest => pr !== null);
-        setPullRequests(validPRs);
-      } catch (error) {
-        console.error('Error fetching PR data:', error);
-        setError('Failed to fetch pull requests. Please try again later.');
+        const response = await fetch('/pr-data.json');
+        if (!response.ok) {
+          throw new Error('Failed to load PR data');
+        }
+        const prData = await response.json();
+        setData(prData);
+      } catch (err) {
+        console.error('Error loading PR data:', err);
+        setError('Failed to load pull requests data.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPRs();
+    fetchData();
   }, []);
+
+  // Sort PRs based on current sort settings
+  const sortedPRs = data ? [...data.prs].sort((a, b) => {
+    // First, prioritize top repos
+    const aIsTop = a.isTopRepo || false;
+    const bIsTop = b.isTopRepo || false;
+    
+    if (aIsTop && !bIsTop) return -1;
+    if (!aIsTop && bIsTop) return 1;
+    
+    // Within same priority group, sort by selected field
+    if (sortBy === "status") {
+      const statusOrder = { "Open": 0, "Merged": 1, "Closed": 2 };
+      const aOrder = statusOrder[a.status];
+      const bOrder = statusOrder[b.status];
+      return sortOrder === "asc" ? aOrder - bOrder : bOrder - aOrder;
+    } else if (sortBy === "date") {
+      const dateA = new Date(a.date.split(' ').reverse().join(' ')).getTime();
+      const dateB = new Date(b.date.split(' ').reverse().join(' ')).getTime();
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    } else {
+      return sortOrder === "asc" 
+        ? a.repo.localeCompare(b.repo) 
+        : b.repo.localeCompare(a.repo);
+    }
+  }) : [];
+
+  const toggleSort = (newSortBy: "status" | "date" | "repo") => {
+    if (sortBy === newSortBy) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(newSortBy);
+      setSortOrder("asc");
+    }
+  };
 
   return (
     <PageTransition>
@@ -161,6 +131,95 @@ const PullRequests = () => {
               </p>
             </div>
 
+            {/* Sort Controls */}
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <span className="text-sm text-white/50 flex items-center gap-2">
+                <ArrowDownUp className="w-4 h-4" />
+                Sort by:
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => toggleSort("status")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                    sortBy === "status" 
+                      ? "bg-accent text-black" 
+                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  <GitPullRequest className="w-4 h-4" />
+                  Status
+                  {sortBy === "status" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                </button>
+                <button
+                  onClick={() => toggleSort("date")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                    sortBy === "date" 
+                      ? "bg-accent text-black" 
+                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Date
+                  {sortBy === "date" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                </button>
+                <button
+                  onClick={() => toggleSort("repo")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                    sortBy === "repo" 
+                      ? "bg-accent text-black" 
+                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  <GitCommit className="w-4 h-4" />
+                  Repository
+                  {sortBy === "repo" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                </button>
+              </div>
+
+              {/* PR Count */}
+              <div className="ml-auto flex items-center gap-4 text-sm">
+                <span className="flex items-center gap-1.5 text-green-400">
+                  <Circle className="w-3 h-3 fill-current" />
+                  {data?.open || 0} Open
+                </span>
+                <span className="flex items-center gap-1.5 text-purple-400">
+                  <CheckCircle2 className="w-3 h-3 fill-current" />
+                  {data?.merged || 0} Merged
+                </span>
+              </div>
+            </div>
+
+            {/* Last Updated */}
+            {data?.lastUpdated && (
+              <div className="mb-4 text-xs text-white/40">
+                Last updated: {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+              </div>
+            )}
+
+            {/* Top Repos Section */}
+            {data?.topRepos && data.topRepos.length > 0 && !loading && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <Star className="w-5 h-5 text-accent" />
+                  <h3 className="text-lg font-semibold text-white">My Contributions</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.topRepos.map(repo => (
+                    <span 
+                      key={repo}
+                      className="px-3 py-1.5 rounded-full text-sm bg-accent/10 text-accent border border-accent/20 flex items-center gap-2"
+                    >
+                      <GitCommit className="w-3 h-3" />
+                      {repo}
+                      <span className="text-white/40 text-xs">
+                        ({data.prs.filter(pr => pr.repo === repo).length})
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
@@ -173,7 +232,7 @@ const PullRequests = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {pullRequests.map((pr, index) => (
+                {sortedPRs.map((pr, index) => (
                   <motion.a
                     key={index}
                     href={pr.url}
@@ -184,7 +243,6 @@ const PullRequests = () => {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     className="group relative flex flex-col p-6 md:p-8 rounded-3xl bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-accent/50 transition-all duration-500 overflow-hidden"
                   >
-                    {/* Hover Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="relative z-10 flex flex-col h-full">
@@ -220,6 +278,9 @@ const PullRequests = () => {
                       <div className="flex items-center gap-2 text-sm text-white/50 mb-4 font-mono">
                         <GitCommit className="w-4 h-4" />
                         <span>{pr.repo}</span>
+                        {pr.isTopRepo && (
+                          <Star className="w-3 h-3 text-accent fill-accent" />
+                        )}
                       </div>
 
                       <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
