@@ -45,7 +45,8 @@ const PullRequests = () => {
   const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status");
+  const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // desc for merged first
   const [filterStatus, setFilterStatus] = useState<"all" | "merged" | "open">("all");
   const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
