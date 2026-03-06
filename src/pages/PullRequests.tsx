@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter } from "lucide-react";
 import { Link } from 'react-router-dom';
 import PageTransition from "../components/PageTransition";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
@@ -28,23 +28,39 @@ interface PRData {
   merged: number;
 }
 
+interface OrgStats {
+  name: string;
+  repos: string[];
+  totalPRs: number;
+  mergedPRs: number;
+  openPRs: number;
+  totalAdditions: number;
+  totalDeletions: number;
+  languages: string[];
+  isTopOrg: boolean;
+}
+
 const PullRequests = () => {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
   const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // desc for merged first
+  const [filterStatus, setFilterStatus] = useState<"all" | "merged" | "open">("all");
+  const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
+
+  const topOrgs = ["kubeflow", "mem0ai", "google-deepmind", "meta-llama", "OWASP"];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('/pr-data.json');
-        if (!response.ok) {
-          throw new Error('Failed to load PR data');
-        }
+        if (!response.ok) throw new Error('Failed to load PR data');
         const prData = await response.json();
         setData(prData);
+        const orgs = [...new Set(prData.prs.map((pr: PullRequest) => pr.repo.split('/')[0]))];
+        setExpandedOrgs(new Set(orgs));
       } catch (err) {
         console.error('Error loading PR data:', err);
         setError('Failed to load pull requests data.');
@@ -52,44 +68,88 @@ const PullRequests = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // Sort PRs based on current sort settings
-  const sortedPRs = data ? [...data.prs].sort((a, b) => {
-    // First, prioritize top repos
-    const aIsTop = a.isTopRepo || false;
-    const bIsTop = b.isTopRepo || false;
-    
-    if (aIsTop && !bIsTop) return -1;
-    if (!aIsTop && bIsTop) return 1;
-    
-    // Within same priority group, sort by selected field
-    if (sortBy === "status") {
-      const statusOrder = { "Open": 0, "Merged": 1, "Closed": 2 };
-      const aOrder = statusOrder[a.status];
-      const bOrder = statusOrder[b.status];
-      return sortOrder === "asc" ? aOrder - bOrder : bOrder - aOrder;
-    } else if (sortBy === "date") {
-      const dateA = new Date(a.date.split(' ').reverse().join(' ')).getTime();
-      const dateB = new Date(b.date.split(' ').reverse().join(' ')).getTime();
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    } else {
-      return sortOrder === "asc" 
-        ? a.repo.localeCompare(b.repo) 
-        : b.repo.localeCompare(a.repo);
-    }
+  const orgStats: OrgStats[] = data ? Object.entries(
+    data.prs.reduce((acc: Record<string, PullRequest[]>, pr: PullRequest) => {
+      const org = pr.repo.split('/')[0];
+      if (!acc[org]) acc[org] = [];
+      acc[org].push(pr);
+      return acc;
+    }, {})
+  ).map(([org, prs]) => {
+    const prList = prs as PullRequest[];
+    const allLanguages = prList.flatMap(pr => pr.languages);
+    return {
+      name: org,
+      repos: [...new Set(prList.map(pr => pr.repo))],
+      totalPRs: prList.length,
+      mergedPRs: prList.filter(pr => pr.status === "Merged").length,
+      openPRs: prList.filter(pr => pr.status === "Open").length,
+      totalAdditions: prList.reduce((sum, pr) => sum + pr.additions, 0),
+      totalDeletions: prList.reduce((sum, pr) => sum + pr.deletions, 0),
+      languages: [...new Set(allLanguages)].slice(0, 5),
+      isTopOrg: topOrgs.includes(org.toLowerCase())
+    };
+  }).sort((a, b) => {
+    if (a.isTopOrg && !b.isTopOrg) return -1;
+    if (!a.isTopOrg && b.isTopOrg) return 1;
+    return b.totalPRs - a.totalPRs;
   }) : [];
+
+  const toggleOrg = (orgName: string) => {
+    setExpandedOrgs(prev => {
+      const newSet = new Set(prev);
+      newSet.has(orgName) ? newSet.delete(orgName) : newSet.add(orgName);
+      return newSet;
+    });
+  };
+
+  // Filter and sort PRs
+  const getFilteredAndSortedPRs = () => {
+    if (!data) return [];
+    
+    let prs = [...data.prs];
+    
+    // Apply status filter
+    if (filterStatus !== "all") {
+      prs = prs.filter(pr => pr.status.toLowerCase() === filterStatus);
+    }
+    
+    // Sort
+    return prs.sort((a, b) => {
+      const aIsTop = a.isTopRepo || false;
+      const bIsTop = b.isTopRepo || false;
+      
+      if (aIsTop && !bIsTop) return -1;
+      if (!aIsTop && bIsTop) return 1;
+      
+      if (sortBy === "status") {
+        const statusOrder = { "Open": 0, "Merged": 1, "Closed": 2 };
+        const aOrder = statusOrder[a.status];
+        const bOrder = statusOrder[b.status];
+        return sortOrder === "asc" ? aOrder - bOrder : bOrder - aOrder;
+      } else if (sortBy === "date") {
+        const dateA = new Date(a.date.split(' ').reverse().join(' ')).getTime();
+        const dateB = new Date(b.date.split(' ').reverse().join(' ')).getTime();
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      } else {
+        return sortOrder === "asc" ? a.repo.localeCompare(b.repo) : b.repo.localeCompare(a.repo);
+      }
+    });
+  };
 
   const toggleSort = (newSortBy: "status" | "date" | "repo") => {
     if (sortBy === newSortBy) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortBy(newSortBy);
-      setSortOrder("asc");
+      setSortOrder(newSortBy === "status" ? "desc" : "asc");
     }
   };
+
+  const filteredPRs = getFilteredAndSortedPRs();
 
   return (
     <PageTransition>
@@ -97,28 +157,16 @@ const PullRequests = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <Magnetic>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-sm"
-              >
+              <Link to="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-sm">
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Back to Home</span>
               </Link>
             </Magnetic>
           </div>
 
-          <div
-            ref={ref}
-            className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-              }`}
-          >
+          <div ref={ref} className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
             <div className="mb-16">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="flex items-center gap-4 mb-6"
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="flex items-center gap-4 mb-6">
                 <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent">
                   <GitPullRequest className="w-8 h-8" />
                 </div>
@@ -131,92 +179,172 @@ const PullRequests = () => {
               </p>
             </div>
 
-            {/* Sort Controls */}
-            <div className="flex flex-wrap items-center gap-3 mb-8">
+            {/* Stats Overview */}
+            {data && !loading && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10">
+                  <p className="text-3xl font-bold text-white">{data.total}</p>
+                  <p className="text-sm text-white/50">Total PRs</p>
+                </div>
+                <div className="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/20">
+                  <p className="text-3xl font-bold text-purple-400">{data.merged}</p>
+                  <p className="text-sm text-purple-300">Merged</p>
+                </div>
+                <div className="p-5 rounded-2xl bg-green-500/10 border border-green-500/20">
+                  <p className="text-3xl font-bold text-green-400">{data.open}</p>
+                  <p className="text-sm text-green-300">Open</p>
+                </div>
+                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10">
+                  <p className="text-3xl font-bold text-white">+{data.prs.reduce((s, pr) => s + pr.additions, 0)}</p>
+                  <p className="text-sm text-white/50">Lines Added</p>
+                </div>
+              </div>
+            )}
+
+            {/* Organization Cards */}
+            {orgStats.length > 0 && !loading && (
+              <div className="mb-12">
+                <div className="flex items-center gap-2 mb-6">
+                  <Building2 className="w-5 h-5 text-accent" />
+                  <h3 className="text-xl font-semibold text-white">Organizations</h3>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {orgStats.map((org, index) => (
+                    <motion.div
+                      key={org.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className={`group rounded-2xl overflow-hidden transition-all duration-300 ${
+                        org.isTopOrg ? "bg-gradient-to-br from-accent/10 to-purple-500/10 border border-accent/20 hover:border-accent/50" : "bg-zinc-900/40 border border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      <button onClick={() => toggleOrg(org.name)} className="w-full p-5 text-left">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-lg font-bold text-white">{org.name}</h4>
+                              {org.isTopOrg && <Star className="w-4 h-4 text-accent fill-accent" />}
+                            </div>
+                            <p className="text-sm text-white/50">{org.repos.length} repos • {org.totalPRs} PRs</p>
+                          </div>
+                          <ArrowUpRight className={`w-5 h-5 text-white/40 transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
+                        </div>
+
+                        <div className="flex gap-4 text-sm">
+                          <div className="flex items-center gap-1.5 text-purple-400">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>{org.mergedPRs} merged</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-green-400">
+                            <Circle className="w-3.5 h-3.5" />
+                            <span>{org.openPRs} open</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {org.languages.map(lang => (
+                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded">{lang}</span>
+                          ))}
+                        </div>
+                      </button>
+
+                      <motion.div
+                        initial={false}
+                        animate={{ height: expandedOrgs.has(org.name) ? 'auto' : 0, opacity: expandedOrgs.has(org.name) ? 1 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-5 space-y-2">
+                          {filteredPRs.filter(pr => pr.repo.startsWith(org.name + '/')).slice(0, 5).map((pr, i) => (
+                            <a key={i} href={pr.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group/pr">
+                              <div className={`w-2 h-2 rounded-full ${pr.status === "Merged" ? "bg-purple-500" : pr.status === "Open" ? "bg-green-500" : "bg-red-500"}`} />
+                              <span className="text-sm text-white/70 group-hover/pr:text-white truncate flex-1">{pr.title}</span>
+                              <GitPullRequest className="w-3.5 h-3.5 text-white/40" />
+                            </a>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Filter & Sort Controls */}
+            <div className="flex flex-wrap items-center gap-3 mb-6">
               <span className="text-sm text-white/50 flex items-center gap-2">
+                <Filter className="w-4 h-4" />
+                Filter:
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setFilterStatus("all")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    filterStatus === "all" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  All ({data?.total || 0})
+                </button>
+                <button
+                  onClick={() => setFilterStatus("merged")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
+                    filterStatus === "merged" ? "bg-purple-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  Merged ({data?.merged || 0})
+                </button>
+                <button
+                  onClick={() => setFilterStatus("open")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
+                    filterStatus === "open" ? "bg-green-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  <Circle className="w-4 h-4" />
+                  Open ({data?.open || 0})
+                </button>
+              </div>
+
+              <span className="text-sm text-white/50 flex items-center gap-2 ml-4">
                 <ArrowDownUp className="w-4 h-4" />
-                Sort by:
+                Sort:
               </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => toggleSort("status")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                    sortBy === "status" 
-                      ? "bg-accent text-black" 
-                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    sortBy === "status" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
-                  <GitPullRequest className="w-4 h-4" />
-                  Status
-                  {sortBy === "status" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                  Status {sortBy === "status" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
                 <button
                   onClick={() => toggleSort("date")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                    sortBy === "date" 
-                      ? "bg-accent text-black" 
-                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    sortBy === "date" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
                   <Calendar className="w-4 h-4" />
-                  Date
-                  {sortBy === "date" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                  Date {sortBy === "date" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
                 <button
                   onClick={() => toggleSort("repo")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                    sortBy === "repo" 
-                      ? "bg-accent text-black" 
-                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    sortBy === "repo" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
                   <GitCommit className="w-4 h-4" />
-                  Repository
-                  {sortBy === "repo" && (sortOrder === "asc" ? " ↑" : " ↓")}
+                  Repo {sortBy === "repo" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
-              </div>
-
-              {/* PR Count */}
-              <div className="ml-auto flex items-center gap-4 text-sm">
-                <span className="flex items-center gap-1.5 text-green-400">
-                  <Circle className="w-3 h-3 fill-current" />
-                  {data?.open || 0} Open
-                </span>
-                <span className="flex items-center gap-1.5 text-purple-400">
-                  <CheckCircle2 className="w-3 h-3 fill-current" />
-                  {data?.merged || 0} Merged
-                </span>
               </div>
             </div>
 
             {/* Last Updated */}
             {data?.lastUpdated && (
-              <div className="mb-4 text-xs text-white/40">
+              <div className="mb-6 text-xs text-white/40">
                 Last updated: {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-              </div>
-            )}
-
-            {/* Top Repos Section */}
-            {data?.topRepos && data.topRepos.length > 0 && !loading && (
-              <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="w-5 h-5 text-accent" />
-                  <h3 className="text-lg font-semibold text-white">My Contributions</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {data.topRepos.map(repo => (
-                    <span 
-                      key={repo}
-                      className="px-3 py-1.5 rounded-full text-sm bg-accent/10 text-accent border border-accent/20 flex items-center gap-2"
-                    >
-                      <GitCommit className="w-3 h-3" />
-                      {repo}
-                      <span className="text-white/40 text-xs">
-                        ({data.prs.filter(pr => pr.repo === repo).length})
-                      </span>
-                    </span>
-                  ))}
-                </div>
               </div>
             )}
 
@@ -227,12 +355,10 @@ const PullRequests = () => {
                 ))}
               </div>
             ) : error ? (
-              <div className="p-8 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">
-                {error}
-              </div>
+              <div className="p-8 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">{error}</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {sortedPRs.map((pr, index) => (
+                {filteredPRs.map((pr, index) => (
                   <motion.a
                     key={index}
                     href={pr.url}
@@ -240,7 +366,7 @@ const PullRequests = () => {
                     rel="noopener noreferrer"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
                     className="group relative flex flex-col p-6 md:p-8 rounded-3xl bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-accent/50 transition-all duration-500 overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -248,15 +374,10 @@ const PullRequests = () => {
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="flex items-start justify-between mb-6">
                         <div className="flex items-center gap-3">
-                          <div className={`
-                            px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5
-                            ${pr.status === "Merged"
-                              ? "bg-purple-500/10 text-purple-300 border-purple-500/20"
-                              : pr.status === "Open"
-                                ? "bg-green-500/10 text-green-300 border-green-500/20"
-                                : "bg-red-500/10 text-red-300 border-red-500/20"
-                            }
-                          `}>
+                          <div className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5 ${
+                            pr.status === "Merged" ? "bg-purple-500/10 text-purple-300 border-purple-500/20" : 
+                            pr.status === "Open" ? "bg-green-500/10 text-green-300 border-green-500/20" : "bg-red-500/10 text-red-300 border-red-500/20"
+                          }`}>
                             <GitPullRequest className="w-3 h-3" />
                             {pr.status}
                           </div>
@@ -265,39 +386,29 @@ const PullRequests = () => {
                             {pr.date}
                           </span>
                         </div>
-
                         <div className="p-2 rounded-full bg-white/5 text-white/40 group-hover:text-white group-hover:bg-accent transition-all duration-300">
                           <ArrowUpRight className="w-4 h-4" />
                         </div>
                       </div>
 
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors duration-300 line-clamp-2">
-                        {pr.title}
-                      </h3>
+                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors duration-300 line-clamp-2">{pr.title}</h3>
 
                       <div className="flex items-center gap-2 text-sm text-white/50 mb-4 font-mono">
                         <GitCommit className="w-4 h-4" />
                         <span>{pr.repo}</span>
-                        {pr.isTopRepo && (
-                          <Star className="w-3 h-3 text-accent fill-accent" />
-                        )}
+                        {pr.isTopRepo && <Star className="w-3 h-3 text-accent fill-accent" />}
                       </div>
 
-                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
-                        {pr.description}
-                      </p>
+                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">{pr.description}</p>
 
                       <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
                         <div className="flex items-center gap-3 text-xs font-mono">
                           <span className="text-green-400 bg-green-400/10 px-2 py-1 rounded">+{pr.additions}</span>
                           <span className="text-red-400 bg-red-400/10 px-2 py-1 rounded">-{pr.deletions}</span>
                         </div>
-
                         <div className="flex gap-2">
                           {pr.languages.map((lang) => (
-                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">
-                              {lang}
-                            </span>
+                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">{lang}</span>
                           ))}
                         </div>
                       </div>
