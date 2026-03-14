@@ -145,22 +145,6 @@
       "isTopRepo": true
     },
     {
-      "title": "Feature: Add AI Spam detection for Bug reports",
-      "repo": "OWASP-BLT/BLT",
-      "url": "https://github.com/OWASP-BLT/BLT/pull/4803",
-      "description": "## Overview\r\nThis PR implements an AI-based spam detection system for bug reports using Gemini. It automatically analyze...",
-      "status": "Open",
-      "date": "Nov 15, 2025",
-      "additions": 1124,
-      "deletions": 46,
-      "languages": [
-        "HTML",
-        "Python",
-        "JavaScript"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "Feat: Add pre-commit hook that strips notebooks of metadata",
       "repo": "google-deepmind/optax",
       "url": "https://github.com/google-deepmind/optax/pull/1519",
@@ -282,6 +266,22 @@
         "Python",
         "JavaScript",
         "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Feature: Add AI Spam detection for Bug reports",
+      "repo": "OWASP-BLT/BLT",
+      "url": "https://github.com/OWASP-BLT/BLT/pull/4803",
+      "description": "## Overview\r\nThis PR implements an AI-based spam detection system for bug reports using Gemini. It automatically analyze...",
+      "status": "Merged",
+      "date": "Nov 15, 2025",
+      "additions": 1124,
+      "deletions": 46,
+      "languages": [
+        "HTML",
+        "Python",
+        "JavaScript"
       ],
       "isTopRepo": true
     },
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-13T07:00:54.060Z",
+  "lastUpdated": "2026-03-14T06:54:20.823Z",
   "total": 25,
-  "open": 19,
-  "merged": 6
+  "open": 18,
+  "merged": 7
 }
