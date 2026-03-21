@@ -113,22 +113,6 @@
       "isTopRepo": true
     },
     {
-      "title": " feat(update) : Migrate embedchain from google-generativeai to google-genai SDK",
-      "repo": "mem0ai/mem0",
-      "url": "https://github.com/mem0ai/mem0/pull/3487",
-      "description": "## Description\r\n\r\nMigrate embedchain/ from google-generativeai to python-genai\r\n\r\n This PR migrates the legacy Google SD...",
-      "status": "Open",
-      "date": "Sep 20, 2025",
-      "additions": 330,
-      "deletions": 307,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "MDX"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "Update llm client to add gemini support ",
       "repo": "meta-llama/synthetic-data-kit",
       "url": "https://github.com/meta-llama/synthetic-data-kit/pull/78",
@@ -382,6 +366,22 @@
       "isTopRepo": true
     },
     {
+      "title": " feat(update) : Migrate embedchain from google-generativeai to google-genai SDK",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0/pull/3487",
+      "description": "## Description\r\n\r\nMigrate embedchain/ from google-generativeai to python-genai\r\n\r\n This PR migrates the legacy Google SD...",
+      "status": "Closed",
+      "date": "Sep 20, 2025",
+      "additions": 330,
+      "deletions": 307,
+      "languages": [
+        "Python",
+        "TypeScript",
+        "MDX"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat(config): add per-chat-type model routing (DM vs Group Chat)",
       "repo": "openclaw/openclaw",
       "url": "https://github.com/openclaw/openclaw/pull/36310",
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-20T07:02:16.843Z",
+  "lastUpdated": "2026-03-21T06:52:06.101Z",
   "total": 25,
-  "open": 18,
+  "open": 17,
   "merged": 7
 }
