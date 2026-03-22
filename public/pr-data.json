@@ -150,8 +150,8 @@
       "description": "FIxes #1342\r\n\r\n\r\n- update sigma to scale\r\n- change default num_samples to 1\r\n- update examples notebook of perturbations...",
       "status": "Open",
       "date": "Dec 3, 2025",
-      "additions": 43,
-      "deletions": 55,
+      "additions": 44,
+      "deletions": 56,
       "languages": [
         "Python",
         "Shell"
@@ -411,7 +411,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-21T06:52:06.101Z",
+  "lastUpdated": "2026-03-22T06:57:28.242Z",
   "total": 25,
   "open": 17,
   "merged": 7
