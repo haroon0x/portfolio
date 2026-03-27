@@ -97,22 +97,6 @@
       "isTopRepo": true
     },
     {
-      "title": "Fix: Update OpenAIEmbedder to support reduced embedding dimensions (sync with Chroma)",
-      "repo": "mem0ai/mem0",
-      "url": "https://github.com/mem0ai/mem0/pull/3471",
-      "description": "## Description\r\n\r\nIssue #1229: Mem0 fails when trying to reduce OpenAI embedding dimensions (e.g., 1024) because `vector...",
-      "status": "Open",
-      "date": "Sep 17, 2025",
-      "additions": 2,
-      "deletions": 1,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "MDX"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "Update llm client to add gemini support ",
       "repo": "meta-llama/synthetic-data-kit",
       "url": "https://github.com/meta-llama/synthetic-data-kit/pull/78",
@@ -366,6 +350,22 @@
       "isTopRepo": true
     },
     {
+      "title": "Fix: Update OpenAIEmbedder to support reduced embedding dimensions (sync with Chroma)",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0/pull/3471",
+      "description": "## Description\r\n\r\nIssue #1229: Mem0 fails when trying to reduce OpenAI embedding dimensions (e.g., 1024) because `vector...",
+      "status": "Closed",
+      "date": "Sep 17, 2025",
+      "additions": 2,
+      "deletions": 1,
+      "languages": [
+        "Python",
+        "TypeScript",
+        "MDX"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": " feat(update) : Migrate embedchain from google-generativeai to google-genai SDK",
       "repo": "mem0ai/mem0",
       "url": "https://github.com/mem0ai/mem0/pull/3487",
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-26T07:15:43.883Z",
+  "lastUpdated": "2026-03-27T07:14:45.562Z",
   "total": 25,
-  "open": 17,
+  "open": 16,
   "merged": 7
 }
