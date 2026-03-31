@@ -4,7 +4,7 @@
       "title": "feat: add GitHub Issues ingestion component wired into pipeline",
       "repo": "kubeflow/docs-agent",
       "url": "https://github.com/kubeflow/docs-agent/pull/101",
-      "description": "## Summary\r\n\r\nExtends the existing Kubeflow RAG pipeline to optionally ingest GitHub Issues alongside documentation. Iss...",
+      "description": "This pr is not ready for merge. I have some fixes to make.\r\n## Summary\r\n\r\nExtends the existing Kubeflow RAG pipeline to ...",
       "status": "Open",
       "date": "Mar 2, 2026",
       "additions": 165,
@@ -411,7 +411,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-03-30T07:49:39.798Z",
+  "lastUpdated": "2026-03-31T07:22:11.007Z",
   "total": 25,
   "open": 16,
   "merged": 7
