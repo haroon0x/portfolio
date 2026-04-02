@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter, Trophy } from "lucide-react";
 import { Link } from 'react-router-dom';
 import PageTransition from "../components/PageTransition";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
@@ -17,6 +17,7 @@ interface PullRequest {
   deletions: number;
   languages: string[];
   isTopRepo?: boolean;
+  bounty?: string;
 }
 
 interface PRData {
@@ -126,7 +127,7 @@ const PullRequests = () => {
       if (!aIsTop && bIsTop) return 1;
       
       if (sortBy === "status") {
-        const statusOrder = { "Open": 0, "Merged": 1, "Closed": 2 };
+        const statusOrder = { "Merged": 2, "Open": 1, "Closed": 0 };
         const aOrder = statusOrder[a.status];
         const bOrder = statusOrder[b.status];
         return sortOrder === "asc" ? aOrder - bOrder : bOrder - aOrder;
@@ -150,6 +151,14 @@ const PullRequests = () => {
   };
 
   const filteredPRs = getFilteredAndSortedPRs();
+
+  const totalBounty = data ? data.prs.reduce((acc, pr) => {
+    if (pr.bounty) {
+      const amount = parseFloat(pr.bounty.replace(/[^0-9.-]+/g, ""));
+      if (!isNaN(amount)) return acc + amount;
+    }
+    return acc;
+  }, 0) : 0;
 
   return (
     <PageTransition>
@@ -181,12 +190,19 @@ const PullRequests = () => {
 
             {/* Stats Overview */}
             {data && !loading && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10 flex flex-col justify-between">
                   <p className="text-3xl font-bold text-white">{data.total}</p>
                   <p className="text-sm text-white/50">Total PRs</p>
                 </div>
-                <div className="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/20">
+                <div className="p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex flex-col justify-between">
+                  <div className="flex items-center gap-2">
+                    <Trophy className="w-6 h-6 text-yellow-400" />
+                    <p className="text-3xl font-bold text-yellow-400">${totalBounty}</p>
+                  </div>
+                  <p className="text-sm text-yellow-300">Total Bounties</p>
+                </div>
+                <div className="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex flex-col justify-between">
                   <p className="text-3xl font-bold text-purple-400">{data.merged}</p>
                   <p className="text-sm text-purple-300">Merged</p>
                 </div>
@@ -385,6 +401,12 @@ const PullRequests = () => {
                             <Calendar className="w-3 h-3" />
                             {pr.date}
                           </span>
+                          {pr.bounty && (
+                            <div className="px-2 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                              <Trophy className="w-3 h-3" />
+                              {pr.bounty} Bounty
+                            </div>
+                          )}
                         </div>
                         <div className="p-2 rounded-full bg-white/5 text-white/40 group-hover:text-white group-hover:bg-accent transition-all duration-300">
                           <ArrowUpRight className="w-4 h-4" />

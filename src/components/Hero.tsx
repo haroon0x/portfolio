@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail, Twitter, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -9,7 +10,6 @@ export default function Hero() {
   const roles = [
     'AI/ML Engineer',
     'Agentic AI Developer',
-    'Full-Stack Developer',
     'Open Source Contributor'
   ];
 
@@ -43,7 +43,8 @@ export default function Hero() {
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x' },
     { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8' },
     { name: 'Email', icon: Mail, url: 'mailto:haroonbmc0@gmail.com' },
-    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/skywalkerr0x' }
+    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/skywalkerr0x' },
+    { name: 'Sponsor', icon: Heart, url: 'https://github.com/sponsors/haroon0x' }
   ];
 
   return (
@@ -134,7 +135,7 @@ export default function Hero() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-white/10 rounded-full">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm text-white/70 font-mono">Available for opportunities</span>
+              <span className="text-sm text-white/70 font-mono">Available, also for freelance work</span>
             </div>
           </motion.div>
 
@@ -189,15 +190,16 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
           >
-            <motion.button
-              onClick={scrollToWork}
-              className="group px-8 py-4 bg-accent text-black font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span>View My Work</span>
-              <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
-            </motion.button>
+            <Link to="/pull-requests" onMouseEnter={() => import('../pages/PullRequests')}>
+              <motion.button
+                className="group px-8 py-4 bg-accent text-black font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span>View My Work</span>
+                <ArrowDown size={18} className="-rotate-90 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </Link>
 
             <motion.a
               href="https://github.com/haroon0x"

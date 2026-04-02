@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Sun, Moon, Twitter } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Sun, Moon, Twitter, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -77,6 +77,9 @@ export default function Header() {
                   item.url.startsWith('/') ? (
                     <Link
                       to={item.url}
+                      onMouseEnter={() => {
+                        if (item.url === '/pull-requests') import('../pages/PullRequests');
+                      }}
                       className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                     >
                       {item.name}
@@ -105,6 +108,18 @@ export default function Header() {
 
           {/* Right Side - Theme & Socials */}
           <div className="flex items-center gap-3 pl-3 border-l border-white/10">
+            <Magnetic>
+              <a 
+                href="https://github.com/sponsors/haroon0x" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 group"
+              >
+                <Heart size={12} className="group-hover:text-accent group-hover:fill-accent transition-colors" />
+                <span>Sponsor</span>
+              </a>
+            </Magnetic>
+
             <Magnetic>
               <button
                 onClick={toggleTheme}
@@ -158,6 +173,9 @@ export default function Header() {
                       <Link
                         key={item.name}
                         to={item.url}
+                        onMouseEnter={() => {
+                          if (item.url === '/pull-requests') import('../pages/PullRequests');
+                        }}
                         className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
                         onClick={() => setIsMenuOpen(false)}
                       >
