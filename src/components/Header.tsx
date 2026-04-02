@@ -30,7 +30,7 @@ export default function Header() {
   const navItems = [
     { name: 'Work', id: 'work' },
     { name: 'Pull Requests', url: '/pull-requests' },
-    { name: 'Resume', url: 'https://drive.google.com/file/d/1Lg-j32yIQ9TKW6jnEvebK4tJffZ6MIS2/view?usp=sharing' },
+    { name: 'Resume', url: 'https://drive.google.com/file/d/1fcm8Z6ul2k97JCTBcJoufh6UHVeSKiOv/view?usp=sharing' },
   ];
 
   const socialLinks = [
