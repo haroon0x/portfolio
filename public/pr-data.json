@@ -241,8 +241,7 @@
       "title": "Feature: Add AI Spam detection for Bug reports",
       "repo": "OWASP-BLT/BLT",
       "url": "https://github.com/OWASP-BLT/BLT/pull/4803",
-      "description": "## Overview\\r\\nThis PR implements an AI-based spam detection system for bug reports using Gemini. It automatically analyze...",
-      "bounty": "$5",
+      "description": "## Overview\r\nThis PR implements an AI-based spam detection system for bug reports using Gemini. It automatically analyze...",
       "status": "Merged",
       "date": "Nov 15, 2025",
       "additions": 1124,
@@ -412,7 +411,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-04-02T11:35:49.970Z",
+  "lastUpdated": "2026-04-02T12:14:14.844Z",
   "total": 25,
   "open": 16,
   "merged": 7
