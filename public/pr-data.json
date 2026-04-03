@@ -65,22 +65,6 @@
       "isTopRepo": true
     },
     {
-      "title": "Add AGENTS.md",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/30",
-      "description": "Fixes #31 \r\n\r\n## Summary\r\nCreate an `AGENTS.md` file that includes the following sections:\r\n\r\n1.  **Who This Is For**: C...",
-      "status": "Open",
-      "date": "Feb 14, 2026",
-      "additions": 379,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "feat(cli): add kfp ui to serve frontend as static content",
       "repo": "kubeflow/pipelines",
       "url": "https://github.com/kubeflow/pipelines/pull/12746",
@@ -187,22 +171,6 @@
         "Python",
         "Go",
         "TypeScript"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: Add agent module for shared utilities",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/6",
-      "description": "## Summary\r\nAdds an `agent-app/` module to centralize shared utilities, preparing the codebase for agentic workflows.\r\n\r...",
-      "status": "Open",
-      "date": "Jan 29, 2026",
-      "additions": 213,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
       ],
       "isTopRepo": true
     },
@@ -350,6 +318,22 @@
       "isTopRepo": true
     },
     {
+      "title": "Add AGENTS.md",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/30",
+      "description": "Fixes #31 \r\n\r\n## Summary\r\nCreate an `AGENTS.md` file that includes the following sections:\r\n\r\n1.  **Who This Is For**: C...",
+      "status": "Closed",
+      "date": "Feb 14, 2026",
+      "additions": 379,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "Fix: Update OpenAIEmbedder to support reduced embedding dimensions (sync with Chroma)",
       "repo": "mem0ai/mem0",
       "url": "https://github.com/mem0ai/mem0/pull/3471",
@@ -378,6 +362,22 @@
         "Python",
         "TypeScript",
         "MDX"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat: Add agent module for shared utilities",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/6",
+      "description": "## Summary\r\nAdds an `agent-app/` module to centralize shared utilities, preparing the codebase for agentic workflows.\r\n\r...",
+      "status": "Closed",
+      "date": "Jan 29, 2026",
+      "additions": 213,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
       ],
       "isTopRepo": true
     },
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-04-02T12:14:14.844Z",
+  "lastUpdated": "2026-04-03T07:16:04.076Z",
   "total": 25,
-  "open": 16,
+  "open": 14,
   "merged": 7
 }
