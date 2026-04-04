@@ -53,7 +53,7 @@ export default function Hero() {
       <div className="absolute inset-0 perspective-1000">
         {/* Floating Geometric Shapes */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-32 h-32 border border-white/10"
+          className="absolute top-1/4 left-1/4 w-16 h-16 md:w-32 md:h-32 border border-white/10"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateX(${mousePosition.y}deg) rotateY(${mousePosition.x}deg)`,
@@ -72,7 +72,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-24 h-24 border border-accent/20"
+          className="absolute bottom-1/4 right-1/4 w-12 h-12 md:w-24 md:h-24 border border-accent/20"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateX(${-mousePosition.y}deg) rotateY(${-mousePosition.x}deg)`,
@@ -91,7 +91,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute top-1/3 right-1/3 w-20 h-20 border-2 border-white/5 rounded-lg"
+          className="absolute top-1/3 right-1/3 w-10 h-10 md:w-20 md:h-20 border-2 border-white/5 rounded-lg"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${mousePosition.x * 0.5}deg) rotateX(${mousePosition.y * 0.5}deg)`,
@@ -185,14 +185,14 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+            className="flex flex-col sm:flex-row items-center justify-center w-full gap-4 pt-4 px-4 sm:px-0"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
           >
-            <Link to="/pull-requests" onMouseEnter={() => import('../pages/PullRequests')}>
+            <Link to="/pull-requests" onMouseEnter={() => import('../pages/PullRequests')} className="w-full sm:w-auto border border-transparent">
               <motion.button
-                className="group px-8 py-4 bg-accent text-black font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40"
+                className="w-full group px-8 py-4 bg-accent text-black font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -205,7 +205,7 @@ export default function Hero() {
               href="https://github.com/haroon0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 border border-white/20 text-white hover:border-accent hover:text-accent font-medium rounded-lg transition-all duration-300"
+              className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white hover:border-accent hover:text-accent font-medium rounded-lg transition-all duration-300 flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

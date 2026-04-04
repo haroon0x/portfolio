@@ -219,7 +219,8 @@
         "Python",
         "JavaScript"
       ],
-      "isTopRepo": true
+      "isTopRepo": true,
+      "bounty": "$5"
     },
     {
       "title": "fix(frontend): remove raw <br/> tags from Getting Started page",

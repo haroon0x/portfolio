@@ -141,7 +141,7 @@ function SpotlightCard({ project, index }: { project: any; index: number }) {
       <div className="relative p-8 md:p-10">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           <div className="flex-1">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4 mb-4">
               <h3 className="text-2xl md:text-3xl font-heading font-bold text-white group-hover:text-accent transition-colors">
                 {project.title}
               </h3>

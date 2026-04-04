@@ -58,10 +58,11 @@ const PullRequests = () => {
       try {
         const response = await fetch('/pr-data.json');
         if (!response.ok) throw new Error('Failed to load PR data');
-        const prData = await response.json();
+        const prData = (await response.json()) as PRData;
         setData(prData);
-        const orgs = [...new Set(prData.prs.map((pr: PullRequest) => pr.repo.split('/')[0]))];
-        setExpandedOrgs(new Set(orgs));
+        const prsArray: string[] = prData.prs.map((pr: PullRequest) => pr.repo.split('/')[0]);
+        const orgs = Array.from(new Set<string>(prsArray));
+        setExpandedOrgs(new Set<string>(orgs));
       } catch (err) {
         console.error('Error loading PR data:', err);
         setError('Failed to load pull requests data.');
@@ -294,7 +295,7 @@ const PullRequests = () => {
                 <Filter className="w-4 h-4" />
                 Filter:
               </span>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setFilterStatus("all")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
@@ -327,7 +328,7 @@ const PullRequests = () => {
                 <ArrowDownUp className="w-4 h-4" />
                 Sort:
               </span>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => toggleSort("status")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
@@ -428,7 +429,7 @@ const PullRequests = () => {
                           <span className="text-green-400 bg-green-400/10 px-2 py-1 rounded">+{pr.additions}</span>
                           <span className="text-red-400 bg-red-400/10 px-2 py-1 rounded">-{pr.deletions}</span>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2 justify-end">
                           {pr.languages.map((lang) => (
                             <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">{lang}</span>
                           ))}
