@@ -219,8 +219,7 @@
         "Python",
         "JavaScript"
       ],
-      "isTopRepo": true,
-      "bounty": "$5"
+      "isTopRepo": true
     },
     {
       "title": "fix(frontend): remove raw <br/> tags from Getting Started page",
@@ -412,7 +411,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-04-04T07:06:29.535Z",
+  "lastUpdated": "2026-04-04T09:52:48.946Z",
   "total": 25,
   "open": 14,
   "merged": 7
