@@ -386,7 +386,7 @@
       "repo": "openclaw/openclaw",
       "url": "https://github.com/openclaw/openclaw/pull/36310",
       "description": " ## Summary\r\n\r\n  Describe the problem and fix in 2–5 bullets:\r\n\r\n  - **Problem**: The model field in agent configuration...",
-      "status": "Open",
+      "status": "Closed",
       "date": "Mar 5, 2026",
       "additions": 249,
       "deletions": 1,
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-04-19T07:25:48.693Z",
+  "lastUpdated": "2026-04-20T08:16:36.590Z",
   "total": 25,
-  "open": 14,
+  "open": 13,
   "merged": 7
 }
