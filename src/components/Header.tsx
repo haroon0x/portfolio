@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Sun, Moon, Twitter, Heart } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Sun, Moon, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,7 +15,7 @@ export default function Header() {
       setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -35,8 +35,7 @@ export default function Header() {
 
   const socialLinks = [
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' },
-    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/skywalkerr0x', color: 'hover:text-blue-400' }
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' }
   ];
 
   return (
@@ -47,7 +46,7 @@ export default function Header() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none"
       >
-        <nav className={`
+        <nav aria-label="Primary navigation" className={`
           pointer-events-auto
           flex items-center justify-between gap-2 md:gap-6
           px-4 md:px-6 py-2 md:py-3
@@ -55,7 +54,7 @@ export default function Header() {
           bg-zinc-900/40 backdrop-blur-xl
           border border-white/10
           shadow-lg shadow-black/10
-          transition-all duration-500
+          transition-colors duration-500
           ${isScrolled ? 'bg-zinc-900/60 shadow-xl' : ''}
         `}>
           {/* Logo */}
@@ -80,7 +79,7 @@ export default function Header() {
                       onMouseEnter={() => {
                         if (item.url === '/pull-requests') import('../pages/PullRequests');
                       }}
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       {item.name}
                     </Link>
@@ -89,7 +88,7 @@ export default function Header() {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       {item.name}
                     </a>
@@ -97,7 +96,7 @@ export default function Header() {
                 ) : (
                   <button
                     onClick={() => item.id && scrollToSection(item.id)}
-                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                   >
                     {item.name}
                   </button>
@@ -113,7 +112,7 @@ export default function Header() {
                 href="https://github.com/sponsors/haroon0x" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 group"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-[color,background-color,border-color,transform] duration-300 group active:scale-[0.96]"
               >
                 <Heart size={12} className="group-hover:text-accent group-hover:fill-accent transition-colors" />
                 <span>Sponsor</span>
@@ -123,9 +122,17 @@ export default function Header() {
             <Magnetic>
               <button
                 onClick={toggleTheme}
-                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300"
+                aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+                className="relative p-3 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
               >
-                {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                <Sun
+                  size={16}
+                  className={`absolute inset-0 m-auto transition-[transform,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${isDark ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-[0.25] blur-[4px]'}`}
+                />
+                <Moon
+                  size={16}
+                  className={`transition-[transform,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${isDark ? 'opacity-0 scale-[0.25] blur-[4px]' : 'opacity-100 scale-100 blur-0'}`}
+                />
               </button>
             </Magnetic>
 
@@ -136,7 +143,8 @@ export default function Header() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`block p-2 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-all duration-300`}
+                    aria-label={`Visit ${social.name} profile`}
+                    className={`block p-3 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]`}
                   >
                     <social.icon size={16} />
                   </a>
@@ -145,23 +153,24 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors duration-300"
-            >
-              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            className="md:hidden p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+          >
+            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </nav>
       </motion.header>
 
       {/* Mobile Menu Overlay */}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            exit={{ opacity: 0, scale: 0.98, y: -8 }}
             transition={{ duration: 0.2 }}
             className="fixed top-24 left-4 right-4 z-40 md:hidden"
           >
@@ -176,7 +185,7 @@ export default function Header() {
                         onMouseEnter={() => {
                           if (item.url === '/pull-requests') import('../pages/PullRequests');
                         }}
-                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {item.name}
@@ -187,7 +196,7 @@ export default function Header() {
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                       >
                         {item.name}
                       </a>
@@ -196,10 +205,12 @@ export default function Header() {
                     <button
                       key={item.id}
                       onClick={() => {
-                        item.id && scrollToSection(item.id);
+                        if (item.id) {
+                          scrollToSection(item.id);
+                        }
                         setIsMenuOpen(false);
                       }}
-                      className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                      className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       {item.name}
                     </button>
@@ -214,7 +225,8 @@ export default function Header() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-all duration-300`}
+                    aria-label={`Visit ${social.name} profile`}
+                    className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]`}
                   >
                     <social.icon size={20} />
                   </a>

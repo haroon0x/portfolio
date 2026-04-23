@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, Twitter, Heart } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+
+const ROLES = [
+  'AI/ML Engineer',
+  'Agentic AI Developer',
+  'Open Source Contributor'
+];
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentRole, setCurrentRole] = useState(0);
 
-  const roles = [
-    'AI/ML Engineer',
-    'Agentic AI Developer',
-    'Open Source Contributor'
-  ];
-
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentRole((prev) => (prev + 1) % roles.length);
+      setCurrentRole((prev) => (prev + 1) % ROLES.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -43,7 +43,6 @@ export default function Hero() {
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x' },
     { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8' },
     { name: 'Email', icon: Mail, url: 'mailto:haroonbmc0@gmail.com' },
-    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/skywalkerr0x' },
     { name: 'Sponsor', icon: Heart, url: 'https://github.com/sponsors/haroon0x' }
   ];
 
@@ -142,7 +141,7 @@ export default function Hero() {
           {/* Main Heading */}
           <div className="space-y-4">
             <motion.h1
-              className="font-heading text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-tight tracking-tight"
+              className="font-heading text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-tight tracking-tight text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -167,14 +166,14 @@ export default function Hero() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
               >
-                {roles[currentRole]}
+                {ROLES[currentRole]}
               </motion.p>
             </motion.div>
           </div>
 
           {/* Description */}
           <motion.p
-            className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto font-light leading-relaxed"
+            className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto font-light leading-relaxed text-pretty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.9 }}
@@ -190,24 +189,24 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
           >
-            <Link to="/pull-requests" onMouseEnter={() => import('../pages/PullRequests')} className="w-full sm:w-auto border border-transparent">
-              <motion.button
-                className="w-full group px-8 py-4 bg-accent text-black font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} className="w-full sm:w-auto">
+              <Link
+                to="/pull-requests"
+                onMouseEnter={() => import('../pages/PullRequests')}
+                className="w-full group px-8 py-4 bg-accent text-white font-medium rounded-lg hover:bg-accent/90 transition-[background-color,box-shadow,transform] duration-300 flex items-center justify-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40 active:scale-[0.96]"
               >
                 <span>View My Work</span>
                 <ArrowDown size={18} className="-rotate-90 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </Link>
+              </Link>
+            </motion.div>
 
             <motion.a
               href="https://github.com/haroon0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white hover:border-accent hover:text-accent font-medium rounded-lg transition-all duration-300 flex items-center justify-center"
+              className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white hover:border-accent hover:text-accent font-medium rounded-lg transition-[color,border-color,transform] duration-300 flex items-center justify-center active:scale-[0.96]"
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.96 }}
             >
               Explore Projects
             </motion.a>
@@ -228,7 +227,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 className="p-3 text-white/40 hover:text-accent transition-colors duration-300 rounded-lg hover:bg-white/5"
                 whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.96 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4 + index * 0.1 }}

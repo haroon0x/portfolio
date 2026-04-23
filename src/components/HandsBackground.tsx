@@ -60,21 +60,30 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
     return (
         <div ref={containerRef} className="relative w-full min-h-screen bg-background text-text-primary overflow-hidden">
             {/* Background Image Layer */}
-            <div
-                className="absolute inset-0 z-0 pointer-events-none"
-                style={{
-                    backgroundImage: 'url(/hands-high-res.jpg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center',
-                    backgroundRepeat: 'no-repeat',
-                    // Invert to make white bg dark, and hands light. 
-                    // Grayscale to remove color noise.
-                    // Opacity to blend with the dark background.
-                    filter: 'grayscale(100%) invert(1) contrast(1.3) brightness(0.9)',
-                    opacity: 0.7,
-                    mixBlendMode: 'screen'
-                }}
-            />
+            <picture className="absolute inset-0 z-0 pointer-events-none">
+                <source
+                    type="image/webp"
+                    srcSet="/hands-960.webp 960w, /hands-1600.webp 1600w"
+                    sizes="100vw"
+                />
+                <img
+                    src="/hands-high-res.jpg"
+                    alt=""
+                    aria-hidden="true"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="h-full w-full object-cover"
+                    style={{
+                        // Invert to make white bg dark, and hands light.
+                        // Grayscale to remove color noise.
+                        // Opacity to blend with dark background.
+                        filter: 'grayscale(100%) invert(1) contrast(1.3) brightness(0.9)',
+                        opacity: 0.7,
+                        mixBlendMode: 'screen'
+                    }}
+                />
+            </picture>
 
             {/* Vignette / Gradient Overlay to fade edges */}
             <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-transparent to-background" />

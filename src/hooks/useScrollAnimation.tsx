@@ -39,21 +39,6 @@ export function useScrollAnimation<T extends HTMLElement = HTMLElement>(options:
   return { ref, isVisible, hasAnimated };
 }
 
-export function useParallax() {
-  const [offset, setOffset] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setOffset(window.pageYOffset);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return offset;
-}
-
 // Advanced scroll animations hook
 export function useAdvancedScrollAnimation() {
   const [scrollY, setScrollY] = useState(0);
@@ -79,37 +64,4 @@ export function useAdvancedScrollAnimation() {
   }, []);
 
   return { scrollY, scrollDirection, scrollProgress };
-}
-
-// Stagger animation hook
-export function useStaggerAnimation(itemCount: number, delay: number = 0.1) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  const getItemDelay = (index: number) => {
-    return isVisible ? index * delay : 0;
-  };
-
-  return { ref, isVisible, getItemDelay };
 }

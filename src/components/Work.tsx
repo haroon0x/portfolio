@@ -6,8 +6,17 @@ interface WorkProps {
   order?: 'latest' | 'all';
 }
 
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  github?: string;
+  link?: string;
+  size?: 'small' | 'medium' | 'large' | 'wide';
+}
+
 export default function Work({ order = 'all' }: WorkProps) {
-  const projects = [
+  const projects: Project[] = [
     {
       title: 'Containerized Agent',
       description: 'A secure, containerized code execution agent that increased code execution reliability by 99.8% and reduced security incidents by 75% through isolated environments.',
@@ -66,10 +75,10 @@ export default function Work({ order = 'all' }: WorkProps) {
         transition={{ duration: 0.8 }}
         className="mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 text-balance">
           Selected <span className="text-accent">Works</span>
         </h2>
-        <p className="text-xl text-white/60 max-w-2xl font-light">
+        <p className="text-xl text-white/60 max-w-2xl font-light text-pretty">
           A collection of projects exploring AI, autonomous agents, and interactive web experiences.
         </p>
       </motion.div>
@@ -83,9 +92,8 @@ export default function Work({ order = 'all' }: WorkProps) {
   );
 }
 
-function SpotlightCard({ project, index }: { project: any; index: number }) {
+function SpotlightCard({ project, index }: { project: Project; index: number }) {
   const divRef = React.useRef<HTMLDivElement>(null);
-  const [isFocused, setIsFocused] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = React.useState(0);
 
@@ -99,12 +107,10 @@ function SpotlightCard({ project, index }: { project: any; index: number }) {
   };
 
   const handleFocus = () => {
-    setIsFocused(true);
     setOpacity(1);
   };
 
   const handleBlur = () => {
-    setIsFocused(false);
     setOpacity(0);
   };
 
@@ -151,6 +157,7 @@ function SpotlightCard({ project, index }: { project: any; index: number }) {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Open ${project.title} on GitHub`}
                     className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors border border-white/5 hover:border-white/20"
                   >
                     <Github size={20} />
@@ -161,6 +168,7 @@ function SpotlightCard({ project, index }: { project: any; index: number }) {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Open live link for ${project.title}`}
                     className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors border border-white/5 hover:border-white/20"
                   >
                     <ExternalLink size={20} />
@@ -184,12 +192,13 @@ function SpotlightCard({ project, index }: { project: any; index: number }) {
 
           <div className="flex items-center self-end md:self-center">
             {(project.link || project.github) && (
-              <a
-                href={project.link || project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-accent font-medium opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300"
-              >
+                <a
+                  href={project.link || project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View project details for ${project.title}`}
+                  className="flex items-center gap-2 text-accent font-medium opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-[opacity,transform] duration-300"
+                >
                 <span>View Project</span>
                 <ArrowRight size={20} />
               </a>

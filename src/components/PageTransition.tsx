@@ -8,17 +8,40 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+    const start = performance.now();
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection?.effectiveType;
 
-    return () => clearTimeout(timer);
+    let minDuration = 250;
+    if (prefersReducedMotion) {
+      minDuration = 0;
+    } else if (connection === 'slow-2g' || connection === '2g') {
+      minDuration = 600;
+    }
+
+    const releaseLoader = () => {
+      const elapsed = performance.now() - start;
+      const remaining = Math.max(minDuration - elapsed, 0);
+      window.setTimeout(() => setIsLoading(false), remaining);
+    };
+
+    const safetyTimer = window.setTimeout(releaseLoader, 1200);
+    if (document.readyState === 'complete') {
+      releaseLoader();
+    } else {
+      window.addEventListener('load', releaseLoader, { once: true });
+    }
+
+    return () => {
+      window.clearTimeout(safetyTimer);
+      window.removeEventListener('load', releaseLoader);
+    };
   }, []);
 
   return (
     <>
       {/* Loading Screen */}
-      <div className={`fixed inset-0 z-50 bg-black flex items-center justify-center transition-all duration-1000 ${
+      <div data-testid="page-loader" className={`fixed inset-0 z-50 bg-black flex items-center justify-center transition-[opacity,visibility] duration-1000 ${
         isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}>
         <div className="text-center space-y-8">
@@ -41,7 +64,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
       </div>
 
       {/* Main Content */}
-      <div className={`transition-all duration-1000 ${
+      <div className={`transition-[opacity,transform] duration-1000 ${
         isLoading ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'
       }`}>
         {children}

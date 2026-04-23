@@ -11,6 +11,8 @@
   body {
     @apply bg-background text-text-primary font-body antialiased selection:bg-accent selection:text-white;
     background-color: #0a0a0a;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
     /* Hide default cursor */
   }
 
@@ -22,10 +24,15 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     opacity: 0.4;
-    mix-blend-mode: overlay;
+    mix-blend-mode: normal;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
   }
 
   h1,
@@ -49,6 +56,72 @@
 
   .text-gradient-accent {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-glow to-accent;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/50;
+  }
+
+  .hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-lg hover:shadow-black/20;
+  }
+
+  .animate-pulse-minimal {
+    animation: pulse-minimal 1.8s ease-in-out infinite;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 10000;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #111111;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-140%);
+    transition: transform 200ms ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-minimal {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
