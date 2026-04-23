@@ -47,7 +47,7 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-transparent">
+    <section id="hero" className="min-h-[100svh] relative overflow-hidden flex items-center justify-center bg-transparent">
       {/* 3D Background Elements */}
       <div className="absolute inset-0 perspective-1000">
         {/* Floating Geometric Shapes */}
@@ -247,7 +247,9 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
       >
-        <motion.div
+        <motion.button
+          type="button"
+          aria-label="Scroll to work section"
           className="flex flex-col items-center gap-2 cursor-pointer group"
           onClick={scrollToWork}
           animate={{ y: [0, 10, 0] }}
@@ -255,7 +257,7 @@ export default function Hero() {
         >
           <div className="w-px h-16 bg-gradient-to-b from-transparent via-accent/50 to-transparent" />
           <span className="text-xs text-white/30 uppercase tracking-wider font-mono group-hover:text-accent transition-colors">Scroll</span>
-        </motion.div>
+        </motion.button>
       </motion.div>
     </section>
   );

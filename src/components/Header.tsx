@@ -19,6 +19,26 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isMenuOpen]);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -155,6 +175,8 @@ export default function Header() {
             {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav-menu"
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             className="md:hidden p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
           >
@@ -167,14 +189,28 @@ export default function Header() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence initial={false}>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-24 left-4 right-4 z-40 md:hidden"
-          >
-            <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl">
+          <>
+            <motion.button
+              type="button"
+              aria-label="Close menu overlay"
+              onClick={() => setIsMenuOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-30 bg-black/40 md:hidden"
+            />
+            <motion.div
+              id="mobile-nav-menu"
+              role="dialog"
+              aria-modal="true"
+              initial={{ opacity: 0, scale: 0.95, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="fixed top-24 left-4 right-4 z-40 md:hidden"
+            >
+              <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl">
               <div className="flex flex-col space-y-2">
                 {navItems.map((item) => (
                   'url' in item && item.url ? (
@@ -232,8 +268,9 @@ export default function Header() {
                   </a>
                 ))}
               </div>
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

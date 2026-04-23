@@ -10,6 +10,7 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         let animationFrameId: number;
         let offset = 0;
@@ -43,8 +44,10 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 ctx.stroke();
             }
 
-            offset += 0.2; // Speed of grid movement
-            animationFrameId = requestAnimationFrame(drawGrid);
+            if (!prefersReducedMotion) {
+                offset += 0.2; // Speed of grid movement
+                animationFrameId = requestAnimationFrame(drawGrid);
+            }
         };
 
         window.addEventListener('resize', resize);

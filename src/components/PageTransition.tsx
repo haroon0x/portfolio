@@ -19,10 +19,15 @@ export default function PageTransition({ children }: PageTransitionProps) {
       minDuration = 600;
     }
 
+    let hasReleased = false;
+    let releaseTimer: number | null = null;
+
     const releaseLoader = () => {
+      if (hasReleased) return;
+      hasReleased = true;
       const elapsed = performance.now() - start;
       const remaining = Math.max(minDuration - elapsed, 0);
-      window.setTimeout(() => setIsLoading(false), remaining);
+      releaseTimer = window.setTimeout(() => setIsLoading(false), remaining);
     };
 
     const safetyTimer = window.setTimeout(releaseLoader, 1200);
@@ -34,6 +39,9 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
     return () => {
       window.clearTimeout(safetyTimer);
+      if (releaseTimer !== null) {
+        window.clearTimeout(releaseTimer);
+      }
       window.removeEventListener('load', releaseLoader);
     };
   }, []);

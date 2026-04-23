@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter, Trophy } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useEffect, useState } from "react";
@@ -16,7 +16,6 @@ interface PullRequest {
   deletions: number;
   languages: string[];
   isTopRepo?: boolean;
-  bounty?: string;
 }
 
 interface PRData {
@@ -156,16 +155,8 @@ const PullRequests = () => {
 
   const filteredPRs = getFilteredAndSortedPRs();
 
-  const totalBounty = data ? data.prs.reduce((acc, pr) => {
-    if (pr.bounty) {
-      const amount = parseFloat(pr.bounty.replace(/[^0-9.-]+/g, ""));
-      if (!isNaN(amount)) return acc + amount;
-    }
-    return acc;
-  }, 0) : 0;
-
   return (
-      <section className="min-h-screen py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 bg-background">
+      <section className="min-h-[100svh] py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <Magnetic>
@@ -193,17 +184,10 @@ const PullRequests = () => {
 
             {/* Stats Overview */}
             {data && !loading && (
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                 <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10 flex flex-col justify-between">
                   <p className="text-3xl font-bold text-white tabular-nums">{data.total}</p>
                   <p className="text-sm text-white/50">Total PRs</p>
-                </div>
-                <div className="p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex flex-col justify-between">
-                  <div className="flex items-center gap-2">
-                    <Trophy className="w-6 h-6 text-yellow-400" />
-                    <p className="text-3xl font-bold text-yellow-400 tabular-nums">${totalBounty}</p>
-                  </div>
-                  <p className="text-sm text-yellow-300">Total Bounties</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex flex-col justify-between">
                   <p className="text-3xl font-bold text-purple-400 tabular-nums">{data.merged}</p>
@@ -415,12 +399,6 @@ const PullRequests = () => {
                             <Calendar className="w-3 h-3" />
                             {pr.date}
                           </span>
-                          {pr.bounty && (
-                            <div className="px-2 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
-                              <Trophy className="w-3 h-3" />
-                              {pr.bounty} Bounty
-                            </div>
-                          )}
                         </div>
                         <div className="p-2 rounded-full bg-white/5 text-white/40 group-hover:text-white group-hover:bg-accent transition-[background-color,color,transform] duration-300">
                           <ArrowUpRight className="w-4 h-4" />
