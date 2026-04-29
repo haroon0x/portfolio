@@ -159,22 +159,6 @@
       "isTopRepo": true
     },
     {
-      "title": "feat: Add automatic container image security scanning using Trivy",
-      "repo": "kubeflow/katib",
-      "url": "https://github.com/kubeflow/katib/pull/2608",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Open",
-      "date": "Jan 28, 2026",
-      "additions": 36,
-      "deletions": 2,
-      "languages": [
-        "Python",
-        "Go",
-        "TypeScript"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "feat(trainer): implement get_gpu_status for Kubernetesbackend",
       "repo": "kubeflow/sdk",
       "url": "https://github.com/kubeflow/sdk/pull/251",
@@ -366,6 +350,22 @@
       "isTopRepo": true
     },
     {
+      "title": "feat: Add automatic container image security scanning using Trivy",
+      "repo": "kubeflow/katib",
+      "url": "https://github.com/kubeflow/katib/pull/2608",
+      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
+      "status": "Closed",
+      "date": "Jan 28, 2026",
+      "additions": 36,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: Add agent module for shared utilities",
       "repo": "kubeflow/docs-agent",
       "url": "https://github.com/kubeflow/docs-agent/pull/6",
@@ -411,8 +411,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-04-28T08:30:53.086Z",
+  "lastUpdated": "2026-04-29T08:24:52.377Z",
   "total": 25,
-  "open": 13,
+  "open": 12,
   "merged": 7
 }
