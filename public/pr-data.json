@@ -97,36 +97,6 @@
       "isTopRepo": true
     },
     {
-      "title": "Feat: Add pre-commit hook that strips notebooks of metadata",
-      "repo": "google-deepmind/optax",
-      "url": "https://github.com/google-deepmind/optax/pull/1519",
-      "description": "Fixes #1372\r\n\r\n## Summary\r\n\r\nThis PR adds a pre-commit hook using [nbstripout](https://github.com/kynan/nbstripout) to a...",
-      "status": "Open",
-      "date": "Dec 3, 2025",
-      "additions": 9054,
-      "deletions": 9010,
-      "languages": [
-        "Python",
-        "Shell"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Update make_perturbed_fun",
-      "repo": "google-deepmind/optax",
-      "url": "https://github.com/google-deepmind/optax/pull/1520",
-      "description": "FIxes #1342\r\n\r\n\r\n- update sigma to scale\r\n- change default num_samples to 1\r\n- update examples notebook of perturbations...",
-      "status": "Open",
-      "date": "Dec 3, 2025",
-      "additions": 44,
-      "deletions": 56,
-      "languages": [
-        "Python",
-        "Shell"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "refactor: replace gomock with fake client in generator_test.go",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2604",
@@ -170,22 +140,6 @@
       "languages": [
         "Python",
         "Makefile"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Add Milvus connection pooling with auto-reconnection",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/27",
-      "description": "Fixes #28 \r\n## Summary\r\n\r\nImplements connection pooling for Milvus to eliminate the overhead of creating a new connectio...",
-      "status": "Open",
-      "date": "Feb 14, 2026",
-      "additions": 101,
-      "deletions": 32,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
       ],
       "isTopRepo": true
     },
@@ -350,6 +304,30 @@
       "isTopRepo": true
     },
     {
+      "title": "Feat: Add pre-commit hook that strips notebooks of metadata",
+      "repo": "google-deepmind/optax",
+      "url": "https://github.com/google-deepmind/optax/pull/1519",
+      "description": "Fixes #1372\r\n\r\n## Summary\r\n\r\nThis PR adds a pre-commit hook using [nbstripout](https://github.com/kynan/nbstripout) to a...",
+      "status": "Closed",
+      "date": "Dec 3, 2025",
+      "additions": 9054,
+      "deletions": 9010,
+      "languages": [],
+      "isTopRepo": true
+    },
+    {
+      "title": "Update make_perturbed_fun",
+      "repo": "google-deepmind/optax",
+      "url": "https://github.com/google-deepmind/optax/pull/1520",
+      "description": "FIxes #1342\r\n\r\n\r\n- update sigma to scale\r\n- change default num_samples to 1\r\n- update examples notebook of perturbations...",
+      "status": "Closed",
+      "date": "Dec 3, 2025",
+      "additions": 44,
+      "deletions": 56,
+      "languages": [],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: Add automatic container image security scanning using Trivy",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2608",
@@ -382,6 +360,22 @@
       "isTopRepo": true
     },
     {
+      "title": "Add Milvus connection pooling with auto-reconnection",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/27",
+      "description": "Fixes #28 \r\n## Summary\r\n\r\nImplements connection pooling for Milvus to eliminate the overhead of creating a new connectio...",
+      "status": "Closed",
+      "date": "Feb 14, 2026",
+      "additions": 101,
+      "deletions": 32,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat(config): add per-chat-type model routing (DM vs Group Chat)",
       "repo": "openclaw/openclaw",
       "url": "https://github.com/openclaw/openclaw/pull/36310",
@@ -390,11 +384,7 @@
       "date": "Mar 5, 2026",
       "additions": 249,
       "deletions": 1,
-      "languages": [
-        "TypeScript",
-        "Swift",
-        "JavaScript"
-      ],
+      "languages": [],
       "isTopRepo": false
     }
   ],
@@ -411,8 +401,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-12T08:45:47.668Z",
+  "lastUpdated": "2026-05-13T08:49:22.182Z",
   "total": 25,
-  "open": 12,
+  "open": 9,
   "merged": 7
 }
