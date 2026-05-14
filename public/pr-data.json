@@ -6,7 +6,7 @@
       "url": "https://github.com/RetroShare/RetroShare/pull/3223",
       "description": "\r\nResolves Issue #1794 \r\n\r\n## Description & Motivation\r\n\r\nCurrently, incoming connection attempts in RetroShare are disp...",
       "status": "Open",
-      "date": "May 13, 2026",
+      "date": "May 12, 2026",
       "additions": 509,
       "deletions": 0,
       "languages": [
@@ -102,7 +102,7 @@
       "url": "https://github.com/kubeflow/docs-agent/pull/101",
       "description": "This pr is not ready for merge. I have some fixes to make.\r\n## Summary\r\n\r\nExtends the existing Kubeflow RAG pipeline to ...",
       "status": "Open",
-      "date": "Mar 3, 2026",
+      "date": "Mar 2, 2026",
       "additions": 165,
       "deletions": 66,
       "languages": [
@@ -150,7 +150,7 @@
       "url": "https://github.com/kubeflow/docs-agent/pull/33",
       "description": "## Replace MinIO with SeaweedFS as Milvus object storage backend\r\nFixes #34\r\n### What\r\n\r\nThis PR swaps out the MinIO sid...",
       "status": "Open",
-      "date": "Feb 15, 2026",
+      "date": "Feb 14, 2026",
       "additions": 126,
       "deletions": 0,
       "languages": [
@@ -293,7 +293,7 @@
       "url": "https://github.com/gemma-facet/cloud-services/pull/82",
       "description": "## Description\r\nIntegrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing m...",
       "status": "Merged",
-      "date": "Nov 14, 2025",
+      "date": "Nov 13, 2025",
       "additions": 1717,
       "deletions": 940,
       "languages": [
@@ -501,7 +501,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-14T14:31:01.972Z",
+  "lastUpdated": "2026-05-14T15:36:21.392Z",
   "total": 31,
   "open": 15,
   "merged": 7
