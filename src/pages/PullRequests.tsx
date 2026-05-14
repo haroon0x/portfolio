@@ -49,7 +49,7 @@ const PullRequests = () => {
   const [filterStatus, setFilterStatus] = useState<"all" | "merged" | "open">("all");
   const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
 
-  const topOrgs = ["kubeflow", "mem0ai", "google-deepmind", "meta-llama", "owasp"];
+  const topOrgs = ["kubeflow", "mem0ai", "google-deepmind", "meta-llama", "owasp", "meshery", "potpie-ai", "retroshare", "moorcheh-ai"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -233,7 +233,6 @@ const PullRequests = () => {
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="text-lg font-bold text-white">{org.name}</h4>
-                              {org.isTopOrg && <Star className="w-4 h-4 text-accent fill-accent" />}
                             </div>
                             <p className="text-sm text-white/50">{org.repos.length} repos • {org.totalPRs} PRs</p>
                           </div>
@@ -410,7 +409,6 @@ const PullRequests = () => {
                       <div className="flex items-center gap-2 text-sm text-white/50 mb-4 font-mono">
                         <GitCommit className="w-4 h-4" />
                         <span>{pr.repo}</span>
-                        {pr.isTopRepo && <Star className="w-3 h-3 text-accent fill-accent" />}
                       </div>
 
                       <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">{pr.description}</p>

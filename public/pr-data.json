@@ -1,12 +1,108 @@
 {
   "prs": [
     {
+      "title": "Implement persistent Friend Requests page ",
+      "repo": "RetroShare/RetroShare",
+      "url": "https://github.com/RetroShare/RetroShare/pull/3223",
+      "description": "\r\nResolves Issue #1794 \r\n\r\n## Description & Motivation\r\n\r\nCurrently, incoming connection attempts in RetroShare are disp...",
+      "status": "Open",
+      "date": "May 13, 2026",
+      "additions": 509,
+      "deletions": 0,
+      "languages": [
+        "C++",
+        "C",
+        "QMake"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat(examples): add LangGraph long-term memory integration",
+      "repo": "moorcheh-ai/memanto",
+      "url": "https://github.com/moorcheh-ai/memanto/pull/440",
+      "description": "# feat(examples): Add LangGraph Long-Term Memory Integration\r\n\r\n## Demo\r\n\r\n<img width=\"1920\" height=\"973\" alt=\"cross_ses...",
+      "status": "Open",
+      "date": "May 12, 2026",
+      "additions": 610,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "HTML",
+        "Dockerfile"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "[Server] Propagate adapter deployment errors to GraphQL client",
+      "repo": "meshery/meshery",
+      "url": "https://github.com/meshery/meshery/pull/19228",
+      "description": "Fixes #19221\r\n\r\n\r\n**Summary:**\r\n\r\nFixes #19221\r\n\r\n`changeAdapterStatus` in `adapter.go` had two bugs:\r\n\r\n1. **Swallowed ...",
+      "status": "Open",
+      "date": "May 11, 2026",
+      "additions": 5485,
+      "deletions": 11518,
+      "languages": [
+        "Go",
+        "TypeScript",
+        "JavaScript"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Validate repository name format in get_branch_list() and check_public_repo()",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/763",
+      "description": "## Summary\n\nAdds input validation to `get_branch_list()` and `check_public_repo()` to ensure the `repo_name` parameter f...",
+      "status": "Open",
+      "date": "May 4, 2026",
+      "additions": 258,
+      "deletions": 1,
+      "languages": [
+        "Python",
+        "Rust",
+        "Tree-sitter Query"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Consolidate repo_name and repo_path into a single repository identifier",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/762",
+      "description": "\r\nCloses #517\r\n\r\n## summary\r\n\r\nThe codebase accepts `repo_name` and `repo_path` as separate variables throughout the par...",
+      "status": "Open",
+      "date": "May 4, 2026",
+      "additions": 481,
+      "deletions": 23,
+      "languages": [
+        "Python",
+        "Rust",
+        "Tree-sitter Query"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat: Migrate dependency management from pip to uv workspaces",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/202",
+      "description": "\r\n## Summary\r\n\r\nThis PR replaces the per-directory `requirements.txt` files with `pyproject.toml` files managed by `uv` ...",
+      "status": "Open",
+      "date": "Apr 9, 2026",
+      "additions": 3500,
+      "deletions": 50,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: add GitHub Issues ingestion component wired into pipeline",
       "repo": "kubeflow/docs-agent",
       "url": "https://github.com/kubeflow/docs-agent/pull/101",
       "description": "This pr is not ready for merge. I have some fixes to make.\r\n## Summary\r\n\r\nExtends the existing Kubeflow RAG pipeline to ...",
       "status": "Open",
-      "date": "Mar 2, 2026",
+      "date": "Mar 3, 2026",
       "additions": 165,
       "deletions": 66,
       "languages": [
@@ -54,7 +150,7 @@
       "url": "https://github.com/kubeflow/docs-agent/pull/33",
       "description": "## Replace MinIO with SeaweedFS as Milvus object storage backend\r\nFixes #34\r\n### What\r\n\r\nThis PR swaps out the MinIO sid...",
       "status": "Open",
-      "date": "Feb 14, 2026",
+      "date": "Feb 15, 2026",
       "additions": 126,
       "deletions": 0,
       "languages": [
@@ -197,7 +293,7 @@
       "url": "https://github.com/gemma-facet/cloud-services/pull/82",
       "description": "## Description\r\nIntegrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing m...",
       "status": "Merged",
-      "date": "Nov 13, 2025",
+      "date": "Nov 14, 2025",
       "additions": 1717,
       "deletions": 940,
       "languages": [
@@ -389,6 +485,10 @@
     }
   ],
   "topRepos": [
+    "RetroShare/RetroShare",
+    "moorcheh-ai/memanto",
+    "meshery/meshery",
+    "potpie-ai/potpie",
     "gemma-facet/cloud-services",
     "gemma-facet/synthetic-data-kit",
     "sktime/sktime",
@@ -401,8 +501,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-14T08:42:30.156Z",
-  "total": 25,
-  "open": 9,
+  "lastUpdated": "2026-05-14T14:31:01.972Z",
+  "total": 31,
+  "open": 15,
   "merged": 7
 }

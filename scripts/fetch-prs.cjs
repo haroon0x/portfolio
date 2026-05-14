@@ -2,6 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const prUrls = [
+  "https://github.com/RetroShare/RetroShare/pull/3223",
+  "https://github.com/moorcheh-ai/memanto/pull/440",
+  "https://github.com/meshery/meshery/pull/19228",
+  "https://github.com/potpie-ai/potpie/pull/763",
+  "https://github.com/potpie-ai/potpie/pull/762",
+  "https://github.com/kubeflow/docs-agent/pull/202",
   "https://github.com/openclaw/openclaw/pull/36310",
   "https://github.com/kubeflow/docs-agent/pull/101",
   "https://github.com/kubeflow/docs-agent/pull/50",
@@ -30,6 +36,10 @@ const prUrls = [
 ];
 
 const topRepos = [
+  "RetroShare/RetroShare",
+  "moorcheh-ai/memanto",
+  "meshery/meshery",
+  "potpie-ai/potpie",
   "gemma-facet/cloud-services",
   "gemma-facet/synthetic-data-kit",
   "sktime/sktime",
