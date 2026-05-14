@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Github, Linkedin, Sun, Moon, Heart } from 'lucide-react';
+import { XIcon } from './icons/XIcon';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +55,7 @@ export default function Header() {
   ];
 
   const socialLinks = [
+    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-blue-400' },
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
     { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' }
   ];
