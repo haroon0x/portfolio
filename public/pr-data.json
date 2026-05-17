@@ -4,11 +4,11 @@
       "title": "Implement persistent Friend Requests page ",
       "repo": "RetroShare/RetroShare",
       "url": "https://github.com/RetroShare/RetroShare/pull/3223",
-      "description": "\r\nResolves Issue #1794 \r\n\r\n## Description & Motivation\r\n\r\nCurrently, incoming connection attempts in RetroShare are disp...",
+      "description": "\r\nResolves Issue #1794 \r\n\r\nAdds a dedicated **Friend Requests** tab to the Network page so incoming connection attempts ...",
       "status": "Open",
       "date": "May 12, 2026",
-      "additions": 509,
-      "deletions": 0,
+      "additions": 569,
+      "deletions": 5,
       "languages": [
         "C++",
         "C",
@@ -189,22 +189,6 @@
         "Python",
         "Jupyter Notebook",
         "HTML"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "refactor: replace gomock with fake client in generator_test.go",
-      "repo": "kubeflow/katib",
-      "url": "https://github.com/kubeflow/katib/pull/2604",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Open",
-      "date": "Jan 26, 2026",
-      "additions": 57,
-      "deletions": 46,
-      "languages": [
-        "Python",
-        "Go",
-        "TypeScript"
       ],
       "isTopRepo": true
     },
@@ -424,6 +408,22 @@
       "isTopRepo": true
     },
     {
+      "title": "refactor: replace gomock with fake client in generator_test.go",
+      "repo": "kubeflow/katib",
+      "url": "https://github.com/kubeflow/katib/pull/2604",
+      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
+      "status": "Closed",
+      "date": "Jan 26, 2026",
+      "additions": 57,
+      "deletions": 46,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: Add automatic container image security scanning using Trivy",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2608",
@@ -501,8 +501,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-16T08:09:20.074Z",
+  "lastUpdated": "2026-05-17T08:25:30.342Z",
   "total": 31,
-  "open": 15,
+  "open": 14,
   "merged": 7
 }
