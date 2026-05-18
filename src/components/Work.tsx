@@ -19,14 +19,28 @@ export default function Work({ order = 'all' }: WorkProps) {
   const projects: Project[] = [
     {
       title: 'Containerized Agent',
-      description: 'A secure, containerized code execution agent that increased code execution reliability by 99.8% and reduced security incidents by 75% through isolated environments.',
-      tags: ['Python', 'Docker', 'Security'],
+      description: 'A secure, containerized code execution agent that runs untrusted AI-generated code in isolated sandbox environments to protect host systems from malicious processes.',
+      tags: ['Docker', 'FastAPI', 'Security'],
       github: 'https://github.com/haroon0x/Containerized-agent',
       size: 'large' as const
     },
     {
+      title: 'DeadDrop - Sovereign Task Agent',
+      description: 'A sovereign, asynchronous coding task inbox and local agent runner powered by a FastAPI dashboard and a high-performance Go worker polling outbound via secure tokens.',
+      tags: ['Go', 'FastAPI', 'Supabase', 'Agent Orchestration'],
+      github: 'https://github.com/haroon0x/DeadDrop',
+      size: 'large' as const
+    },
+    {
+      title: 'OutSync - Distributed Event System',
+      description: 'An asynchronous backend system that implements the transactional outbox pattern to safely forward PostgreSQL database events to Redis queues for event-driven webhooks and automation pipelines.',
+      tags: ['Python', 'Redis', 'PostgreSQL', 'Asyncio'],
+      github: 'https://github.com/haroon0x/OutSync',
+      size: 'medium' as const
+    },
+    {
       title: 'CrawlWise - The GEOAgent',
-      description: 'An intelligent web crawling agent that discovered over 10,000 new marketing opportunities and boosted SEO content generation by 300%.',
+      description: 'An intelligent web crawling agent designed for high-performance asynchronous web crawling and large-scale, structured data extraction across thousands of domains.',
       tags: ['TypeScript', 'React', 'AI/ML'],
       github: 'https://github.com/haroon0x/CrawlWise',
       link: 'https://crawlwise.netlify.app/',
@@ -34,22 +48,15 @@ export default function Work({ order = 'all' }: WorkProps) {
     },
     {
       title: 'PromoAgent',
-      description: 'An autonomous agent that increased marketing outreach by 500% on Reddit by generating tailored, high-engagement content.',
+      description: 'An autonomous agent that automates marketing outreach on community platforms by generating tailored, high-engagement content.',
       tags: ['Python', 'LangGraph', 'Marketing'],
       github: 'https://github.com/haroon0x/PromoAgent',
       link: 'https://promoagent.onrender.com/',
       size: 'small' as const
     },
     {
-      title: 'TheAgent - CLI Code Agent',
-      description: 'A CLI Code Agent that automated Python code documentation, migration, and refactoring, resulting in a 40% reduction in manual coding time.',
-      tags: ['Python', 'CLI', 'Automation'],
-      github: 'https://github.com/haroon0x/TheAgent',
-      size: 'small' as const
-    },
-    {
       title: 'Percolation Hypotheses Generator',
-      description: 'A hypothesis generation engine that accelerated research by 60% by automating the exploration of hypothesis complexity.',
+      description: 'A hypothesis generation engine that automates the exploration of hypothesis complexity to accelerate computational research.',
       tags: ['Python', 'NLP', 'Research'],
       github: 'https://github.com/haroon0x/percolation-hypotheses-gen',
       link: 'https://percolation-hypotheses.onrender.com/',
@@ -57,8 +64,8 @@ export default function Work({ order = 'all' }: WorkProps) {
     },
     {
       title: 'Neural Network From Scratch',
-      description: 'An educational project that achieved a 95% accuracy rate on foundational ML problems by implementing neural networks from scratch.',
-      tags: ['Python', 'Java', 'ML Fundamentals'],
+      description: 'An educational project implementing deep learning and neural network structures from scratch to achieve high classification accuracy.',
+      tags: ['Python', 'ML Fundamentals'],
       github: 'https://github.com/haroon0x/NNFromScratch',
       size: 'small' as const
     }

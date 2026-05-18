@@ -33,3 +33,6 @@ dist-ssr
 # Playwright artifacts
 playwright-report/
 test-results/
+
+# Resume
+haroon-resume.html
