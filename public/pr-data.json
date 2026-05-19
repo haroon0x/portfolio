@@ -68,11 +68,11 @@
       "title": "Consolidate repo_name and repo_path into a single repository identifier",
       "repo": "potpie-ai/potpie",
       "url": "https://github.com/potpie-ai/potpie/pull/762",
-      "description": "\r\nCloses #517\r\n\r\n## summary\r\n\r\nThe codebase accepts `repo_name` and `repo_path` as separate variables throughout the par...",
+      "description": "  ## Changes\r\n\r\n  - Added `RepositoryResolver` to classify repository identifiers as local paths\r\n  or remote repos.\r\n  ...",
       "status": "Open",
       "date": "May 4, 2026",
       "additions": 481,
-      "deletions": 23,
+      "deletions": 29,
       "languages": [
         "Python",
         "Rust",
@@ -208,6 +208,22 @@
       "isTopRepo": true
     },
     {
+      "title": "refactor: replace gomock with fake client in generator_test.go",
+      "repo": "kubeflow/katib",
+      "url": "https://github.com/kubeflow/katib/pull/2604",
+      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
+      "status": "Open",
+      "date": "Jan 26, 2026",
+      "additions": 57,
+      "deletions": 46,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: Add node selector configuration for Python SDK",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2607",
@@ -234,6 +250,7 @@
       "deletions": 4,
       "languages": [
         "Python",
+        "Shell",
         "Makefile"
       ],
       "isTopRepo": true
@@ -453,22 +470,6 @@
       "isTopRepo": true
     },
     {
-      "title": "refactor: replace gomock with fake client in generator_test.go",
-      "repo": "kubeflow/katib",
-      "url": "https://github.com/kubeflow/katib/pull/2604",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Closed",
-      "date": "Jan 26, 2026",
-      "additions": 57,
-      "deletions": 46,
-      "languages": [
-        "Python",
-        "Go",
-        "TypeScript"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "feat: Add automatic container image security scanning using Trivy",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2608",
@@ -547,8 +548,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-19T12:34:02.190Z",
-  "total": 34,
-  "open": 17,
+  "lastUpdated": "2026-05-17T08:25:30.342Z",
+  "total": 31,
+  "open": 14,
   "merged": 7
 }
