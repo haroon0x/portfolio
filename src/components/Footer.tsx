@@ -14,33 +14,33 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-zinc-950 border-t border-white/10 py-16">
-      <div className="max-w-5xl mx-auto px-8">
+    <footer className="border-t border-white/10 bg-zinc-950 py-12 sm:py-16">
+      <div className="safe-x mx-auto max-w-5xl sm:px-8">
         <div className="text-center space-y-8">
           {/* Contact */}
           <div className="space-y-4">
-            <h3 className="text-3xl font-light text-white tracking-tight">
+            <h3 className="text-2xl font-light tracking-tight text-white sm:text-3xl">
               Let's build something amazing
             </h3>
             <a 
               href="mailto:haroonbmc0@gmail.com"
-              className="group inline-flex items-center space-x-3 text-white/70 hover:text-white transition-[color,transform] duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-lg px-3 py-2 text-pretty active:scale-[0.96]"
+              className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-lg px-3 py-2 text-white/70 transition-[color,transform] duration-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
               aria-label="Send email to haroonbmc0@gmail.com"
             >
               <Mail size={18} />
-              <span className="font-medium">haroonbmc0@gmail.com</span>
+              <span className="min-w-0 break-all font-medium">haroonbmc0@gmail.com</span>
             </a>
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center items-center space-x-6 mt-4">
+          <div className="mt-4 flex items-center justify-center gap-3 sm:gap-6">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-[border-color,color,transform,box-shadow] duration-200 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96] ${social.color}`}
+                className={`group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-200 hover-lift hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96] ${social.color}`}
                 aria-label={`Visit ${social.name} profile`}
                 tabIndex={0}
               >
@@ -64,7 +64,7 @@ export default function Footer() {
 
             <button
               onClick={scrollToTop}
-              className="group p-3 bg-zinc-900 border border-white/10 hover:border-blue-400/30 rounded-xl transition-[border-color,color,transform,box-shadow] duration-300 hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
+              className="group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-300 hover-lift hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
               aria-label="Back to top"
             >
               <ArrowUp size={16} className="text-white/70 group-hover:text-blue-400 group-hover:-translate-y-1 transition-[color,transform] duration-300" />

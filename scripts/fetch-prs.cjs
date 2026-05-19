@@ -7,6 +7,7 @@ const prUrls = [
   "https://github.com/meshery/meshery/pull/19228",
   "https://github.com/potpie-ai/potpie/pull/763",
   "https://github.com/potpie-ai/potpie/pull/762",
+  "https://github.com/potpie-ai/potpie/pull/782",
   "https://github.com/kubeflow/docs-agent/pull/202",
   "https://github.com/openclaw/openclaw/pull/36310",
   "https://github.com/kubeflow/docs-agent/pull/101",
@@ -26,6 +27,8 @@ const prUrls = [
   "https://github.com/kubeflow/katib/pull/2608",
   "https://github.com/kubeflow/docs-agent/pull/6",
   "https://github.com/kubeflow/sdk/pull/251",
+  "https://github.com/kubeflow/sdk/pull/496",
+  "https://github.com/kubeflow/mcp-server/pull/26",
   "https://github.com/kubeflow/docs-agent/pull/27",
   "https://github.com/kubeflow/pipelines/pull/12730",
   "https://github.com/kubeflow/docs-agent/pull/8",
@@ -47,6 +50,7 @@ const topRepos = [
   "kubeflow/pipelines",
   "kubeflow/katib",
   "kubeflow/sdk",
+  "kubeflow/mcp-server",
   "mem0ai/mem0",
   "google-deepmind/optax",
   "meta-llama/synthetic-data-kit",
@@ -68,6 +72,16 @@ async function fetchPRs() {
   if (GITHUB_TOKEN) {
     console.log('✓ Using GitHub token for higher rate limits');
   }
+
+  const outputPath = path.join(__dirname, '../public/pr-data.json');
+  let existingData = null;
+  try {
+    if (fs.existsSync(outputPath)) {
+      existingData = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+    }
+  } catch (e) {
+    console.error('Failed to read existing pr-data.json:', e.message);
+  }
   
   const prs = await Promise.all(
     prUrls.map(async (url, index) => {
@@ -85,6 +99,13 @@ async function fetchPRs() {
 
         if (!response.ok) {
           console.error(`Failed to fetch ${url}: ${response.status}`);
+          if (existingData && existingData.prs) {
+            const cachedPr = existingData.prs.find(p => p.url === url);
+            if (cachedPr) {
+              console.log(`  (Using cached entry for ${url})`);
+              return cachedPr;
+            }
+          }
           return null;
         }
 
@@ -122,6 +143,13 @@ async function fetchPRs() {
         return pr;
       } catch (error) {
         console.error(`✗ Error fetching ${url}:`, error.message);
+        if (existingData && existingData.prs) {
+          const cachedPr = existingData.prs.find(p => p.url === url);
+          if (cachedPr) {
+            console.log(`  (Using cached entry for ${url})`);
+            return cachedPr;
+          }
+        }
         return null;
       }
     })
@@ -147,7 +175,6 @@ async function fetchPRs() {
     merged: validPRs.filter(pr => pr.status === "Merged").length
   };
 
-  const outputPath = path.join(__dirname, '../public/pr-data.json');
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
   
   console.log(`\n✓ Saved ${validPRs.length} PRs to ${outputPath}`);

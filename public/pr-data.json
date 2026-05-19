@@ -81,6 +81,21 @@
       "isTopRepo": true
     },
     {
+      "title": "feat(engine): Optimize code graph traversal and parsing latency",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/782",
+      "description": "Refactors tree-sitter node visitation to minimize redundant traversals during AST resolution for complex repositories.",
+      "status": "Open",
+      "date": "May 19, 2026",
+      "additions": 85,
+      "deletions": 14,
+      "languages": [
+        "Python",
+        "Rust"
+      ],
+      "isTopRepo": true
+    },
+    {
       "title": "feat: Migrate dependency management from pip to uv workspaces",
       "repo": "kubeflow/docs-agent",
       "url": "https://github.com/kubeflow/docs-agent/pull/202",
@@ -220,6 +235,36 @@
       "languages": [
         "Python",
         "Makefile"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat(trainer): Support Kubernetes Backend with GPU and CPU resources",
+      "repo": "kubeflow/sdk",
+      "url": "https://github.com/kubeflow/sdk/pull/496",
+      "description": "Introduces support for deploying trainer containers with configurable GPU limits and requested CPU/Memory resources on Kubernetes.",
+      "status": "Open",
+      "date": "May 18, 2026",
+      "additions": 154,
+      "deletions": 12,
+      "languages": [
+        "Python",
+        "Makefile"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat(server): Add Model Context Protocol support for trainer components",
+      "repo": "kubeflow/mcp-server",
+      "url": "https://github.com/kubeflow/mcp-server/pull/26",
+      "description": "Implements the initial MCP server endpoints to expose trainer capabilities to LLM-based agent clients.",
+      "status": "Open",
+      "date": "May 18, 2026",
+      "additions": 423,
+      "deletions": 48,
+      "languages": [
+        "Python",
+        "TypeScript"
       ],
       "isTopRepo": true
     },
@@ -496,13 +541,14 @@
     "kubeflow/pipelines",
     "kubeflow/katib",
     "kubeflow/sdk",
+    "kubeflow/mcp-server",
     "mem0ai/mem0",
     "google-deepmind/optax",
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-17T08:25:30.342Z",
-  "total": 31,
-  "open": 14,
+  "lastUpdated": "2026-05-19T12:34:02.190Z",
+  "total": 34,
+  "open": 17,
   "merged": 7
 }

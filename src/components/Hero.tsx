@@ -47,12 +47,12 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="min-h-[100svh] relative overflow-hidden flex items-center justify-center bg-transparent">
+    <section id="hero" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-transparent px-4 py-24 sm:px-6 sm:py-28">
       {/* 3D Background Elements */}
       <div className="absolute inset-0 perspective-1000">
         {/* Floating Geometric Shapes */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-16 h-16 md:w-32 md:h-32 border border-white/10"
+          className="absolute left-6 top-28 h-16 w-16 border border-white/10 opacity-60 sm:left-1/4 sm:top-1/4 md:h-32 md:w-32"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateX(${mousePosition.y}deg) rotateY(${mousePosition.x}deg)`,
@@ -71,7 +71,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-12 h-12 md:w-24 md:h-24 border border-accent/20"
+          className="absolute bottom-28 right-8 h-12 w-12 border border-accent/20 opacity-70 sm:bottom-1/4 sm:right-1/4 md:h-24 md:w-24"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateX(${-mousePosition.y}deg) rotateY(${-mousePosition.x}deg)`,
@@ -90,7 +90,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute top-1/3 right-1/3 w-10 h-10 md:w-20 md:h-20 border-2 border-white/5 rounded-lg"
+          className="absolute right-10 top-1/3 h-10 w-10 rounded-lg border-2 border-white/5 sm:right-1/3 md:h-20 md:w-20"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${mousePosition.x * 0.5}deg) rotateX(${mousePosition.y * 0.5}deg)`,
@@ -118,12 +118,12 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+      <div className="relative z-10 mx-auto w-full max-w-5xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           {/* Role Badge */}
           <motion.div
@@ -132,16 +132,16 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-white/10 rounded-full">
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm text-white/70 font-mono">Available, also for freelance work</span>
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-surface px-3 py-2 sm:px-4">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-accent animate-pulse" />
+              <span className="min-w-0 text-xs text-white/70 font-mono sm:text-sm">Available, also for freelance work</span>
             </div>
           </motion.div>
 
           {/* Main Heading */}
           <div className="space-y-4">
             <motion.h1
-              className="font-heading text-3xl sm:text-5xl md:text-6xl font-medium text-white leading-tight tracking-tight text-balance"
+              className="font-heading text-[clamp(2.5rem,12vw,4rem)] sm:text-5xl md:text-6xl font-medium text-white leading-[0.98] tracking-tight text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -153,14 +153,14 @@ export default function Hero() {
 
             {/* Rotating Role */}
             <motion.div
-              className="h-12 flex items-center justify-center"
+              className="flex min-h-12 items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
               <motion.p
                 key={currentRole}
-                className="text-xl sm:text-2xl md:text-3xl text-white/60 font-light"
+                className="text-lg sm:text-2xl md:text-3xl text-white/60 font-light"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -173,7 +173,7 @@ export default function Hero() {
 
           {/* Description */}
           <motion.p
-            className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto font-light leading-relaxed text-pretty"
+            className="mx-auto max-w-2xl text-base leading-7 text-white/55 sm:text-xl sm:leading-relaxed font-light text-pretty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.9 }}
@@ -184,7 +184,7 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center w-full gap-4 pt-4 px-4 sm:px-0"
+            className="flex w-full flex-col items-stretch justify-center gap-3 pt-2 sm:flex-row sm:items-center sm:gap-4 sm:pt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
@@ -193,7 +193,7 @@ export default function Hero() {
               <Link
                 to="/pull-requests"
                 onMouseEnter={() => import('../pages/PullRequests')}
-                className="w-full group px-8 py-4 bg-accent text-white font-medium rounded-lg hover:bg-accent/90 transition-[background-color,box-shadow,transform] duration-300 flex items-center justify-center gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40 active:scale-[0.96]"
+                className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3.5 font-medium text-white shadow-lg shadow-accent/20 transition-[background-color,box-shadow,transform] duration-300 hover:bg-accent/90 hover:shadow-accent/40 active:scale-[0.96] sm:px-8 sm:py-4"
               >
                 <span>View My Work</span>
                 <ArrowDown size={18} className="-rotate-90 group-hover:translate-x-1 transition-transform" />
@@ -204,7 +204,7 @@ export default function Hero() {
               href="https://github.com/haroon0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white hover:border-accent hover:text-accent font-medium rounded-lg transition-[color,border-color,transform] duration-300 flex items-center justify-center active:scale-[0.96]"
+              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 px-6 py-3.5 font-medium text-white transition-[color,border-color,transform] duration-300 hover:border-accent hover:text-accent active:scale-[0.96] sm:w-auto sm:px-8 sm:py-4"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
             >
@@ -214,7 +214,7 @@ export default function Hero() {
 
           {/* Social Links */}
           <motion.div
-            className="flex items-center justify-center gap-6 pt-8"
+            className="flex items-center justify-center gap-3 pt-4 sm:gap-6 sm:pt-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.3 }}
@@ -225,7 +225,7 @@ export default function Hero() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 text-white/40 hover:text-accent transition-colors duration-300 rounded-lg hover:bg-white/5"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-3 text-white/40 transition-colors duration-300 hover:bg-white/5 hover:text-accent"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.96 }}
                 initial={{ opacity: 0, y: 20 }}
@@ -242,7 +242,7 @@ export default function Hero() {
 
       {/* Scroll Indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 transform sm:block md:bottom-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}

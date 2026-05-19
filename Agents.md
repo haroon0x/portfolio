@@ -1,0 +1,2 @@
+- Do not commit or add the resume html file
+- the website should be highly mobile friendly and responsive.

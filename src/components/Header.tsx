@@ -66,12 +66,12 @@ export default function Header() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none"
+        className="safe-top fixed top-3 left-0 right-0 z-50 flex justify-center px-3 pointer-events-none sm:top-6 sm:px-4"
       >
         <nav aria-label="Primary navigation" className={`
           pointer-events-auto
-          flex items-center justify-between gap-2 md:gap-6
-          px-4 md:px-6 py-2 md:py-3
+          flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2
+          px-3 py-2 sm:w-auto sm:max-w-none sm:px-4 md:gap-6 md:px-6 md:py-3
           rounded-full
           bg-zinc-900/40 backdrop-blur-xl
           border border-white/10
@@ -82,10 +82,10 @@ export default function Header() {
           {/* Logo */}
           <button
             onClick={() => scrollToSection('hero')}
-            className="text-lg font-bold group focus:outline-none"
+            className="min-w-0 text-base font-bold group focus:outline-none sm:text-lg"
             aria-label="Go to top"
           >
-            <span className="text-white group-hover:text-accent transition-colors duration-300">
+            <span className="block truncate text-white group-hover:text-accent transition-colors duration-300">
               haroon0x
             </span>
           </button>
@@ -128,7 +128,7 @@ export default function Header() {
           </div>
 
           {/* Right Side - Theme & Socials */}
-          <div className="flex items-center gap-3 pl-3 border-l border-white/10">
+          <div className="flex shrink-0 items-center gap-1.5 pl-2 border-l border-white/10 sm:gap-3 sm:pl-3">
             <Magnetic>
               <a 
                 href="https://github.com/sponsors/haroon0x" 
@@ -145,7 +145,7 @@ export default function Header() {
               <button
                 onClick={toggleTheme}
                 aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-                className="relative p-3 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+                className="relative flex min-h-11 min-w-11 items-center justify-center p-3 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
               >
                 <Sun
                   size={16}
@@ -210,9 +210,9 @@ export default function Header() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: -8 }}
               transition={{ duration: 0.2 }}
-              className="fixed top-24 left-4 right-4 z-40 md:hidden"
+              className="fixed top-20 left-3 right-3 z-40 md:hidden sm:top-24 sm:left-4 sm:right-4"
             >
-              <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl">
+              <div className="bg-zinc-900/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 shadow-2xl sm:p-4">
               <div className="flex flex-col space-y-2">
                 {navItems.map((item) => (
                   'url' in item && item.url ? (

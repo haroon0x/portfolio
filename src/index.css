@@ -96,6 +96,35 @@
     font-variant-numeric: tabular-nums;
   }
 
+  .safe-x {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .fluid-section {
+    padding-top: clamp(4rem, 10vw, 8rem);
+    padding-bottom: clamp(4rem, 10vw, 8rem);
+  }
+
+  .card-container {
+    container-type: inline-size;
+  }
+
+  @container (max-width: 420px) {
+    .cq-card-pad {
+      padding: 1.25rem;
+    }
+
+    .cq-card-title {
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+  }
+
   .skip-link {
     position: fixed;
     top: 12px;

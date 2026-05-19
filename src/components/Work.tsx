@@ -25,7 +25,7 @@ export default function Work({ order = 'all' }: WorkProps) {
       size: 'large' as const
     },
     {
-      title: 'DeadDrop - Sovereign Task Agent',
+      title: 'DeadDrop - Asynchronous Task Agent',
       description: 'A sovereign, asynchronous coding task inbox and local agent runner powered by a FastAPI dashboard and a high-performance Go worker polling outbound via secure tokens.',
       tags: ['Go', 'FastAPI', 'Supabase', 'Agent Orchestration'],
       github: 'https://github.com/haroon0x/DeadDrop',
@@ -74,23 +74,23 @@ export default function Work({ order = 'all' }: WorkProps) {
   const displayProjects = order === 'latest' ? projects.slice(0, 3) : projects;
 
   return (
-    <section id="work" className="py-24 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+    <section id="work" className="safe-x fluid-section relative z-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="mb-16"
+        className="mb-10 sm:mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 text-balance">
+        <h2 className="mb-4 text-3xl font-bold text-white text-balance sm:mb-6 sm:text-4xl md:text-5xl">
           Selected <span className="text-accent">Works</span>
         </h2>
-        <p className="text-xl text-white/60 max-w-2xl font-light text-pretty">
+        <p className="max-w-2xl text-base leading-7 text-white/60 sm:text-xl sm:leading-relaxed font-light text-pretty">
           A collection of projects exploring AI, autonomous agents, and interactive web experiences.
         </p>
       </motion.div>
 
-      <div className="flex flex-col gap-8 max-w-4xl mx-auto">
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:gap-8">
         {displayProjects.map((project, index) => (
           <SpotlightCard key={project.title} project={project} index={index} />
         ))}
@@ -141,7 +141,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/40 backdrop-blur-md hover:border-white/20 transition-colors duration-500"
+      className="card-container group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 backdrop-blur-md transition-colors duration-500 hover:border-white/20 sm:rounded-3xl"
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100"
@@ -151,21 +151,21 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
         }}
       />
 
-      <div className="relative p-8 md:p-10">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-          <div className="flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4 mb-4">
-              <h3 className="text-2xl md:text-3xl font-heading font-bold text-white group-hover:text-accent transition-colors">
+      <div className="cq-card-pad relative p-5 sm:p-8 md:p-10">
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="mb-4 flex items-start justify-between gap-3 sm:items-center">
+              <h3 className="cq-card-title min-w-0 text-xl font-bold leading-tight text-white transition-colors group-hover:text-accent sm:text-2xl md:text-3xl">
                 {project.title}
               </h3>
-              <div className="flex gap-2">
+              <div className="flex shrink-0 gap-2">
                 {project.github && (
                   <a
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.title} on GitHub`}
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors border border-white/5 hover:border-white/20"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/5 bg-white/5 p-2 text-white/60 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
                   >
                     <Github size={20} />
                   </a>
@@ -176,7 +176,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open live link for ${project.title}`}
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors border border-white/5 hover:border-white/20"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/5 bg-white/5 p-2 text-white/60 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
                   >
                     <ExternalLink size={20} />
                   </a>
@@ -184,27 +184,27 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
               </div>
             </div>
 
-            <p className="text-lg text-white/60 leading-relaxed mb-8 max-w-2xl font-light">
+            <p className="mb-6 max-w-2xl text-sm leading-7 text-white/60 sm:mb-8 sm:text-lg sm:leading-relaxed font-light">
               {project.description}
             </p>
 
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {project.tags.map((tag: string) => (
-                <span key={tag} className="px-4 py-1.5 text-sm font-mono rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-default">
+                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white/70 transition-colors hover:bg-white/10 hover:text-white sm:px-4 sm:text-sm">
                   {tag}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center self-end md:self-center">
+          <div className="flex items-center self-start md:self-center">
             {(project.link || project.github) && (
                 <a
                   href={project.link || project.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`View project details for ${project.title}`}
-                  className="flex items-center gap-2 text-accent font-medium opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-[opacity,transform] duration-300"
+                  className="flex min-h-11 items-center gap-2 rounded-lg py-1 text-sm font-medium text-accent opacity-100 transition-[opacity,transform] duration-300 sm:text-base md:translate-x-[-10px] md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100"
                 >
                 <span>View Project</span>
                 <ArrowRight size={20} />

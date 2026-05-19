@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Star, Building2, Filter } from "lucide-react";
+import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Building2, Filter } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useEffect, useState } from "react";
@@ -156,11 +156,11 @@ const PullRequests = () => {
   const filteredPRs = getFilteredAndSortedPRs();
 
   return (
-      <section className="min-h-[100svh] py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 bg-background">
+      <section className="safe-x fluid-section relative z-10 min-h-[100svh] bg-background sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <Magnetic>
-              <Link to="/" aria-label="Back to home page" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-sm">
+              <Link to="/" aria-label="Back to home page" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/60 backdrop-blur-sm transition-colors duration-300 hover:bg-white/10 hover:text-white">
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Back to Home</span>
               </Link>
@@ -168,37 +168,37 @@ const PullRequests = () => {
           </div>
 
           <div ref={ref} className={`transition-[opacity,transform] duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <div className="mb-16">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent">
-                  <GitPullRequest className="w-8 h-8" />
+            <div className="mb-10 sm:mb-16">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-5 flex items-start gap-3 sm:mb-6 sm:items-center sm:gap-4">
+                <div className="rounded-2xl border border-accent/20 bg-accent/10 p-2.5 text-accent sm:p-3">
+                  <GitPullRequest className="h-6 w-6 sm:h-8 sm:w-8" />
                 </div>
-                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white text-balance">
+                <h2 className="text-[clamp(2rem,10vw,3.5rem)] font-bold leading-tight text-white text-balance md:text-5xl">
                   Open Source <span className="text-accent">Contributions</span>
                 </h2>
               </motion.div>
-              <p className="text-xl text-white/60 max-w-2xl font-light leading-relaxed text-pretty">
+              <p className="max-w-prose text-base leading-7 text-white/60 sm:text-xl sm:leading-relaxed font-light text-pretty">
                 Impactful contributions to the open source ecosystem, ranging from feature implementations to core architectural improvements.
               </p>
             </div>
 
             {/* Stats Overview */}
             {data && !loading && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10 flex flex-col justify-between">
-                  <p className="text-3xl font-bold text-white tabular-nums">{data.total}</p>
+              <div className="mb-10 grid grid-cols-2 gap-3 sm:gap-4 md:mb-12 md:grid-cols-4">
+                <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4 sm:p-5 flex flex-col justify-between">
+                  <p className="text-2xl font-bold text-white tabular-nums sm:text-3xl">{data.total}</p>
                   <p className="text-sm text-white/50">Total PRs</p>
                 </div>
-                <div className="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex flex-col justify-between">
-                  <p className="text-3xl font-bold text-purple-400 tabular-nums">{data.merged}</p>
+                <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-4 sm:p-5 flex flex-col justify-between">
+                  <p className="text-2xl font-bold text-purple-400 tabular-nums sm:text-3xl">{data.merged}</p>
                   <p className="text-sm text-purple-300">Merged</p>
                 </div>
-                <div className="p-5 rounded-2xl bg-green-500/10 border border-green-500/20">
-                  <p className="text-3xl font-bold text-green-400 tabular-nums">{data.open}</p>
+                <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4 sm:p-5">
+                  <p className="text-2xl font-bold text-green-400 tabular-nums sm:text-3xl">{data.open}</p>
                   <p className="text-sm text-green-300">Open</p>
                 </div>
-                <div className="p-5 rounded-2xl bg-zinc-900/40 border border-white/10">
-                  <p className="text-3xl font-bold text-white tabular-nums">+{data.prs.reduce((s, pr) => s + pr.additions, 0)}</p>
+                <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4 sm:p-5">
+                  <p className="text-2xl font-bold text-white tabular-nums sm:text-3xl">+{data.prs.reduce((s, pr) => s + pr.additions, 0)}</p>
                   <p className="text-sm text-white/50">Lines Added</p>
                 </div>
               </div>
@@ -207,7 +207,7 @@ const PullRequests = () => {
             {/* Organization Cards */}
             {orgStats.length > 0 && !loading && (
               <div className="mb-12">
-                <div className="flex items-center gap-2 mb-6">
+                <div className="mb-6 flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-accent" />
                   <h3 className="text-xl font-semibold text-white">Organizations</h3>
                 </div>
@@ -227,19 +227,19 @@ const PullRequests = () => {
                         onClick={() => toggleOrg(org.name)}
                         aria-expanded={expandedOrgs.has(org.name)}
                         aria-label={`Toggle ${org.name} pull request list`}
-                        className="w-full p-5 text-left"
+                        className="w-full p-4 text-left sm:p-5"
                       >
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
+                        <div className="mb-3 flex items-start justify-between gap-3">
+                          <div className="min-w-0">
                             <div className="flex items-center gap-2">
-                              <h4 className="text-lg font-bold text-white">{org.name}</h4>
+                              <h4 className="truncate text-lg font-bold text-white">{org.name}</h4>
                             </div>
                             <p className="text-sm text-white/50">{org.repos.length} repos • {org.totalPRs} PRs</p>
                           </div>
-                          <ArrowUpRight className={`w-5 h-5 text-white/40 transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
+                          <ArrowUpRight className={`h-5 w-5 shrink-0 text-white/40 transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
                         </div>
 
-                        <div className="flex gap-4 text-sm">
+                        <div className="flex flex-wrap gap-3 text-sm sm:gap-4">
                           <div className="flex items-center gap-1.5 text-purple-400">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>{org.mergedPRs} merged</span>
@@ -280,16 +280,16 @@ const PullRequests = () => {
             )}
 
             {/* Filter & Sort Controls */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="text-sm text-white/50 flex items-center gap-2">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <span className="flex items-center gap-2 text-sm text-white/50">
                 <Filter className="w-4 h-4" />
                 Filter:
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
                 <button
                   onClick={() => setFilterStatus("all")}
                     aria-label="Show all pull requests"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
+                    className={`min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     filterStatus === "all" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -298,7 +298,7 @@ const PullRequests = () => {
                 <button
                   onClick={() => setFilterStatus("merged")}
                     aria-label="Show merged pull requests"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 flex items-center gap-1.5 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     filterStatus === "merged" ? "bg-purple-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -308,7 +308,7 @@ const PullRequests = () => {
                 <button
                   onClick={() => setFilterStatus("open")}
                     aria-label="Show open pull requests"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 flex items-center gap-1.5 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     filterStatus === "open" ? "bg-green-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -317,15 +317,15 @@ const PullRequests = () => {
                 </button>
               </div>
 
-              <span className="text-sm text-white/50 flex items-center gap-2 ml-4">
+              <span className="flex items-center gap-2 text-sm text-white/50 sm:ml-4">
                 <ArrowDownUp className="w-4 h-4" />
                 Sort:
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
                 <button
                   onClick={() => toggleSort("status")}
                     aria-label="Sort pull requests by status"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 flex items-center gap-2 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     sortBy === "status" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -334,7 +334,7 @@ const PullRequests = () => {
                 <button
                   onClick={() => toggleSort("date")}
                     aria-label="Sort pull requests by date"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 flex items-center gap-2 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     sortBy === "date" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -344,7 +344,7 @@ const PullRequests = () => {
                 <button
                   onClick={() => toggleSort("repo")}
                     aria-label="Sort pull requests by repository"
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 flex items-center gap-2 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
                     sortBy === "repo" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
                 >
@@ -380,45 +380,45 @@ const PullRequests = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.05 }}
-                    className="group relative flex flex-col p-6 md:p-8 rounded-3xl bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-accent/50 transition-[border-color,transform] duration-500 overflow-hidden active:scale-[0.96]"
+                    className="card-container group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 p-5 backdrop-blur-xl transition-[border-color,transform] duration-500 hover:border-accent/50 active:scale-[0.96] sm:rounded-3xl sm:p-6 md:p-8"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                          <div className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5 ${
+                      <div className="mb-5 flex items-start justify-between gap-3 sm:mb-6">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+                          <div className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${
                             pr.status === "Merged" ? "bg-purple-500/10 text-purple-300 border-purple-500/20" : 
                             pr.status === "Open" ? "bg-green-500/10 text-green-300 border-green-500/20" : "bg-red-500/10 text-red-300 border-red-500/20"
                           }`}>
                             <GitPullRequest className="w-3 h-3" />
                             {pr.status}
                           </div>
-                          <span className="text-xs text-white/40 flex items-center gap-1.5">
-                            <Calendar className="w-3 h-3" />
+                          <span className="flex min-w-0 items-center gap-1.5 text-xs text-white/40">
+                            <Calendar className="h-3 w-3 shrink-0" />
                             {pr.date}
                           </span>
                         </div>
-                        <div className="p-2 rounded-full bg-white/5 text-white/40 group-hover:text-white group-hover:bg-accent transition-[background-color,color,transform] duration-300">
+                        <div className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-white/5 p-2 text-white/40 transition-[background-color,color,transform] duration-300 group-hover:bg-accent group-hover:text-white">
                           <ArrowUpRight className="w-4 h-4" />
                         </div>
                       </div>
 
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors duration-300 line-clamp-2">{pr.title}</h3>
+                      <h3 className="cq-card-title mb-2 text-lg font-bold leading-snug text-white transition-colors duration-300 line-clamp-2 group-hover:text-accent sm:text-xl">{pr.title}</h3>
 
-                      <div className="flex items-center gap-2 text-sm text-white/50 mb-4 font-mono">
-                        <GitCommit className="w-4 h-4" />
-                        <span>{pr.repo}</span>
+                      <div className="mb-4 flex min-w-0 items-center gap-2 font-mono text-xs text-white/50 sm:text-sm">
+                        <GitCommit className="h-4 w-4 shrink-0" />
+                        <span className="min-w-0 truncate">{pr.repo}</span>
                       </div>
 
-                      <p className="text-white/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">{pr.description}</p>
+                      <p className="mb-6 flex-grow text-sm leading-7 text-white/60 line-clamp-3">{pr.description}</p>
 
-                      <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
+                      <div className="mt-auto flex flex-col gap-4 border-t border-white/5 pt-5 sm:flex-row sm:items-center sm:justify-between sm:pt-6">
                         <div className="flex items-center gap-3 text-xs font-mono">
                           <span className="text-green-400 bg-green-400/10 px-2 py-1 rounded tabular-nums">+{pr.additions}</span>
                           <span className="text-red-400 bg-red-400/10 px-2 py-1 rounded tabular-nums">-{pr.deletions}</span>
                         </div>
-                        <div className="flex flex-wrap gap-2 justify-end">
+                        <div className="flex flex-wrap gap-2 sm:justify-end">
                           {pr.languages.map((lang) => (
                             <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">{lang}</span>
                           ))}
