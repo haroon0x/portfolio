@@ -81,17 +81,18 @@
       "isTopRepo": true
     },
     {
-      "title": "feat(engine): Optimize code graph traversal and parsing latency",
+      "title": "Configure read-only pre-commit checks",
       "repo": "potpie-ai/potpie",
       "url": "https://github.com/potpie-ai/potpie/pull/782",
-      "description": "Refactors tree-sitter node visitation to minimize redundant traversals during AST resolution for complex repositories.",
+      "description": "## Summary\r\nFixes #519 \r\nThis PR updates the pre-commit setup so CI runs validation-only checks and does\r\nnot push autom...",
       "status": "Open",
-      "date": "May 19, 2026",
-      "additions": 85,
-      "deletions": 14,
+      "date": "May 17, 2026",
+      "additions": 105,
+      "deletions": 3,
       "languages": [
         "Python",
-        "Rust"
+        "Rust",
+        "Tree-sitter Query"
       ],
       "isTopRepo": true
     },
@@ -256,32 +257,33 @@
       "isTopRepo": true
     },
     {
-      "title": "feat(trainer): Support Kubernetes Backend with GPU and CPU resources",
+      "title": "fix: migrate deprecated Pydantic v1 class Config with ConfigDict for pydantic v2 compatabilty",
       "repo": "kubeflow/sdk",
       "url": "https://github.com/kubeflow/sdk/pull/496",
-      "description": "Introduces support for deploying trainer containers with configurable GPU limits and requested CPU/Memory resources on Kubernetes.",
+      "description": "### fix: replace deprecated Pydantic v1 `class Config` with `ConfigDict`\r\n\r\n## Description\r\n\r\nReplaces all instances of ...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 154,
-      "deletions": 12,
+      "additions": 5,
+      "deletions": 8,
       "languages": [
         "Python",
+        "Shell",
         "Makefile"
       ],
       "isTopRepo": true
     },
     {
-      "title": "feat(server): Add Model Context Protocol support for trainer components",
+      "title": "feat: Add Custom Latency Benchmarking and HTML Reporting for Trainer MCP Tools",
       "repo": "kubeflow/mcp-server",
       "url": "https://github.com/kubeflow/mcp-server/pull/26",
-      "description": "Implements the initial MCP server endpoints to expose trainer capabilities to LLM-based agent clients.",
+      "description": "First thing: this is not a vibe coded AI slop PR.\r\n\r\nI have added the initial benchmark suite for trainer MCP tools as m...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 423,
-      "deletions": 48,
+      "additions": 830,
+      "deletions": 1,
       "languages": [
         "Python",
-        "TypeScript"
+        "Makefile"
       ],
       "isTopRepo": true
     },
@@ -548,8 +550,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-17T08:25:30.342Z",
-  "total": 31,
-  "open": 14,
+  "lastUpdated": "2026-05-19T12:45:27.918Z",
+  "total": 34,
+  "open": 18,
   "merged": 7
 }
