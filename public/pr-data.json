@@ -65,22 +65,6 @@
       "isTopRepo": true
     },
     {
-      "title": "Consolidate repo_name and repo_path into a single repository identifier",
-      "repo": "potpie-ai/potpie",
-      "url": "https://github.com/potpie-ai/potpie/pull/762",
-      "description": "  ## Changes\r\n\r\n  - Added `RepositoryResolver` to classify repository identifiers as local paths\r\n  or remote repos.\r\n  ...",
-      "status": "Open",
-      "date": "May 4, 2026",
-      "additions": 481,
-      "deletions": 29,
-      "languages": [
-        "Python",
-        "Rust",
-        "Tree-sitter Query"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "Configure read-only pre-commit checks",
       "repo": "potpie-ai/potpie",
       "url": "https://github.com/potpie-ai/potpie/pull/782",
@@ -279,7 +263,7 @@
       "description": "First thing: this is not a vibe coded AI slop PR.\r\n\r\nI have added the initial benchmark suite for trainer MCP tools as m...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 830,
+      "additions": 833,
       "deletions": 1,
       "languages": [
         "Python",
@@ -396,6 +380,22 @@
         "Python",
         "Jupyter Notebook",
         "CSS"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "Consolidate repo_name and repo_path into a single repository identifier",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/762",
+      "description": "  ## Changes\r\n\r\n  - Added `RepositoryResolver` to classify repository identifiers as local paths\r\n  or remote repos.\r\n  ...",
+      "status": "Closed",
+      "date": "May 4, 2026",
+      "additions": 481,
+      "deletions": 29,
+      "languages": [
+        "Python",
+        "Rust",
+        "Tree-sitter Query"
       ],
       "isTopRepo": true
     },
@@ -550,8 +550,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-05-25T10:16:59.783Z",
+  "lastUpdated": "2026-05-26T10:03:11.837Z",
   "total": 34,
-  "open": 18,
+  "open": 17,
   "merged": 7
 }
