@@ -39,8 +39,8 @@
       "description": "Fixes #19221\r\n\r\n\r\n**Summary:**\r\n\r\nFixes #19221\r\n\r\n`changeAdapterStatus` in `adapter.go` had two bugs:\r\n\r\n1. **Swallowed ...",
       "status": "Open",
       "date": "May 11, 2026",
-      "additions": 0,
-      "deletions": 0,
+      "additions": 2,
+      "deletions": 1,
       "languages": [
         "TypeScript",
         "Go",
@@ -550,7 +550,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-06-01T11:42:49.366Z",
+  "lastUpdated": "2026-06-02T10:43:00.658Z",
   "total": 34,
   "open": 17,
   "merged": 7
