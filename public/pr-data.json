@@ -17,22 +17,6 @@
       "isTopRepo": true
     },
     {
-      "title": "feat(examples): add LangGraph long-term memory integration",
-      "repo": "moorcheh-ai/memanto",
-      "url": "https://github.com/moorcheh-ai/memanto/pull/440",
-      "description": "# feat(examples): Add LangGraph Long-Term Memory Integration\r\n\r\n## Demo\r\n\r\n<img width=\"1920\" height=\"973\" alt=\"cross_ses...",
-      "status": "Open",
-      "date": "May 12, 2026",
-      "additions": 610,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "HTML",
-        "Dockerfile"
-      ],
-      "isTopRepo": true
-    },
-    {
       "title": "[Server] Propagate adapter deployment errors to GraphQL client",
       "repo": "meshery/meshery",
       "url": "https://github.com/meshery/meshery/pull/19228",
@@ -268,6 +252,22 @@
       "languages": [
         "Python",
         "Makefile"
+      ],
+      "isTopRepo": true
+    },
+    {
+      "title": "feat(examples): add LangGraph long-term memory integration",
+      "repo": "moorcheh-ai/memanto",
+      "url": "https://github.com/moorcheh-ai/memanto/pull/440",
+      "description": "# feat(examples): Add LangGraph Long-Term Memory Integration\r\n\r\n## Demo\r\n\r\n<img width=\"1920\" height=\"973\" alt=\"cross_ses...",
+      "status": "Merged",
+      "date": "May 12, 2026",
+      "additions": 610,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "HTML",
+        "Dockerfile"
       ],
       "isTopRepo": true
     },
@@ -550,8 +550,8 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-06-02T10:43:00.658Z",
+  "lastUpdated": "2026-06-03T11:06:40.246Z",
   "total": 34,
-  "open": 17,
-  "merged": 7
+  "open": 16,
+  "merged": 8
 }
