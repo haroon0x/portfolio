@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowDown, Github, Linkedin, Mail, Heart } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const ROLES = [
@@ -10,7 +10,6 @@ const ROLES = [
 ];
 
 export default function Hero() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentRole, setCurrentRole] = useState(0);
 
   useEffect(() => {
@@ -18,18 +17,6 @@ export default function Hero() {
       setCurrentRole((prev) => (prev + 1) % ROLES.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const scrollToWork = () => {
@@ -46,137 +33,103 @@ export default function Hero() {
     { name: 'Sponsor', icon: Heart, url: 'https://github.com/sponsors/haroon0x' }
   ];
 
+  const stagger = {
+    initial: { opacity: 0, y: 20 },
+    animate: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] },
+    }),
+  };
+
   return (
     <section id="hero" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-transparent px-4 py-24 sm:px-6 sm:py-28">
-      {/* 3D Background Elements */}
-      <div className="absolute inset-0 perspective-1000">
-        {/* Floating Geometric Shapes */}
-        <motion.div
-          className="absolute left-6 top-28 h-16 w-16 border border-white/10 opacity-60 sm:left-1/4 sm:top-1/4 md:h-32 md:w-32"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: `rotateX(${mousePosition.y}deg) rotateY(${mousePosition.x}deg)`,
-          }}
-          animate={{
-            rotateX: [0, 360],
-            rotateZ: [0, 180],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent" />
-        </motion.div>
-
-        <motion.div
-          className="absolute bottom-28 right-8 h-12 w-12 border border-accent/20 opacity-70 sm:bottom-1/4 sm:right-1/4 md:h-24 md:w-24"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: `rotateX(${-mousePosition.y}deg) rotateY(${-mousePosition.x}deg)`,
-          }}
-          animate={{
-            rotateY: [0, 360],
-            rotateX: [0, 180],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-tl from-accent/10 to-transparent" />
-        </motion.div>
-
-        <motion.div
-          className="absolute right-10 top-1/3 h-10 w-10 rounded-lg border-2 border-white/5 sm:right-1/3 md:h-20 md:w-20"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: `rotateY(${mousePosition.x * 0.5}deg) rotateX(${mousePosition.y * 0.5}deg)`,
-          }}
-          animate={{
-            rotateZ: [0, 360],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-
-        {/* Grid Lines */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-          }} />
-        </div>
-      </div>
-
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-5xl text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-6 sm:space-y-8"
-        >
+        <div className="space-y-6 sm:space-y-8">
           {/* Role Badge */}
           <motion.div
             className="inline-block"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            custom={0}
+            variants={stagger}
+            initial="initial"
+            animate="animate"
           >
-            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-surface px-3 py-2 sm:px-4">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-surface border border-border shadow-petal px-3 py-2 sm:px-4">
               <span className="h-2 w-2 shrink-0 rounded-full bg-accent animate-pulse" />
-              <span className="min-w-0 text-xs text-white/70 font-mono sm:text-sm">Available, also for freelance work</span>
+              <span className="min-w-0 text-xs text-ink-secondary font-mono sm:text-sm">Open to full-time & freelance work</span>
             </div>
           </motion.div>
 
           {/* Main Heading */}
           <div className="space-y-4">
             <motion.h1
-              className="font-heading text-[clamp(2.5rem,12vw,4rem)] sm:text-5xl md:text-6xl font-medium text-white leading-[0.98] tracking-tight text-balance"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              className="relative inline-block font-heading text-display text-ink text-balance"
+              custom={1}
+              variants={stagger}
+              initial="initial"
+              animate="animate"
             >
               Building Intelligent
               <br />
-              <span className="text-accent font-light">Systems</span>
+              <span className="text-accent relative">
+                Systems
+                {/* Hand-drawn gold underline */}
+                <svg
+                  viewBox="0 0 200 12"
+                  className="absolute -bottom-2 left-0 w-full h-3"
+                  aria-hidden="true"
+                  style={{ width: '100%' }}
+                >
+                  <path
+                    d="M3 9 C60 3 140 3 197 7"
+                    stroke="#a8821f"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
+              {/* Japanese caption — lg+ only */}
+              <span
+                aria-hidden="true"
+                className="hidden lg:block absolute -left-10 top-2 font-heading text-sm text-ink-muted tracking-[0.3em]"
+                style={{ writingMode: 'vertical-rl' }}
+              >
+                白百合の庭
+              </span>
             </motion.h1>
 
             {/* Rotating Role */}
             <motion.div
               className="flex min-h-12 items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+              custom={2}
+              variants={stagger}
+              initial="initial"
+              animate="animate"
             >
-              <motion.p
-                key={currentRole}
-                className="text-lg sm:text-2xl md:text-3xl text-white/60 font-light"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-              >
-                {ROLES[currentRole]}
-              </motion.p>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.p
+                  key={currentRole}
+                  className="text-heading text-ink-secondary"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {ROLES[currentRole]}
+                </motion.p>
+              </AnimatePresence>
             </motion.div>
           </div>
 
           {/* Description */}
           <motion.p
-            className="mx-auto max-w-2xl text-base leading-7 text-white/55 sm:text-xl sm:leading-relaxed font-light text-pretty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            className="mx-auto max-w-2xl text-body-lg text-ink-secondary text-pretty"
+            custom={3}
+            variants={stagger}
+            initial="initial"
+            animate="animate"
           >
             Creating intelligent systems and building agents that solve real-world problems.
             Passionate about AI, open-source, and pushing the boundaries of what's possible.
@@ -185,15 +138,16 @@ export default function Hero() {
           {/* CTA Buttons */}
           <motion.div
             className="flex w-full flex-col items-stretch justify-center gap-3 pt-2 sm:flex-row sm:items-center sm:gap-4 sm:pt-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
+            custom={4}
+            variants={stagger}
+            initial="initial"
+            animate="animate"
           >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} className="w-full sm:w-auto">
               <Link
                 to="/pull-requests"
                 onMouseEnter={() => import('../pages/PullRequests')}
-                className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3.5 font-medium text-white shadow-lg shadow-accent/20 transition-[background-color,box-shadow,transform] duration-300 hover:bg-accent/90 hover:shadow-accent/40 active:scale-[0.96] sm:px-8 sm:py-4"
+                className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 font-medium text-white shadow-petal transition-[background-color,box-shadow,transform] duration-300 hover:bg-accent-hover active:scale-[0.96] sm:px-8 sm:py-4"
               >
                 <span>View My Work</span>
                 <ArrowDown size={18} className="-rotate-90 group-hover:translate-x-1 transition-transform" />
@@ -204,7 +158,7 @@ export default function Hero() {
               href="https://github.com/haroon0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg border border-white/20 px-6 py-3.5 font-medium text-white transition-[color,border-color,transform] duration-300 hover:border-accent hover:text-accent active:scale-[0.96] sm:w-auto sm:px-8 sm:py-4"
+              className="flex min-h-12 w-full items-center justify-center rounded-xl border border-border bg-surface px-6 py-3.5 font-medium text-ink transition-[color,border-color,transform] duration-300 hover:text-accent hover:border-accent active:scale-[0.96] sm:w-auto sm:px-8 sm:py-4"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
             >
@@ -215,9 +169,10 @@ export default function Hero() {
           {/* Social Links */}
           <motion.div
             className="flex items-center justify-center gap-3 pt-4 sm:gap-6 sm:pt-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
+            custom={5}
+            variants={stagger}
+            initial="initial"
+            animate="animate"
           >
             {socialLinks.map((social, index) => (
               <motion.a
@@ -225,19 +180,18 @@ export default function Hero() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-3 text-white/40 transition-colors duration-300 hover:bg-white/5 hover:text-accent"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-3 text-ink-muted transition-colors duration-300 hover:text-accent hover:bg-accent-muted"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.96 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + index * 0.1 }}
+                custom={5 + index}
+                variants={stagger}
                 aria-label={social.name}
               >
                 <social.icon size={20} />
               </motion.a>
             ))}
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll Indicator */}
@@ -256,7 +210,7 @@ export default function Hero() {
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="w-px h-16 bg-gradient-to-b from-transparent via-accent/50 to-transparent" />
-          <span className="text-xs text-white/30 uppercase tracking-wider font-mono group-hover:text-accent transition-colors">Scroll</span>
+          <span className="text-xs text-ink-muted uppercase tracking-wider font-mono group-hover:text-accent transition-colors">Scroll</span>
         </motion.button>
       </motion.div>
     </section>
