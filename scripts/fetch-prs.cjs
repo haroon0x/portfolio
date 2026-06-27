@@ -83,77 +83,79 @@ async function fetchPRs() {
     console.error('Failed to read existing pr-data.json:', e.message);
   }
   
-  const prs = await Promise.all(
-    prUrls.map(async (url, index) => {
-      try {
-        // Add delay between requests to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 150));
+  const prs = [];
+  for (const url of prUrls) {
+    try {
+      // Add delay between requests to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 150));
 
-        const urlParts = url.split('/');
-        const owner = urlParts[3];
-        const repo = urlParts[4];
-        const prNumber = urlParts[6];
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
+      const urlParts = url.split('/');
+      const owner = urlParts[3];
+      const repo = urlParts[4];
+      const prNumber = urlParts[6];
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
 
-        const response = await fetch(apiUrl, { headers });
+      const response = await fetch(apiUrl, { headers });
 
-        if (!response.ok) {
-          console.error(`Failed to fetch ${url}: ${response.status}`);
-          if (existingData && existingData.prs) {
-            const cachedPr = existingData.prs.find(p => p.url === url);
-            if (cachedPr) {
-              console.log(`  (Using cached entry for ${url})`);
-              return cachedPr;
-            }
-          }
-          return null;
-        }
-
-        const data = await response.json();
-
-        // Try to fetch languages
-        let languages = [];
-        if (data.head && data.head.repo && data.head.repo.languages_url) {
-          try {
-            const langResponse = await fetch(data.head.repo.languages_url, { headers });
-
-            if (langResponse.ok) {
-              const langData = await langResponse.json();
-              languages = Object.keys(langData).slice(0, 3);
-            }
-          } catch (e) {
-            // Ignore language fetch errors
-          }
-        }
-
-        const pr = {
-          title: data.title,
-          repo: `${owner}/${repo}`,
-          url: data.html_url,
-          description: (data.body?.slice(0, 120) || 'No description provided') + '...',
-          status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed"),
-          date: new Date(data.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
-          additions: data.additions || 0,
-          deletions: data.deletions || 0,
-          languages,
-          isTopRepo: topRepos.includes(`${owner}/${repo}`)
-        };
-
-        console.log(`✓ ${pr.repo} #${prNumber} (${pr.status})`);
-        return pr;
-      } catch (error) {
-        console.error(`✗ Error fetching ${url}:`, error.message);
+      if (!response.ok) {
+        console.error(`Failed to fetch ${url}: ${response.status}`);
         if (existingData && existingData.prs) {
           const cachedPr = existingData.prs.find(p => p.url === url);
           if (cachedPr) {
             console.log(`  (Using cached entry for ${url})`);
-            return cachedPr;
+            prs.push(cachedPr);
+            continue;
           }
         }
-        return null;
+        prs.push(null);
+        continue;
       }
-    })
-  );
+
+      const data = await response.json();
+
+      // Try to fetch languages
+      let languages = [];
+      if (data.head && data.head.repo && data.head.repo.languages_url) {
+        try {
+          const langResponse = await fetch(data.head.repo.languages_url, { headers });
+
+          if (langResponse.ok) {
+            const langData = await langResponse.json();
+            languages = Object.keys(langData).slice(0, 3);
+          }
+        } catch (e) {
+          // Ignore language fetch errors
+        }
+      }
+
+      const pr = {
+        title: data.title,
+        repo: `${owner}/${repo}`,
+        url: data.html_url,
+        description: (data.body?.slice(0, 120) || 'No description provided') + '...',
+        status: data.merged ? "Merged" : (data.state === "open" ? "Open" : "Closed"),
+        date: new Date(data.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
+        additions: data.additions || 0,
+        deletions: data.deletions || 0,
+        languages,
+        isTopRepo: topRepos.includes(`${owner}/${repo}`)
+      };
+
+      console.log(`✓ ${pr.repo} #${prNumber} (${pr.status})`);
+      prs.push(pr);
+    } catch (error) {
+      console.error(`✗ Error fetching ${url}:`, error.message);
+      if (existingData && existingData.prs) {
+        const cachedPr = existingData.prs.find(p => p.url === url);
+        if (cachedPr) {
+          console.log(`  (Using cached entry for ${url})`);
+          prs.push(cachedPr);
+          continue;
+        }
+      }
+      prs.push(null);
+    }
+  }
 
   const validPRs = prs.filter(pr => pr !== null);
   
@@ -166,14 +168,25 @@ async function fetchPRs() {
     return statusOrder[a.status] - statusOrder[b.status];
   });
 
+  const now = new Date().toISOString();
   const output = {
     prs: validPRs,
     topRepos: topRepos.filter(repo => validPRs.some(pr => pr.repo === repo)),
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: now,
     total: validPRs.length,
     open: validPRs.filter(pr => pr.status === "Open").length,
     merged: validPRs.filter(pr => pr.status === "Merged").length
   };
+
+  // Skip write if nothing changed (excluding timestamp) to avoid noise commits
+  if (existingData) {
+    const prev = { ...existingData, lastUpdated: '' };
+    const curr = { ...output, lastUpdated: '' };
+    if (JSON.stringify(prev) === JSON.stringify(curr)) {
+      console.log(`\n✓ No changes detected — skipping write`);
+      return;
+    }
+  }
 
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
   
