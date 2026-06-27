@@ -38,30 +38,3 @@ export function useScrollAnimation<T extends HTMLElement = HTMLElement>(options:
 
   return { ref, isVisible, hasAnimated };
 }
-
-// Advanced scroll animations hook
-export function useAdvancedScrollAnimation() {
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    let lastScrollY = window.pageYOffset;
-
-    const updateScrollInfo = () => {
-      const currentScrollY = window.pageYOffset;
-      const direction = currentScrollY > lastScrollY ? 'down' : 'up';
-      const progress = Math.min(currentScrollY / (document.body.scrollHeight - window.innerHeight), 1);
-
-      setScrollY(currentScrollY);
-      setScrollDirection(direction);
-      setScrollProgress(progress);
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener('scroll', updateScrollInfo, { passive: true });
-    return () => window.removeEventListener('scroll', updateScrollInfo);
-  }, []);
-
-  return { scrollY, scrollDirection, scrollProgress };
-}

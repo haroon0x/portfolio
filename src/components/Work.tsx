@@ -2,20 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 
-interface WorkProps {
-  order?: 'latest' | 'all';
-}
-
 interface Project {
   title: string;
   description: string;
   tags: string[];
   github?: string;
   link?: string;
-  size?: 'small' | 'medium' | 'large' | 'wide';
 }
 
-export default function Work({ order = 'all' }: WorkProps) {
+export default function Work() {
   const projects: Project[] = [
     {
       title: 'Containerized Agent',
