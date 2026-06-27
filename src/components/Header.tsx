@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Sun, Moon, Heart } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Heart } from 'lucide-react';
 import { XIcon } from './icons/XIcon';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../hooks/useTheme';
 import { motion, AnimatePresence } from 'framer-motion';
 import Magnetic from './Magnetic';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,9 +53,9 @@ export default function Header() {
   ];
 
   const socialLinks = [
-    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-blue-400' },
+    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-accent' },
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' }
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-accent' }
   ];
 
   return (
@@ -76,7 +74,7 @@ export default function Header() {
           bg-zinc-900/40 backdrop-blur-xl
           border border-white/10
           shadow-lg shadow-black/10
-          transition-colors duration-500
+          transition-colors duration-base
           ${isScrolled ? 'bg-zinc-900/60 shadow-xl' : ''}
         `}>
           {/* Logo */}
@@ -85,7 +83,7 @@ export default function Header() {
             className="min-w-0 text-base font-bold group focus:outline-none sm:text-lg"
             aria-label="Go to top"
           >
-            <span className="block truncate text-white group-hover:text-accent transition-colors duration-300">
+            <span className="block truncate text-white group-hover:text-accent transition-colors duration-fast">
               haroon0x
             </span>
           </button>
@@ -101,7 +99,7 @@ export default function Header() {
                       onMouseEnter={() => {
                         if (item.url === '/pull-requests') import('../pages/PullRequests');
                       }}
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
                     >
                       {item.name}
                     </Link>
@@ -110,7 +108,7 @@ export default function Header() {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
                     >
                       {item.name}
                     </a>
@@ -118,7 +116,7 @@ export default function Header() {
                 ) : (
                   <button
                     onClick={() => item.id && scrollToSection(item.id)}
-                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
                   >
                     {item.name}
                   </button>
@@ -127,35 +125,18 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Right Side - Theme & Socials */}
+          {/* Right Side */}
           <div className="flex shrink-0 items-center gap-1.5 pl-2 border-l border-white/10 sm:gap-3 sm:pl-3">
             <Magnetic>
               <a 
                 href="https://github.com/sponsors/haroon0x" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-[color,background-color,border-color,transform] duration-300 group active:scale-[0.96]"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-[color,background-color,border-color,transform] duration-fast group active:scale-[0.96]"
               >
                 <Heart size={12} className="group-hover:text-accent group-hover:fill-accent transition-colors" />
                 <span>Sponsor</span>
               </a>
-            </Magnetic>
-
-            <Magnetic>
-              <button
-                onClick={toggleTheme}
-                aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-                className="relative flex min-h-11 min-w-11 items-center justify-center p-3 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
-              >
-                <Sun
-                  size={16}
-                  className={`absolute inset-0 m-auto transition-[transform,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${isDark ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-[0.25] blur-[4px]'}`}
-                />
-                <Moon
-                  size={16}
-                  className={`transition-[transform,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${isDark ? 'opacity-0 scale-[0.25] blur-[4px]' : 'opacity-100 scale-100 blur-0'}`}
-                />
-              </button>
             </Magnetic>
 
             <div className="hidden sm:flex items-center gap-1">
@@ -166,7 +147,7 @@ export default function Header() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Visit ${social.name} profile`}
-                    className={`block p-3 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]`}
+                    className={`block p-3 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]`}
                   >
                     <social.icon size={16} />
                   </a>
@@ -175,14 +156,14 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-nav-menu"
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            className="md:hidden p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
-          >
-            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-nav-menu"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              className="md:hidden p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </nav>
@@ -213,63 +194,63 @@ export default function Header() {
               className="fixed top-20 left-3 right-3 z-40 md:hidden sm:top-24 sm:left-4 sm:right-4"
             >
               <div className="bg-zinc-900/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 shadow-2xl sm:p-4">
-              <div className="flex flex-col space-y-2">
-                {navItems.map((item) => (
-                  'url' in item && item.url ? (
-                    item.url.startsWith('/') ? (
-                      <Link
-                        key={item.name}
-                        to={item.url}
-                        onMouseEnter={() => {
-                          if (item.url === '/pull-requests') import('../pages/PullRequests');
-                        }}
-                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
+                <div className="flex flex-col space-y-2">
+                  {navItems.map((item) => (
+                    'url' in item && item.url ? (
+                      item.url.startsWith('/') ? (
+                        <Link
+                          key={item.name}
+                          to={item.url}
+                          onMouseEnter={() => {
+                            if (item.url === '/pull-requests') import('../pages/PullRequests');
+                          }}
+                          className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <a
+                          key={item.name}
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                        >
+                          {item.name}
+                        </a>
+                      )
                     ) : (
-                      <a
-                        key={item.name}
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          if (item.id) {
+                            scrollToSection(item.id);
+                          }
+                          setIsMenuOpen(false);
+                        }}
+                        className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
                       >
                         {item.name}
-                      </a>
+                      </button>
                     )
-                  ) : (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (item.id) {
-                          scrollToSection(item.id);
-                        }
-                        setIsMenuOpen(false);
-                      }}
-                      className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
-                    >
-                      {item.name}
-                    </button>
-                  )
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit ${social.name} profile`}
-                    className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]`}
-                  >
-                    <social.icon size={20} />
-                  </a>
-                ))}
-              </div>
+                <div className="mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
+                  {socialLinks.map((social) => (
+                    <a
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${social.name} profile`}
+                      className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]`}
+                    >
+                      <social.icon size={20} />
+                    </a>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </>

@@ -1,0 +1,52 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="aurora" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#5e6ad2" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#5e6ad2" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#5e6ad2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg" cx="50%" cy="0%" r="100%">
+      <stop offset="0%" stop-color="#0c0c12"/>
+      <stop offset="100%" stop-color="#08080b"/>
+    </radialGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0 H0 V56" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1" fill="none"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#aurora)"/>
+
+  <!-- flow-field particles -->
+  <g fill="#ededf0">
+    <circle cx="120" cy="120" r="2.5" opacity="0.85"/>
+    <circle cx="210" cy="80" r="2" opacity="0.5"/>
+    <circle cx="340" cy="150" r="2.5" opacity="0.7"/>
+    <circle cx="90" cy="490" r="2.5" opacity="0.65"/>
+    <circle cx="1020" cy="140" r="2.5" opacity="0.8"/>
+    <circle cx="1100" cy="260" r="2" opacity="0.5"/>
+    <circle cx="980" cy="470" r="2.5" opacity="0.7"/>
+    <circle cx="1080" cy="540" r="2" opacity="0.45"/>
+    <circle cx="160" cy="380" r="2" opacity="0.5"/>
+    <circle cx="250" cy="520" r="2" opacity="0.4"/>
+  </g>
+  <g fill="#818cf8">
+    <circle cx="280" cy="240" r="2.5" opacity="0.9"/>
+    <circle cx="1040" cy="360" r="2.5" opacity="0.85"/>
+    <circle cx="640" cy="120" r="2.5" opacity="0.7"/>
+  </g>
+
+  <!-- hairline trails -->
+  <g stroke="#ededf0" stroke-opacity="0.18" stroke-width="1.2" fill="none">
+    <path d="M120 120 Q200 180 280 240 Q360 300 340 150"/>
+    <path d="M1020 140 Q1000 250 1040 360 Q1080 460 980 470"/>
+    <path d="M90 490 Q140 440 160 380"/>
+  </g>
+
+  <!-- content -->
+  <text x="120" y="300" font-family="Manrope, sans-serif" font-size="40" font-weight="500" fill="#a0a0aa" letter-spacing="2">haroon0x</text>
+  <text x="120" y="380" font-family="Manrope, sans-serif" font-size="88" font-weight="600" fill="#ededf0" letter-spacing="-2">Building intelligent</text>
+  <text x="120" y="470" font-family="Manrope, sans-serif" font-size="88" font-weight="300" fill="#5e6ad2" letter-spacing="-2">systems that ship.</text>
+  <text x="120" y="540" font-family="JetBrains Mono, monospace" font-size="26" fill="#75757f">AI/ML engineer · agent builder · open source</text>
+</svg>

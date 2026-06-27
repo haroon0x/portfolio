@@ -17,21 +17,18 @@ export default function Work() {
       description: 'A secure, containerized code execution agent that runs untrusted AI-generated code in isolated sandbox environments to protect host systems from malicious processes.',
       tags: ['Docker', 'FastAPI', 'Security'],
       github: 'https://github.com/haroon0x/Containerized-agent',
-      size: 'large' as const
     },
     {
       title: 'DeadDrop - Asynchronous Task Agent',
       description: 'A sovereign, asynchronous coding task inbox and local agent runner powered by a FastAPI dashboard and a high-performance Go worker polling outbound via secure tokens.',
       tags: ['Go', 'FastAPI', 'Supabase', 'Agent Orchestration'],
       github: 'https://github.com/haroon0x/DeadDrop',
-      size: 'large' as const
     },
     {
       title: 'OutSync - Distributed Event System',
       description: 'An asynchronous backend system that implements the transactional outbox pattern to safely forward PostgreSQL database events to Redis queues for event-driven webhooks and automation pipelines.',
       tags: ['Python', 'Redis', 'PostgreSQL', 'Asyncio'],
       github: 'https://github.com/haroon0x/OutSync',
-      size: 'medium' as const
     },
     {
       title: 'CrawlWise - The GEOAgent',
@@ -39,7 +36,6 @@ export default function Work() {
       tags: ['TypeScript', 'React', 'AI/ML'],
       github: 'https://github.com/haroon0x/CrawlWise',
       link: 'https://crawlwise.netlify.app/',
-      size: 'medium' as const
     },
     {
       title: 'PromoAgent',
@@ -47,7 +43,6 @@ export default function Work() {
       tags: ['Python', 'LangGraph', 'Marketing'],
       github: 'https://github.com/haroon0x/PromoAgent',
       link: 'https://promoagent.onrender.com/',
-      size: 'small' as const
     },
     {
       title: 'Percolation Hypotheses Generator',
@@ -55,18 +50,14 @@ export default function Work() {
       tags: ['Python', 'NLP', 'Research'],
       github: 'https://github.com/haroon0x/percolation-hypotheses-gen',
       link: 'https://percolation-hypotheses.onrender.com/',
-      size: 'wide' as const
     },
     {
       title: 'Neural Network From Scratch',
       description: 'An educational project implementing deep learning and neural network structures from scratch to achieve high classification accuracy.',
       tags: ['Python', 'ML Fundamentals'],
       github: 'https://github.com/haroon0x/NNFromScratch',
-      size: 'small' as const
     }
   ];
-
-  const displayProjects = order === 'latest' ? projects.slice(0, 3) : projects;
 
   return (
     <section id="work" className="safe-x fluid-section relative z-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -74,19 +65,19 @@ export default function Work() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="mb-10 sm:mb-16"
       >
-        <h2 className="mb-4 text-3xl font-bold text-white text-balance sm:mb-6 sm:text-4xl md:text-5xl">
+        <h2 className="mb-4 text-title font-bold text-white text-balance sm:mb-6">
           Selected <span className="text-accent">Works</span>
         </h2>
-        <p className="max-w-2xl text-base leading-7 text-white/60 sm:text-xl sm:leading-relaxed font-light text-pretty">
+        <p className="max-w-2xl text-body-lg text-text-secondary font-light text-pretty">
           A collection of projects exploring AI, autonomous agents, and interactive web experiences.
         </p>
       </motion.div>
 
       <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:gap-8">
-        {displayProjects.map((project, index) => (
+        {projects.map((project, index) => (
           <SpotlightCard key={project.title} project={project} index={index} />
         ))}
       </div>
@@ -135,8 +126,8 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="card-container group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 backdrop-blur-md transition-colors duration-500 hover:border-white/20 sm:rounded-3xl"
+      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+      className="card-container group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 backdrop-blur-md transition-colors duration-base hover:border-white/20"
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100"
@@ -150,7 +141,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0 flex-1">
             <div className="mb-4 flex items-start justify-between gap-3 sm:items-center">
-              <h3 className="cq-card-title min-w-0 text-xl font-bold leading-tight text-white transition-colors group-hover:text-accent sm:text-2xl md:text-3xl">
+              <h3 className="cq-card-title text-heading font-bold leading-tight text-white transition-colors group-hover:text-accent">
                 {project.title}
               </h3>
               <div className="flex shrink-0 gap-2">
@@ -179,13 +170,13 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
               </div>
             </div>
 
-            <p className="mb-6 max-w-2xl text-sm leading-7 text-white/60 sm:mb-8 sm:text-lg sm:leading-relaxed font-light">
+            <p className="mb-6 max-w-2xl text-sm leading-7 text-text-secondary sm:mb-8 sm:text-base sm:leading-relaxed font-light">
               {project.description}
             </p>
 
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {project.tags.map((tag: string) => (
-                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white/70 transition-colors hover:bg-white/10 hover:text-white sm:px-4 sm:text-sm">
+                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-white/10 hover:text-white sm:px-4 sm:text-sm">
                   {tag}
                 </span>
               ))}
@@ -199,7 +190,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`View project details for ${project.title}`}
-                  className="flex min-h-11 items-center gap-2 rounded-lg py-1 text-sm font-medium text-accent opacity-100 transition-[opacity,transform] duration-300 sm:text-base md:translate-x-[-10px] md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100"
+                  className="flex min-h-11 items-center gap-2 rounded-lg py-1 text-sm font-medium text-accent opacity-100 transition-[opacity,transform] duration-base sm:text-base md:translate-x-[-10px] md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100"
                 >
                 <span>View Project</span>
                 <ArrowRight size={20} />

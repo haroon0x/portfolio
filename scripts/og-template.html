@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>haroon0x OG Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px; height: 630px;
+      background: #0a0a0a;
+      font-family: 'Manrope', system-ui, sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Grid texture */
+    .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    /* Noise overlay */
+    .noise {
+      position: absolute; inset: 0;
+      opacity: 0.15;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    }
+    .content { position: relative; z-index: 1; text-align: center; }
+    .name {
+      font-size: 72px; font-weight: 800; color: #ededed;
+      letter-spacing: -0.02em; line-height: 1.05;
+    }
+    .accent { color: #5e6ad2; }
+    .subtitle {
+      font-size: 24px; font-weight: 300; color: rgba(255,255,255,0.65);
+      margin-top: 16px; letter-spacing: 0.01em;
+    }
+    .bar {
+      width: 64px; height: 3px; border-radius: 2px;
+      background: #5e6ad2; margin: 24px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="noise"></div>
+  <div class="content">
+    <div class="name"><span class="accent">h</span>aroon0x</div>
+    <div class="subtitle">AI/ML Engineer · Agents · Open Source</div>
+    <div class="bar"></div>
+  </div>
+</body>
+</html>
