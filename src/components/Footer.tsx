@@ -8,9 +8,9 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-blue-400' },
+    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-accent hover:border-accent/40' },
     { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-blue-400' }
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-accent hover:border-accent/40' }
   ];
 
   return (
@@ -24,7 +24,7 @@ export default function Footer() {
             </h3>
             <a 
               href="mailto:haroonbmc0@gmail.com"
-              className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-lg px-3 py-2 text-white/70 transition-[color,transform] duration-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
+              className="group inline-flex min-h-11 max-w-full items-center gap-3 rounded-lg px-3 py-2 text-text-secondary transition-[color,transform] duration-fast hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
               aria-label="Send email to haroonbmc0@gmail.com"
             >
               <Mail size={18} />
@@ -40,7 +40,7 @@ export default function Footer() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-200 hover-lift hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96] ${social.color}`}
+                className={`group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-fast hover-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96] ${social.color}`}
                 aria-label={`Visit ${social.name} profile`}
                 tabIndex={0}
               >
@@ -56,7 +56,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <div className="text-xl font-light mb-2">
-                <span className="gradient-text">
+                <span className="text-gradient">
                   haroon0x
                 </span>
               </div>
@@ -64,10 +64,10 @@ export default function Footer() {
 
             <button
               onClick={scrollToTop}
-              className="group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-300 hover-lift hover:border-blue-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
+              className="group flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 p-3 transition-[border-color,color,transform,box-shadow] duration-fast hover-lift hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-[0.96]"
               aria-label="Back to top"
             >
-              <ArrowUp size={16} className="text-white/70 group-hover:text-blue-400 group-hover:-translate-y-1 transition-[color,transform] duration-300" />
+              <ArrowUp size={16} className="text-text-muted group-hover:text-accent group-hover:-translate-y-1 transition-[color,transform] duration-fast" />
             </button>
           </div>
         </div>

@@ -33,4 +33,49 @@ test.describe('core routes', () => {
     await expect(page.getByRole('heading', { level: 1, name: /page not found/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /go back home/i })).toBeVisible();
   });
+
+  test('mobile menu opens and navigates', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'mobile-only interaction');
+    await page.goto('/');
+    await page.getByRole('button', { name: /open menu/i }).click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.getByRole('dialog').getByRole('link', { name: /pull requests/i }).click();
+    await expect(page.getByRole('heading', { name: /open source contributions/i })).toBeVisible();
+  });
+
+  test('PR status filter narrows the list', async ({ page }) => {
+    await page.goto('/pull-requests');
+    await page.getByRole('button', { name: /show merged pull requests/i }).click();
+    await expect(page.getByRole('button', { name: /show merged pull requests/i })).toBeVisible();
+    // every visible status chip in the card grid should now read "Merged"
+    const chips = page.locator('a:has(h3) >> text=/^(Open|Closed)$/');
+    await expect(chips).toHaveCount(0);
+  });
+
+  test('favicon and og image are served', async ({ page }) => {
+    const fav = await page.request.get('/favicon.svg');
+    expect(fav.ok()).toBeTruthy();
+    const og = await page.request.get('/og-card.png');
+    expect(og.ok()).toBeTruthy();
+  });
+
+  test('pull requests page has no critical accessibility violations', async ({ page }) => {
+    await page.goto('/pull-requests');
+    await page.waitForTimeout(1400);
+    await page.addStyleTag({
+      content: `
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      `,
+    });
+    await page.waitForTimeout(200);
+
+    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    const seriousOrCritical = accessibilityScanResults.violations.filter((violation) =>
+      ['serious', 'critical'].includes(violation.impact ?? '')
+    );
+    expect(seriousOrCritical).toEqual([]);
+  });
 });

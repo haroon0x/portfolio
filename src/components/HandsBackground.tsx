@@ -15,11 +15,6 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
         let animationFrameId: number;
         let offset = 0;
 
-        const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-
         const drawGrid = () => {
             if (!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -45,14 +40,19 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
             }
 
             if (!prefersReducedMotion) {
-                offset += 0.2; // Speed of grid movement
+                offset += 0.2;
                 animationFrameId = requestAnimationFrame(drawGrid);
             }
         };
 
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawGrid();
+        };
+
         window.addEventListener('resize', resize);
         resize();
-        drawGrid();
 
         return () => {
             window.removeEventListener('resize', resize);
@@ -78,9 +78,6 @@ const HandsBackground: React.FC<{ children: React.ReactNode }> = ({ children }) 
                     decoding="async"
                     className="h-full w-full object-cover"
                     style={{
-                        // Invert to make white bg dark, and hands light.
-                        // Grayscale to remove color noise.
-                        // Opacity to blend with dark background.
                         filter: 'grayscale(100%) invert(1) contrast(1.3) brightness(0.9)',
                         opacity: 0.7,
                         mixBlendMode: 'screen'

@@ -58,9 +58,6 @@ const PullRequests = () => {
         if (!response.ok) throw new Error('Failed to load PR data');
         const prData = (await response.json()) as PRData;
         setData(prData);
-        const prsArray: string[] = prData.prs.map((pr: PullRequest) => pr.repo.split('/')[0]);
-        const orgs = Array.from(new Set<string>(prsArray));
-        setExpandedOrgs(new Set<string>(orgs));
       } catch (err) {
         console.error('Error loading PR data:', err);
         setError('Failed to load pull requests data.');
@@ -167,7 +164,7 @@ const PullRequests = () => {
             </Magnetic>
           </div>
 
-          <div ref={ref} className={`transition-[opacity,transform] duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+          <div ref={ref} className={`transition-[opacity,transform] duration-slow ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
             <div className="mb-10 sm:mb-16">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-5 flex items-start gap-3 sm:mb-6 sm:items-center sm:gap-4">
                 <div className="rounded-2xl border border-accent/20 bg-accent/10 p-2.5 text-accent sm:p-3">
@@ -177,7 +174,7 @@ const PullRequests = () => {
                   Open Source <span className="text-accent">Contributions</span>
                 </h2>
               </motion.div>
-              <p className="max-w-prose text-base leading-7 text-white/60 sm:text-xl sm:leading-relaxed font-light text-pretty">
+              <p className="max-w-prose text-body-lg text-text-secondary font-light text-pretty">
                 Impactful contributions to the open source ecosystem, ranging from feature implementations to core architectural improvements.
               </p>
             </div>
@@ -218,7 +215,7 @@ const PullRequests = () => {
                       key={org.name}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      transition={{ duration: 0.5, delay: Math.min(index * 0.1, 0.4) }}
                       className={`group rounded-2xl overflow-hidden transition-[border-color,background-color,transform] duration-300 ${
                         org.isTopOrg ? "bg-gradient-to-br from-accent/10 to-purple-500/10 border border-accent/20 hover:border-accent/50" : "bg-zinc-900/40 border border-white/10 hover:border-white/20"
                       }`}
@@ -236,7 +233,7 @@ const PullRequests = () => {
                             </div>
                             <p className="text-sm text-white/50">{org.repos.length} repos • {org.totalPRs} PRs</p>
                           </div>
-                          <ArrowUpRight className={`h-5 w-5 shrink-0 text-white/40 transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
+                          <ArrowUpRight className={`h-5 w-5 shrink-0 text-text-muted transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
                         </div>
 
                         <div className="flex flex-wrap gap-3 text-sm sm:gap-4">
@@ -252,7 +249,7 @@ const PullRequests = () => {
 
                         <div className="flex flex-wrap gap-1.5 mt-3">
                           {org.languages.map(lang => (
-                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded">{lang}</span>
+                            <span key={lang} className="text-xs text-text-muted bg-white/5 px-2 py-0.5 rounded">{lang}</span>
                           ))}
                         </div>
                       </button>
@@ -268,7 +265,7 @@ const PullRequests = () => {
                             <a key={pr.url} href={pr.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group/pr">
                               <div className={`w-2 h-2 rounded-full ${pr.status === "Merged" ? "bg-purple-500" : pr.status === "Open" ? "bg-green-500" : "bg-red-500"}`} />
                               <span className="text-sm text-white/70 group-hover/pr:text-white truncate flex-1">{pr.title}</span>
-                              <GitPullRequest className="w-3.5 h-3.5 text-white/40" />
+                              <GitPullRequest className="w-3.5 h-3.5 text-text-muted" />
                             </a>
                           ))}
                         </div>
@@ -279,84 +276,88 @@ const PullRequests = () => {
               </div>
             )}
 
-            {/* Filter & Sort Controls */}
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <span className="flex items-center gap-2 text-sm text-white/50">
-                <Filter className="w-4 h-4" />
-                Filter:
-              </span>
-              <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
-                <button
-                  onClick={() => setFilterStatus("all")}
+            {/* Toolbar — filters + sorts */}
+            <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-surface/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="flex items-center gap-2 text-sm text-text-muted">
+                  <Filter className="w-4 h-4" />
+                  Filter:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setFilterStatus("all")}
                     aria-label="Show all pull requests"
-                    className={`min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
-                    filterStatus === "all" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    className={`min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
+                    filterStatus === "all" ? "bg-accent text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  All ({data?.total || 0})
-                </button>
-                <button
-                  onClick={() => setFilterStatus("merged")}
+                  >
+                    All ({data?.total || 0})
+                  </button>
+                  <button
+                    onClick={() => setFilterStatus("merged")}
                     aria-label="Show merged pull requests"
-                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
                     filterStatus === "merged" ? "bg-purple-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  <CheckCircle2 className="w-4 h-4" />
-                  Merged ({data?.merged || 0})
-                </button>
-                <button
-                  onClick={() => setFilterStatus("open")}
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    Merged ({data?.merged || 0})
+                  </button>
+                  <button
+                    onClick={() => setFilterStatus("open")}
                     aria-label="Show open pull requests"
-                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
+                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
                     filterStatus === "open" ? "bg-green-500 text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  <Circle className="w-4 h-4" />
-                  Open ({data?.open || 0})
-                </button>
+                  >
+                    <Circle className="w-4 h-4" />
+                    Open ({data?.open || 0})
+                  </button>
+                </div>
               </div>
 
-              <span className="flex items-center gap-2 text-sm text-white/50 sm:ml-4">
-                <ArrowDownUp className="w-4 h-4" />
-                Sort:
-              </span>
-              <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
-                <button
-                  onClick={() => toggleSort("status")}
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="flex items-center gap-2 text-sm text-text-muted">
+                  <ArrowDownUp className="w-4 h-4" />
+                  Sort:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => toggleSort("status")}
                     aria-label="Sort pull requests by status"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
-                    sortBy === "status" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
+                    sortBy === "status" ? "bg-accent text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  Status {sortBy === "status" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
-                <button
-                  onClick={() => toggleSort("date")}
+                  >
+                    Status {sortBy === "status" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                  <button
+                    onClick={() => toggleSort("date")}
                     aria-label="Sort pull requests by date"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
-                    sortBy === "date" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
+                    sortBy === "date" ? "bg-accent text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  <Calendar className="w-4 h-4" />
-                  Date {sortBy === "date" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
-                <button
-                  onClick={() => toggleSort("repo")}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Date {sortBy === "date" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                  <button
+                    onClick={() => toggleSort("repo")}
                     aria-label="Sort pull requests by repository"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-300 active:scale-[0.96] ${
-                    sortBy === "repo" ? "bg-accent text-black" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
+                    sortBy === "repo" ? "bg-accent text-white" : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
                   }`}
-                >
-                  <GitCommit className="w-4 h-4" />
-                  Repo {sortBy === "repo" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
+                  >
+                    <GitCommit className="w-4 h-4" />
+                    Repo {sortBy === "repo" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Last Updated */}
             {data?.lastUpdated && (
-              <div className="mb-6 text-xs text-white/40">
+              <div className="mb-6 text-xs text-text-muted">
                 Last updated: {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
             )}
@@ -364,11 +365,11 @@ const PullRequests = () => {
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-64 rounded-3xl bg-white/5 animate-pulse border border-white/10" />
+                  <div key={i} className="h-64 rounded-2xl bg-white/5 animate-pulse border border-white/10" />
                 ))}
               </div>
             ) : error ? (
-              <div className="p-8 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">{error}</div>
+              <div className="p-8 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">{error}</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredPRs.map((pr, index) => (
@@ -380,9 +381,9 @@ const PullRequests = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.05 }}
-                    className="card-container group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 p-5 backdrop-blur-xl transition-[border-color,transform] duration-500 hover:border-accent/50 active:scale-[0.96] sm:rounded-3xl sm:p-6 md:p-8"
+                    className="card-container group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 p-5 backdrop-blur-xl transition-[border-color,transform] duration-base hover:border-accent/50 active:scale-[0.96] sm:p-6 md:p-8"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-base" />
 
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="mb-5 flex items-start justify-between gap-3 sm:mb-6">
@@ -394,12 +395,12 @@ const PullRequests = () => {
                             <GitPullRequest className="w-3 h-3" />
                             {pr.status}
                           </div>
-                          <span className="flex min-w-0 items-center gap-1.5 text-xs text-white/40">
+                          <span className="flex min-w-0 items-center gap-1.5 text-xs text-text-muted">
                             <Calendar className="h-3 w-3 shrink-0" />
                             {pr.date}
                           </span>
                         </div>
-                        <div className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-white/5 p-2 text-white/40 transition-[background-color,color,transform] duration-300 group-hover:bg-accent group-hover:text-white">
+                        <div className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-white/5 p-2 text-text-muted transition-[background-color,color,transform] duration-300 group-hover:bg-accent group-hover:text-white">
                           <ArrowUpRight className="w-4 h-4" />
                         </div>
                       </div>
@@ -420,7 +421,7 @@ const PullRequests = () => {
                         </div>
                         <div className="flex flex-wrap gap-2 sm:justify-end">
                           {pr.languages.map((lang) => (
-                            <span key={lang} className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded border border-white/5">{lang}</span>
+                            <span key={lang} className="text-xs text-text-muted bg-white/5 px-2 py-1 rounded border border-white/5">{lang}</span>
                           ))}
                         </div>
                       </div>
@@ -436,3 +437,4 @@ const PullRequests = () => {
 };
 
 export default PullRequests;
+
