@@ -4,28 +4,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#faf8f4',
+        background: '#fffdfb',
         sky: {
-          light: '#eef5fc',
-          haze: '#fdfbf7',
+          light: '#fff8f5',
+          haze: '#f8fbf6',
         },
-        surface: '#ffffff',
-        border: 'rgba(31, 35, 40, 0.08)',
+        surface: 'rgba(255, 255, 255, 0.82)',
+        border: 'rgba(54, 45, 42, 0.10)',
         ink: {
-          DEFAULT: '#1f2328',
-          secondary: '#46525c',
-          muted: '#66707a',
+          DEFAULT: '#282321',
+          secondary: '#5f5753',
+          muted: '#817671',
         },
         accent: {
-          DEFAULT: '#3e7a52',
-          hover: '#346847',
-          muted: 'rgba(62, 122, 82, 0.10)',
+          DEFAULT: '#b72d3b',
+          hover: '#962330',
+          muted: 'rgba(183, 45, 59, 0.09)',
         },
         gold: {
-          DEFAULT: '#a8821f',
-          soft: 'rgba(168, 130, 31, 0.14)',
+          DEFAULT: '#b88a37',
+          soft: 'rgba(184, 138, 55, 0.13)',
         },
-        blush: '#f7eef0',
+        blush: '#fff1f1',
       },
       fontFamily: {
         heading: ['"Shippori Mincho"', 'Georgia', 'serif'],
@@ -39,8 +39,8 @@ export default {
         'body-lg': ['clamp(1.0625rem, 1.5vw, 1.1875rem)', { lineHeight: '1.75' }],
       },
       boxShadow: {
-        petal: '0 1px 2px rgba(31,35,40,0.04), 0 8px 24px rgba(31,35,40,0.06)',
-        'petal-lg': '0 2px 4px rgba(31,35,40,0.05), 0 16px 48px rgba(31,35,40,0.09)',
+        petal: '0 1px 2px rgba(42,32,28,0.04), 0 16px 42px rgba(78,51,42,0.07)',
+        'petal-lg': '0 2px 4px rgba(42,32,28,0.05), 0 22px 60px rgba(78,51,42,0.11)',
       },
       transitionDuration: {
         fast: '150ms',

@@ -7,6 +7,7 @@
     @apply bg-background text-ink font-body antialiased selection:bg-accent/20 selection:text-ink;
     -webkit-font-smoothing: antialiased;
     position: relative;
+    background: #fbf9f2;
   }
 
   body::before {
@@ -19,8 +20,8 @@
     pointer-events: none;
     z-index: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    opacity: 0.25;
-    mix-blend-mode: normal;
+    opacity: 0.08;
+    mix-blend-mode: multiply;
   }
 
   #root {
@@ -97,17 +98,87 @@
   }
 }
 
-/* Lily bed sway */
-@keyframes lily-sway {
-  from { transform: rotate(-0.4deg); }
-  to { transform: rotate(0.5deg); }
+.ambient-shell {
+  --ambient-x: 50%;
+  --ambient-y: 42%;
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+  overflow: hidden;
+  background: #fbfaf7;
 }
 
-/* Drifting petals */
-@keyframes petal-fall {
-  0%   { transform: translate3d(0, -8vh, 0) rotate(0deg); opacity: 0; }
-  8%   { opacity: 0.9; }
-  100% { transform: translate3d(7vw, 108vh, 0) rotate(300deg); opacity: 0; }
+.ambient-wash,
+.ambient-orbit,
+.ambient-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ambient-wash {
+  z-index: 0;
+  background:
+    radial-gradient(circle at var(--ambient-x) var(--ambient-y), rgba(255, 255, 255, 0.96) 0 8%, rgba(255, 255, 255, 0) 32%),
+    radial-gradient(ellipse 48% 54% at 4% 12%, rgba(174, 43, 57, 0.13), transparent 68%),
+    radial-gradient(ellipse 42% 48% at 96% 88%, rgba(103, 137, 104, 0.13), transparent 72%),
+    linear-gradient(145deg, #fffefd 0%, #faf7f2 48%, #f5f5ed 100%);
+}
+
+.ambient-orbit {
+  z-index: 1;
+  margin: auto;
+  border: 1px solid rgba(66, 57, 51, 0.075);
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.ambient-orbit-one {
+  width: min(78vw, 72rem);
+  height: min(78vw, 72rem);
+  box-shadow: 0 0 0 8rem rgba(255, 255, 255, 0.035), 0 0 0 18rem rgba(255, 255, 255, 0.025);
+  animation: ambient-turn 38s linear infinite;
+}
+
+.ambient-orbit-one::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 12%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #b72d3b;
+  box-shadow: 0 0 0 0.45rem rgba(183, 45, 59, 0.08);
+}
+
+.ambient-orbit-two {
+  width: min(48vw, 42rem);
+  height: min(48vw, 42rem);
+  border-color: rgba(94, 116, 88, 0.07);
+  animation: ambient-turn 28s linear infinite reverse;
+}
+
+.ambient-orbit-two::after {
+  content: "";
+  position: absolute;
+  right: 4%;
+  bottom: 24%;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: #6e8b6d;
+}
+
+.ambient-grain {
+  z-index: 2;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+@keyframes ambient-turn {
+  to { transform: rotate(360deg); }
 }
 
 /* Custom Scrollbar */
@@ -116,28 +187,28 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f3f0ea;
+  background: #faf7f3;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d8d2c6;
+  background: #d3c8c1;
   border-radius: 9999px;
   border: 1px solid rgba(31, 35, 40, 0.08);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c4bcae;
+  background: #b9aaa2;
 }
 
 /* Text Selection */
 ::selection {
-  background: rgba(62, 122, 82, 0.20);
-  color: #1f2328;
+  background: rgba(183, 45, 59, 0.2);
+  color: #282321;
 }
 
 /* Focus States */
 :focus-visible {
-  outline: 2px solid #3e7a52;
+  outline: 2px solid #b72d3b;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -152,6 +223,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .ambient-orbit {
+    animation: none;
   }
 }
 
