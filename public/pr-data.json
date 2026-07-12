@@ -247,8 +247,8 @@
       "description": "First thing: this is not a vibe coded AI slop PR.\r\n\r\nI have added the initial benchmark suite for trainer MCP tools as m...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 837,
-      "deletions": 1,
+      "additions": 853,
+      "deletions": 0,
       "languages": [
         "Python",
         "Makefile"
@@ -550,7 +550,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-07-11T18:48:09.111Z",
+  "lastUpdated": "2026-07-12T11:28:10.597Z",
   "total": 34,
   "open": 16,
   "merged": 8
