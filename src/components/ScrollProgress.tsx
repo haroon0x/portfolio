@@ -20,7 +20,7 @@ export default function ScrollProgress() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-px bg-white/10">
+    <div className="fixed top-0 left-0 right-0 z-50 h-px bg-border">
       <div
         className="h-full bg-accent origin-left"
         style={{ transform: `scaleX(${scrollProgress})` }}

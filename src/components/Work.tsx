@@ -68,7 +68,7 @@ export default function Work() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="mb-10 sm:mb-16"
       >
-        <h2 className="mb-4 text-title font-bold text-white text-balance sm:mb-6">
+        <h2 className="mb-4 text-title font-bold text-text-primary text-balance sm:mb-6">
           Selected <span className="text-accent">Works</span>
         </h2>
         <p className="max-w-2xl text-body-lg text-text-secondary font-light text-pretty">
@@ -115,6 +115,8 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
     setOpacity(0);
   };
 
+  const spotlightOpacity = opacity * 0.06;
+
   return (
     <motion.div
       ref={divRef}
@@ -127,13 +129,13 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="card-container group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 backdrop-blur-md transition-colors duration-base hover:border-white/20"
+      className="card-container group relative overflow-hidden rounded-2xl border border-card-border bg-card-bg backdrop-blur-md transition-colors duration-base hover:border-card-border-hover"
     >
       <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px transition duration-300"
         style={{
-          opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.06), transparent 40%)`,
+          opacity: spotlightOpacity,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, var(--text-primary), transparent 40%)`,
         }}
       />
 
@@ -141,7 +143,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0 flex-1">
             <div className="mb-4 flex items-start justify-between gap-3 sm:items-center">
-              <h3 className="cq-card-title text-heading font-bold leading-tight text-white transition-colors group-hover:text-accent">
+              <h3 className="cq-card-title text-heading font-bold leading-tight text-text-primary transition-colors group-hover:text-accent">
                 {project.title}
               </h3>
               <div className="flex shrink-0 gap-2">
@@ -151,7 +153,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.title} on GitHub`}
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/5 bg-white/5 p-2 text-white/60 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-card-border-subtle bg-hover-bg p-2 text-text-muted transition-colors hover:border-card-border-hover hover:bg-hover-bg-strong hover:text-text-primary"
                   >
                     <Github size={20} />
                   </a>
@@ -162,7 +164,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open live link for ${project.title}`}
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/5 bg-white/5 p-2 text-white/60 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-card-border-subtle bg-hover-bg p-2 text-text-muted transition-colors hover:border-card-border-hover hover:bg-hover-bg-strong hover:text-text-primary"
                   >
                     <ExternalLink size={20} />
                   </a>
@@ -176,7 +178,7 @@ function SpotlightCard({ project, index }: { project: Project; index: number }) 
 
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {project.tags.map((tag: string) => (
-                <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-white/10 hover:text-white sm:px-4 sm:text-sm">
+                <span key={tag} className="rounded-full border border-card-border-subtle bg-hover-bg px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-hover-bg-strong hover:text-text-primary sm:px-4 sm:text-sm">
                   {tag}
                 </span>
               ))}

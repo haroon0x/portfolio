@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
   <title>haroon0x | AI/ML Engineer Portfolio</title>
   <meta name="description"
     content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
@@ -25,7 +26,7 @@
   <meta name="twitter:description"
     content="Portfolio of Muhammed Haroon, AI/ML Engineer. Showcasing intelligent systems, AI agents, and open-source projects." />
   <meta name="twitter:image" content="https://haroon0x.onrender.com/og-card.png" />
-  <!-- Performance: Preconnect to Google Fonts -->
+  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -37,7 +38,7 @@
     type="image/webp"
   />
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Shippori+Mincho:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHVPNSB7K1"></script>
@@ -47,6 +48,21 @@
     gtag('js', new Date());
 
     gtag('config', 'G-EHVPNSB7K1');
+  </script>
+  <!-- Inline theme detection to prevent flash -->
+  <script>
+    (function () {
+      const stored = localStorage.getItem('portfolio-theme');
+      if (stored === 'light') {
+        document.documentElement.classList.remove('theme-dark');
+        document.documentElement.classList.add('theme-light');
+      } else if (stored === 'dark') {
+        document.documentElement.classList.add('theme-dark');
+      } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.classList.remove('theme-dark');
+        document.documentElement.classList.add('theme-light');
+      }
+    })();
   </script>
 </head>
 

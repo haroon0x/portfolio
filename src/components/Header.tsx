@@ -4,6 +4,7 @@ import { XIcon } from './icons/XIcon';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Magnetic from './Magnetic';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,9 +54,9 @@ export default function Header() {
   ];
 
   const socialLinks = [
-    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x', color: 'hover:text-accent' },
-    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x', color: 'hover:text-white' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8', color: 'hover:text-accent' }
+    { name: 'Twitter', icon: XIcon, url: 'https://x.com/skywalkerr0x' },
+    { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/muhammed-haroon-0399962b8' }
   ];
 
   return (
@@ -71,11 +72,11 @@ export default function Header() {
           flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2
           px-3 py-2 sm:w-auto sm:max-w-none sm:px-4 md:gap-6 md:px-6 md:py-3
           rounded-full
-          bg-zinc-900/40 backdrop-blur-xl
-          border border-white/10
-          shadow-lg shadow-black/10
-          transition-colors duration-base
-          ${isScrolled ? 'bg-zinc-900/60 shadow-xl' : ''}
+          bg-header-bg backdrop-blur-xl
+          border border-header-border
+          shadow-header
+          transition-all duration-500
+          ${isScrolled ? 'bg-header-bg-scrolled' : ''}
         `}>
           {/* Logo */}
           <button
@@ -83,7 +84,7 @@ export default function Header() {
             className="min-w-0 text-base font-bold group focus:outline-none sm:text-lg"
             aria-label="Go to top"
           >
-            <span className="block truncate text-white group-hover:text-accent transition-colors duration-fast">
+            <span className="block truncate text-text-primary group-hover:text-accent transition-colors duration-300">
               haroon0x
             </span>
           </button>
@@ -99,7 +100,7 @@ export default function Header() {
                       onMouseEnter={() => {
                         if (item.url === '/pull-requests') import('../pages/PullRequests');
                       }}
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                      className="block px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       {item.name}
                     </Link>
@@ -108,7 +109,7 @@ export default function Header() {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                      className="block px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       {item.name}
                     </a>
@@ -116,7 +117,7 @@ export default function Header() {
                 ) : (
                   <button
                     onClick={() => item.id && scrollToSection(item.id)}
-                    className="block px-4 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                    className="block px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                   >
                     {item.name}
                   </button>
@@ -125,14 +126,14 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Right Side */}
-          <div className="flex shrink-0 items-center gap-1.5 pl-2 border-l border-white/10 sm:gap-3 sm:pl-3">
+          {/* Right Side — Sponsor, Socials, Toggle */}
+          <div className="flex shrink-0 items-center gap-1.5 pl-2 border-l border-header-border sm:gap-3 sm:pl-3">
             <Magnetic>
               <a 
                 href="https://github.com/sponsors/haroon0x" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-[color,background-color,border-color,transform] duration-fast group active:scale-[0.96]"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-text-muted hover:text-text-primary bg-hover-bg hover:bg-hover-bg-strong border border-border rounded-full transition-[color,background-color,border-color,transform] duration-300 group active:scale-[0.96]"
               >
                 <Heart size={12} className="group-hover:text-accent group-hover:fill-accent transition-colors" />
                 <span>Sponsor</span>
@@ -147,7 +148,7 @@ export default function Header() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Visit ${social.name} profile`}
-                    className={`block p-3 text-white/60 ${social.color} hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]`}
+                    className="block p-3 text-text-muted hover:text-accent hover:bg-accent-muted rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                   >
                     <social.icon size={16} />
                   </a>
@@ -155,13 +156,15 @@ export default function Header() {
               ))}
             </div>
 
+            <ThemeToggle />
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-nav-menu"
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              className="md:hidden p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+              className="md:hidden p-3 text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-full transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
             >
               {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -181,7 +184,7 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-30 bg-black/40 md:hidden"
+              className="fixed inset-0 z-30 bg-overlay md:hidden"
             />
             <motion.div
               id="mobile-nav-menu"
@@ -193,7 +196,7 @@ export default function Header() {
               transition={{ duration: 0.2 }}
               className="fixed top-20 left-3 right-3 z-40 md:hidden sm:top-24 sm:left-4 sm:right-4"
             >
-              <div className="bg-zinc-900/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 shadow-2xl sm:p-4">
+              <div className="bg-header-bg-solid backdrop-blur-xl rounded-2xl border border-header-border shadow-petal-lg p-3 sm:p-4">
                 <div className="flex flex-col space-y-2">
                   {navItems.map((item) => (
                     'url' in item && item.url ? (
@@ -204,7 +207,7 @@ export default function Header() {
                           onMouseEnter={() => {
                             if (item.url === '/pull-requests') import('../pages/PullRequests');
                           }}
-                          className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                          className="p-3 text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.name}
@@ -215,7 +218,7 @@ export default function Header() {
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                          className="p-3 text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                         >
                           {item.name}
                         </a>
@@ -229,7 +232,7 @@ export default function Header() {
                           }
                           setIsMenuOpen(false);
                         }}
-                        className="p-3 text-left text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]"
+                        className="p-3 text-left text-text-secondary hover:text-text-primary hover:bg-hover-bg rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                       >
                         {item.name}
                       </button>
@@ -237,7 +240,7 @@ export default function Header() {
                   ))}
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
+                <div className="mt-4 pt-4 border-t border-border flex justify-center gap-4">
                   {socialLinks.map((social) => (
                     <a
                       key={social.name}
@@ -245,7 +248,7 @@ export default function Header() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit ${social.name} profile`}
-                      className={`p-3 text-white/60 ${social.color} hover:bg-white/5 rounded-xl transition-[color,background-color,transform] duration-fast active:scale-[0.96]`}
+                      className="p-3 text-text-muted hover:text-accent hover:bg-hover-bg rounded-xl transition-[color,background-color,transform] duration-300 active:scale-[0.96]"
                     >
                       <social.icon size={20} />
                     </a>

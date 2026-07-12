@@ -57,7 +57,7 @@ export default function Hero() {
       {/* Single floating geometric shape */}
       <div className="absolute inset-0 perspective-1000">
         <motion.div
-          className="absolute left-6 top-28 h-16 w-16 border border-white/10 opacity-40 sm:left-1/4 sm:top-1/4 md:h-32 md:w-32"
+          className="absolute left-6 top-28 h-16 w-16 border border-border opacity-40 sm:left-1/4 sm:top-1/4 md:h-32 md:w-32"
           style={{
             transformStyle: 'preserve-3d',
             rotateX,
@@ -91,7 +91,7 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
           >
-            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-surface px-3 py-2 sm:px-4">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-surface px-3 py-2 sm:px-4">
               <span className="h-2 w-2 shrink-0 rounded-full bg-accent animate-pulse" />
               <span className="min-w-0 font-mono text-xs text-text-secondary sm:text-sm">Open to full-time & freelance work</span>
             </div>
@@ -100,7 +100,7 @@ export default function Hero() {
           {/* Main Heading */}
           <div className="space-y-4">
             <motion.h1
-              className="text-display font-medium text-white leading-[0.98] tracking-tight text-balance"
+              className="text-display font-medium text-text-primary leading-[0.98] tracking-tight text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
@@ -149,7 +149,7 @@ export default function Hero() {
               <Link
                 to="/pull-requests"
                 onMouseEnter={() => import('../pages/PullRequests')}
-                className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 font-medium text-white shadow-lg shadow-accent/20 transition-[background-color,box-shadow,transform] duration-fast hover:bg-accent-hover hover:shadow-accent/40 active:scale-[0.96] sm:px-8 sm:py-4"
+                className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 font-medium text-white shadow-lg shadow-accent/20 transition-[background-color,box-shadow,transform] duration-base hover:bg-accent-hover hover:shadow-accent/40 active:scale-[0.96] sm:px-8 sm:py-4"
               >
                 <span>View My Work</span>
                 <ArrowDown size={18} className="-rotate-90 group-hover:translate-x-1 transition-transform" />
@@ -160,7 +160,7 @@ export default function Hero() {
               href="https://github.com/haroon0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-12 w-full items-center justify-center rounded-xl border border-white/20 px-6 py-3.5 font-medium text-white transition-[color,border-color,transform] duration-fast hover:border-accent hover:text-accent active:scale-[0.96] sm:w-auto sm:px-8 sm:py-4"
+              className="flex min-h-12 w-full items-center justify-center rounded-xl border border-border px-6 py-3.5 font-medium text-text-primary transition-[color,border-color,transform] duration-base hover:border-accent hover:text-accent active:scale-[0.96] sm:w-auto sm:px-8 sm:py-4"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
             >
@@ -181,7 +181,7 @@ export default function Hero() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-3 text-text-muted transition-colors duration-fast hover:bg-white/5 hover:text-accent"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-3 text-text-muted transition-colors duration-base hover:bg-hover-bg hover:text-accent"
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.96 }}
                 initial={{ opacity: 0, y: 20 }}
