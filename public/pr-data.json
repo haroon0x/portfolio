@@ -530,35 +530,6 @@
       "deletions": 1,
       "languages": [],
       "isTopRepo": false
-    },
-    {
-      "title": "feat(memory-graph): configurable labels + popover z-index",
-      "repo": "supermemoryai/supermemory",
-      "url": "https://github.com/supermemoryai/supermemory/pull/1201",
-      "description": "Document-facing copy and hover popover stacking were hardcoded, forcing downstream apps to patch dist/ output when produ...",
-      "status": "Closed",
-      "date": "Jul 5, 2026",
-      "additions": 436,
-      "deletions": 78,
-      "languages": [
-        "TypeScript",
-        "React"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "fix(tools): coerce limit/offset in ai-sdk schemas",
-      "repo": "supermemoryai/supermemory",
-      "url": "https://github.com/supermemoryai/supermemory/pull/1202",
-      "description": "Fixes #1191 \r\n `searchMemories` and `documentList` tool calls fail with tool call validation failed when the LLM emits l...",
-      "status": "Closed",
-      "date": "Jul 5, 2026",
-      "additions": 5,
-      "deletions": 5,
-      "languages": [
-        "TypeScript"
-      ],
-      "isTopRepo": true
     }
   ],
   "topRepos": [
@@ -577,11 +548,10 @@
     "mem0ai/mem0",
     "google-deepmind/optax",
     "meta-llama/synthetic-data-kit",
-    "OWASP-BLT/BLT",
-    "supermemoryai/supermemory"
+    "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-07-12T11:45:00.000Z",
-  "total": 36,
+  "lastUpdated": "2026-07-12T11:31:38.513Z",
+  "total": 34,
   "open": 16,
   "merged": 8
 }
