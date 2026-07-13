@@ -296,11 +296,7 @@
       "date": "Jan 29, 2026",
       "additions": 0,
       "deletions": 8,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "Go"
-      ],
+      "languages": [],
       "isTopRepo": true
     },
     {
@@ -550,7 +546,7 @@
     "meta-llama/synthetic-data-kit",
     "OWASP-BLT/BLT"
   ],
-  "lastUpdated": "2026-07-12T11:31:38.513Z",
+  "lastUpdated": "2026-07-13T09:34:31.907Z",
   "total": 34,
   "open": 16,
   "merged": 8
