@@ -1,234 +1,68 @@
 {
   "prs": [
     {
-      "title": "Implement persistent Friend Requests page ",
-      "repo": "RetroShare/RetroShare",
-      "url": "https://github.com/RetroShare/RetroShare/pull/3223",
-      "description": "\r\nResolves Issue #1794 \r\n\r\nAdds a dedicated **Friend Requests** tab to the Network page so incoming connection attempts ...",
-      "status": "Open",
-      "date": "May 12, 2026",
-      "additions": 569,
+      "title": "feat: implement plan 001 — dark Linear-style redesign",
+      "repo": "haroon0x/portfolio",
+      "url": "https://github.com/haroon0x/portfolio/pull/1",
+      "description": "Complete 9-phase implementation of the dark Linear aesthetic: - Phase A: Token foundation (single palette, fluid type scale, motion tokens) - Phase B: Remove dead theme system (...",
+      "status": "Merged",
+      "date": "Jul 11, 2026",
+      "additions": 2356,
+      "deletions": 534,
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "HTML"
+      ]
+    },
+    {
+      "title": "fix(tools): coerce limit/offset in ai-sdk schemas",
+      "repo": "supermemoryai/supermemory",
+      "url": "https://github.com/supermemoryai/supermemory/pull/1202",
+      "description": "Fixes #1191 `searchMemories` and `documentList` tool calls fail with `tool call validation failed: [/limit: expected number, but got string]` when the LLM emits `limit`/`offset`...",
+      "status": "Merged",
+      "date": "Jul 5, 2026",
+      "additions": 5,
       "deletions": 5,
       "languages": [
-        "C++",
-        "C",
-        "QMake"
-      ],
-      "isTopRepo": true
+        "TypeScript",
+        "MDX",
+        "Python"
+      ]
     },
     {
-      "title": "[Server] Propagate adapter deployment errors to GraphQL client",
-      "repo": "meshery/meshery",
-      "url": "https://github.com/meshery/meshery/pull/19228",
-      "description": "Fixes #19221\r\n\r\n\r\n**Summary:**\r\n\r\nFixes #19221\r\n\r\n`changeAdapterStatus` in `adapter.go` had two bugs:\r\n\r\n1. **Swallowed ...",
-      "status": "Open",
-      "date": "May 11, 2026",
-      "additions": 2,
-      "deletions": 1,
+      "title": "feat(memory-graph): configurable labels + popover z-index",
+      "repo": "supermemoryai/supermemory",
+      "url": "https://github.com/supermemoryai/supermemory/pull/1201",
+      "description": "Document-facing copy and hover popover stacking were hardcoded, forcing downstream apps to patch dist/ output when product vocabulary (sources vs documents) or app-shell layerin...",
+      "status": "Merged",
+      "date": "Jul 5, 2026",
+      "additions": 436,
+      "deletions": 78,
       "languages": [
         "TypeScript",
-        "Go",
-        "JavaScript"
-      ],
-      "isTopRepo": true
+        "MDX",
+        "Python"
+      ]
     },
     {
-      "title": "Validate repository name format in get_branch_list() and check_public_repo()",
-      "repo": "potpie-ai/potpie",
-      "url": "https://github.com/potpie-ai/potpie/pull/763",
-      "description": "## Summary\n\nAdds input validation to `get_branch_list()` and `check_public_repo()` to ensure the `repo_name` parameter f...",
+      "title": "fix: resolve runtime crashes in CrewAI handler, streaming cost calculation, and missing requests dependency",
+      "repo": "neatlogs/neatlogs",
+      "url": "https://github.com/neatlogs/neatlogs/pull/12",
+      "description": "## Summary I went through the codebase and found 3 bugs that will crash the library at runtime. These are not edge cases, they hit you the moment you try to use CrewAI integrati...",
       "status": "Open",
-      "date": "May 4, 2026",
-      "additions": 258,
-      "deletions": 1,
-      "languages": [
-        "Python",
-        "Rust",
-        "Tree-sitter Query"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Configure read-only pre-commit checks",
-      "repo": "potpie-ai/potpie",
-      "url": "https://github.com/potpie-ai/potpie/pull/782",
-      "description": "## Summary\r\nFixes #519 \r\nThis PR updates the pre-commit setup so CI runs validation-only checks and does\r\nnot push autom...",
-      "status": "Open",
-      "date": "May 17, 2026",
-      "additions": 105,
-      "deletions": 3,
-      "languages": [
-        "Python",
-        "Rust",
-        "Tree-sitter Query"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: Migrate dependency management from pip to uv workspaces",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/202",
-      "description": "\r\n## Summary\r\n\r\nThis PR replaces the per-directory `requirements.txt` files with `pyproject.toml` files managed by `uv` ...",
-      "status": "Open",
-      "date": "Apr 9, 2026",
-      "additions": 3500,
-      "deletions": 50,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: add GitHub Issues ingestion component wired into pipeline",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/101",
-      "description": "This pr is not ready for merge. I have some fixes to make.\r\n## Summary\r\n\r\nExtends the existing Kubeflow RAG pipeline to ...",
-      "status": "Open",
-      "date": "Mar 2, 2026",
-      "additions": 165,
-      "deletions": 66,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: implement two-stage hybrid retrieval pipeline with RRF",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/50",
-      "description": "## Summary\r\nFixes #51 \r\nThe core value of the docs-agent is retrieving the exact context needed to augment Llama 3.1-8B....",
-      "status": "Open",
-      "date": "Feb 22, 2026",
-      "additions": 106,
-      "deletions": 53,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Add CI/CD: GitHub Actions",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/35",
-      "description": "#36 \r\n\r\n### What\r\n\r\nAdds automated CI/CD workflows and local developer tooling to the repository. \r\n### Why\r\n\r\nThe repo ...",
-      "status": "Open",
-      "date": "Feb 15, 2026",
-      "additions": 170,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Add Milvus deployment with SeaweedFS backend (replaces MinIO)",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/33",
-      "description": "## Replace MinIO with SeaweedFS as Milvus object storage backend\r\nFixes #34\r\n### What\r\n\r\nThis PR swaps out the MinIO sid...",
-      "status": "Open",
-      "date": "Feb 14, 2026",
-      "additions": 126,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat(cli): add kfp ui to serve frontend as static content",
-      "repo": "kubeflow/pipelines",
-      "url": "https://github.com/kubeflow/pipelines/pull/12746",
-      "description": "Fixes #11947 \r\n## Summary\r\nThis PR implements the `kfp ui` command, enabling users to explore the Kubeflow Pipelines (KF...",
-      "status": "Open",
-      "date": "Jan 31, 2026",
-      "additions": 140,
-      "deletions": 3,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "Go"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Update llm client to add gemini support ",
-      "repo": "meta-llama/synthetic-data-kit",
-      "url": "https://github.com/meta-llama/synthetic-data-kit/pull/78",
-      "description": "\r\n## Description\r\nAdd Gemini support and python-dotenv \r\n\r\nFixes #44 \r\n\r\n## Type of change\r\n\r\nPlease non-releavant optio...",
-      "status": "Open",
-      "date": "Oct 23, 2025",
-      "additions": 56,
+      "date": "May 19, 2026",
+      "additions": 20,
       "deletions": 4,
       "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "refactor: replace gomock with fake client in generator_test.go",
-      "repo": "kubeflow/katib",
-      "url": "https://github.com/kubeflow/katib/pull/2604",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Open",
-      "date": "Jan 26, 2026",
-      "additions": 57,
-      "deletions": 46,
-      "languages": [
-        "Python",
-        "Go",
-        "TypeScript"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: Add node selector configuration for Python SDK",
-      "repo": "kubeflow/katib",
-      "url": "https://github.com/kubeflow/katib/pull/2607",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Open",
-      "date": "Jan 28, 2026",
-      "additions": 123,
-      "deletions": 3,
-      "languages": [
-        "Python",
-        "Go",
-        "TypeScript"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat(trainer): implement get_gpu_status for Kubernetesbackend",
-      "repo": "kubeflow/sdk",
-      "url": "https://github.com/kubeflow/sdk/pull/251",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
-      "status": "Open",
-      "date": "Jan 30, 2026",
-      "additions": 112,
-      "deletions": 4,
-      "languages": [
-        "Python",
-        "Shell",
-        "Makefile"
-      ],
-      "isTopRepo": true
+        "Python"
+      ]
     },
     {
       "title": "fix: migrate deprecated Pydantic v1 class Config with ConfigDict for pydantic v2 compatabilty",
       "repo": "kubeflow/sdk",
       "url": "https://github.com/kubeflow/sdk/pull/496",
-      "description": "### fix: replace deprecated Pydantic v1 `class Config` with `ConfigDict`\r\n\r\n## Description\r\n\r\nReplaces all instances of ...",
+      "description": "### fix: replace deprecated Pydantic v1 `class Config` with `ConfigDict` ## Description Replaces all instances of the deprecated Pydantic v1 `class Config` pattern with the Pyda...",
       "status": "Open",
       "date": "May 18, 2026",
       "additions": 5,
@@ -237,30 +71,58 @@
         "Python",
         "Shell",
         "Makefile"
-      ],
-      "isTopRepo": true
+      ]
     },
     {
       "title": "feat: Add Custom Latency Benchmarking and HTML Reporting for Trainer MCP Tools",
       "repo": "kubeflow/mcp-server",
       "url": "https://github.com/kubeflow/mcp-server/pull/26",
-      "description": "First thing: this is not a vibe coded AI slop PR.\r\n\r\nI have added the initial benchmark suite for trainer MCP tools as m...",
+      "description": "First thing: this is not a vibe coded AI slop PR. I have added the initial benchmark suite for trainer MCP tools as mentioned in #10 . This PR focuses only on latency benchmarks...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 853,
+      "additions": 831,
       "deletions": 0,
       "languages": [
         "Python",
         "Makefile",
         "Dockerfile"
-      ],
-      "isTopRepo": true
+      ]
+    },
+    {
+      "title": "Configure read-only pre-commit checks",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/782",
+      "description": "## Summary Fixes #519 This PR updates the pre-commit setup so CI runs validation-only checks and does not push automatic fixes back to pull requests. Changes made: - disabled pr...",
+      "status": "Open",
+      "date": "May 17, 2026",
+      "additions": 105,
+      "deletions": 3,
+      "languages": [
+        "Python",
+        "Rust",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "Implement persistent Friend Requests page ",
+      "repo": "RetroShare/RetroShare",
+      "url": "https://github.com/RetroShare/RetroShare/pull/3223",
+      "description": "Resolves Issue #1794 Adds a dedicated **Friend Requests** tab to the Network page so incoming connection attempts are visible beyond the one-time feed/toaster notification. The ...",
+      "status": "Open",
+      "date": "May 12, 2026",
+      "additions": 569,
+      "deletions": 5,
+      "languages": [
+        "C++",
+        "C",
+        "QMake"
+      ]
     },
     {
       "title": "feat(examples): add LangGraph long-term memory integration",
       "repo": "moorcheh-ai/memanto",
       "url": "https://github.com/moorcheh-ai/memanto/pull/440",
-      "description": "# feat(examples): Add LangGraph Long-Term Memory Integration\r\n\r\n## Demo\r\n\r\n<img width=\"1920\" height=\"973\" alt=\"cross_ses...",
+      "description": "# feat(examples): Add LangGraph Long-Term Memory Integration ## Demo <img width=\"1920\" height=\"973\" alt=\"cross_session_recall_demo\" src=\"https://github.com/user-attachments/asse...",
       "status": "Merged",
       "date": "May 12, 2026",
       "additions": 610,
@@ -268,31 +130,359 @@
       "languages": [
         "Python",
         "HTML",
-        "Dockerfile"
-      ],
-      "isTopRepo": true
+        "TypeScript"
+      ]
     },
     {
-      "title": "Feature: Add AI Spam detection for Bug reports",
-      "repo": "OWASP-BLT/BLT",
-      "url": "https://github.com/OWASP-BLT/BLT/pull/4803",
-      "description": "## Overview\r\nThis PR implements an AI-based spam detection system for bug reports using Gemini. It automatically analyze...",
-      "status": "Merged",
-      "date": "Nov 15, 2025",
-      "additions": 1124,
-      "deletions": 46,
+      "title": "[Server] Propagate adapter deployment errors to GraphQL client",
+      "repo": "meshery/meshery",
+      "url": "https://github.com/meshery/meshery/pull/19228",
+      "description": "Fixes #19221 **Summary:** Fixes #19221 `changeAdapterStatus` in `adapter.go` had two bugs: 1. **Swallowed errors:** When `DeployAdapter`/`UndeployAdapter` failed, the error was ...",
+      "status": "Open",
+      "date": "May 11, 2026",
+      "additions": 2,
+      "deletions": 1,
       "languages": [
-        "HTML",
-        "Python",
+        "TypeScript",
+        "Go",
         "JavaScript"
-      ],
-      "isTopRepo": true
+      ]
+    },
+    {
+      "title": "Validate repository name format in get_branch_list() and check_public_repo()",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/763",
+      "description": "## Summary Adds input validation to `get_branch_list()` and `check_public_repo()` to ensure the `repo_name` parameter follows GitHub's `owner/repo` naming conventions before mak...",
+      "status": "Open",
+      "date": "May 4, 2026",
+      "additions": 258,
+      "deletions": 1,
+      "languages": [
+        "Python",
+        "Rust",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "Validate repository name format in get_branch_list() and check_public_repo()",
+      "repo": "haroon0x/potpie",
+      "url": "https://github.com/haroon0x/potpie/pull/1",
+      "description": "## Summary Adds input validation to `get_branch_list()` and `check_public_repo()` in `GithubService` to ensure the `repo_name` parameter follows GitHub's `owner/repo` naming con...",
+      "status": "Closed",
+      "date": "May 4, 2026",
+      "additions": 258,
+      "deletions": 1,
+      "languages": [
+        "Python",
+        "Rust",
+        "Tree-sitter Query"
+      ]
+    },
+    {
+      "title": "Consolidate repo_name and repo_path into a single repository identifier",
+      "repo": "potpie-ai/potpie",
+      "url": "https://github.com/potpie-ai/potpie/pull/762",
+      "description": "## Changes - Added `RepositoryResolver` to classify repository identifiers as local paths or remote repos. - Added `repository_identifier` to `ParsingRequest`. - Kept legacy `re...",
+      "status": "Closed",
+      "date": "May 4, 2026",
+      "additions": 481,
+      "deletions": 29,
+      "languages": [
+        "Python",
+        "Rust",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "fix(grounding): bind nonces to identity and add TTL-based expiration",
+      "repo": "quran/quran-mcp",
+      "url": "https://github.com/quran/quran-mcp/pull/1",
+      "description": "Four security hardening changes to GroundingGatekeeperMiddleware: 1. Identity binding: nonces are now stored as (issued_at, identity) tuples. _validate_nonce(nonce, identity) ch...",
+      "status": "Closed",
+      "date": "Apr 15, 2026",
+      "additions": 166,
+      "deletions": 39,
+      "languages": [
+        "Python",
+        "HTML",
+        "Svelte"
+      ]
+    },
+    {
+      "title": "feat: Migrate dependency management from pip to uv workspaces",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/202",
+      "description": "## Summary This PR replaces the per-directory `requirements.txt` files with `pyproject.toml` files managed by `uv` as a workspace. The three Python components (`server`, `server...",
+      "status": "Open",
+      "date": "Apr 9, 2026",
+      "additions": 3500,
+      "deletions": 50,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "docs(fix): remove KFP documentation ingestion task from Phase 1",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/188",
+      "description": "Removed this \"*KFP Ingestion:* Create robust Kubeflow Pipelines to crawl, heavily chunk, and embed the official Kubeflow documentation directly from [kubeflow.org](https://www.k...",
+      "status": "Open",
+      "date": "Mar 30, 2026",
+      "additions": 0,
+      "deletions": 1,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "Feat: Implement Code ingestion pipeline",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/162",
+      "description": "## Summary Fixes #120 PR introduces the initial implementation of the code ingestion pipeline for the Kubeflow RAG system. The pipeline is designed to process code repositories,...",
+      "status": "Open",
+      "date": "Mar 22, 2026",
+      "additions": 1835,
+      "deletions": 52,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "feat: Implement GitHub code ingestion pipeline",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/144",
+      "description": "# PR: Implement GitHub Code Ingestion Pipeline for Kubeflow RAG Fixes #120 ## Description This PR implements the GitHub code ingestion pipeline as specified in the GSoC 2026 Pha...",
+      "status": "Closed",
+      "date": "Mar 18, 2026",
+      "additions": 0,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "fix: Prevent plaintext apiKey from env being saved to models.json",
+      "repo": "openclaw/openclaw",
+      "url": "https://github.com/openclaw/openclaw/pull/39100",
+      "description": "## Summary - Problem: Environment-variable-backed API keys (`${LLM_API_KEY}`) for model providers were resolved and persisted as plaintext into the agent's `models.json` file. -...",
+      "status": "Closed",
+      "date": "Mar 7, 2026",
+      "additions": 36,
+      "deletions": 0,
+      "languages": [
+        "TypeScript",
+        "Swift",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "feat(config): add per-chat-type model routing (DM vs Group Chat)",
+      "repo": "openclaw/openclaw",
+      "url": "https://github.com/openclaw/openclaw/pull/36310",
+      "description": "## Summary Describe the problem and fix in 2–5 bullets: - **Problem**: The model field in agent configuration applies globally with no way to distinguish between DM and group ch...",
+      "status": "Closed",
+      "date": "Mar 5, 2026",
+      "additions": 249,
+      "deletions": 1,
+      "languages": [
+        "TypeScript",
+        "Swift",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "feat: add GitHub Issues ingestion component wired into pipeline",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/101",
+      "description": "This pr is not ready for merge. I have some fixes to make. ## Summary Extends the existing Kubeflow RAG pipeline to optionally ingest GitHub Issues alongside documentation. Issu...",
+      "status": "Open",
+      "date": "Mar 2, 2026",
+      "additions": 165,
+      "deletions": 66,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "feat: implement two-stage hybrid retrieval pipeline with RRF",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/50",
+      "description": "## Summary Fixes #51 The core value of the docs-agent is retrieving the exact context needed to augment Llama 3.1-8B. If the retrieved chunks miss the nuance of the user's query...",
+      "status": "Open",
+      "date": "Feb 22, 2026",
+      "additions": 106,
+      "deletions": 53,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "Add CI/CD: GitHub Actions",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/35",
+      "description": "#36 ### What Adds automated CI/CD workflows and local developer tooling to the repository. ### Why The repo had no automated quality checks. Contributors could push broken code,...",
+      "status": "Open",
+      "date": "Feb 15, 2026",
+      "additions": 170,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "Add Milvus deployment with SeaweedFS backend (replaces MinIO)",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/33",
+      "description": "## Replace MinIO with SeaweedFS as Milvus object storage backend Fixes #34 ### What This PR swaps out the MinIO sidecar container in the Milvus deployment with SeaweedFS. Both p...",
+      "status": "Open",
+      "date": "Feb 14, 2026",
+      "additions": 126,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "Add AGENTS.md",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/30",
+      "description": "Fixes #31 ## Summary Create an `AGENTS.md` file that includes the following sections: 1. **Who This Is For**: Clarify the audience (AI agents, contributors, maintainers). 2. **A...",
+      "status": "Closed",
+      "date": "Feb 14, 2026",
+      "additions": 379,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "Add Milvus connection pooling with auto-reconnection",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/27",
+      "description": "Fixes #28 ## Summary Implements connection pooling for Milvus to eliminate the overhead of creating a new connection on every search request. This is critical for agentic RAG wo...",
+      "status": "Closed",
+      "date": "Feb 14, 2026",
+      "additions": 101,
+      "deletions": 32,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "fix: correct audioPlayerState spreading in migration 18",
+      "repo": "quran/quran.com-frontend-next",
+      "url": "https://github.com/quran/quran.com-frontend-next/pull/3091",
+      "description": "## Summary Migration 18 in `src/redux/migrations.ts` contains a copy-paste bug. It spreads `state.readingPreferences` into `audioPlayerState`, which completely overwrites the au...",
+      "status": "Closed",
+      "date": "Feb 12, 2026",
+      "additions": 1,
+      "deletions": 1,
+      "languages": [
+        "TypeScript",
+        "SCSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "feat(cli): add kfp ui to serve frontend as static content",
+      "repo": "kubeflow/pipelines",
+      "url": "https://github.com/kubeflow/pipelines/pull/12746",
+      "description": "Fixes #11947 ## Summary This PR implements the `kfp ui` command, enabling users to explore the Kubeflow Pipelines (KFP) frontend locally without requiring a Kubernetes cluster. ...",
+      "status": "Open",
+      "date": "Jan 31, 2026",
+      "additions": 140,
+      "deletions": 3,
+      "languages": [
+        "Python",
+        "TypeScript",
+        "Go"
+      ]
+    },
+    {
+      "title": "feat(trainer): implement get_gpu_status for Kubernetesbackend",
+      "repo": "kubeflow/sdk",
+      "url": "https://github.com/kubeflow/sdk/pull/251",
+      "description": "<!-- Thanks for sending a pull request! Here are some tips for you: 1. If this is your first time, check our contributor guidelines: https://www.kubeflow.org/docs/about/contribu...",
+      "status": "Open",
+      "date": "Jan 30, 2026",
+      "additions": 112,
+      "deletions": 4,
+      "languages": [
+        "Python",
+        "Shell",
+        "Makefile"
+      ]
+    },
+    {
+      "title": "fix: implement Milvus partitions for incremental ingestion",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/12",
+      "description": "Fixes #10 ## Problem The ingestion pipeline was previously dropping the entire Milvus collection on every run. This caused: 1. **Data Loss**: Re-running the pipeline for one rep...",
+      "status": "Closed",
+      "date": "Jan 30, 2026",
+      "additions": 20,
+      "deletions": 16,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "feat: Add GitHub Issues ingestion pipeline",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/8",
+      "description": "Adds a new KFP component and pipeline to ingest GitHub Issues from multiple Kubeflow repositories into the RAG system. Fixes #7 , #9 ## Changes ### New Component: `download_gith...",
+      "status": "Merged",
+      "date": "Jan 29, 2026",
+      "additions": 154,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
+    },
+    {
+      "title": "feat: Add agent module for shared utilities",
+      "repo": "kubeflow/docs-agent",
+      "url": "https://github.com/kubeflow/docs-agent/pull/6",
+      "description": "## Summary Adds an `agent-app/` module to centralize shared utilities, preparing the codebase for agentic workflows. ## Changes - [agent/config.py](cci:7://file:///home/g/Docume...",
+      "status": "Closed",
+      "date": "Jan 29, 2026",
+      "additions": 213,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HCL"
+      ]
     },
     {
       "title": "fix(frontend): remove raw <br/> tags from Getting Started page",
       "repo": "kubeflow/pipelines",
       "url": "https://github.com/kubeflow/pipelines/pull/12730",
-      "description": "**Description of your changes:**\r\n\r\nThis PR removes literal `<br/> `tags from the \"Getting Started\" page markdown templa...",
+      "description": "**Description of your changes:** This PR removes literal `<br/> `tags from the \"Getting Started\" page markdown template. Issue: The `markdown-to-jsx `component is configured wit...",
       "status": "Merged",
       "date": "Jan 29, 2026",
       "additions": 0,
@@ -301,182 +491,13 @@
         "Python",
         "TypeScript",
         "Go"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "feat: Add GitHub Issues ingestion pipeline",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/8",
-      "description": "Adds a new KFP component and pipeline to ingest GitHub Issues from multiple Kubeflow repositories into the RAG system.\r\n...",
-      "status": "Merged",
-      "date": "Jan 29, 2026",
-      "additions": 154,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Integrate synthetic data kit to preprocessing module",
-      "repo": "gemma-facet/cloud-services",
-      "url": "https://github.com/gemma-facet/cloud-services/pull/82",
-      "description": "## Description\r\nIntegrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing m...",
-      "status": "Merged",
-      "date": "Nov 13, 2025",
-      "additions": 1717,
-      "deletions": 940,
-      "languages": [
-        "Python",
-        "HCL",
-        "Makefile"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Update llm client to support gemini",
-      "repo": "gemma-facet/synthetic-data-kit",
-      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/1",
-      "description": "\r\nAdd Gemini support to llm client and add python-dotenv to dependecies\r\n## Description\r\nAdded Gemini support and added ...",
-      "status": "Merged",
-      "date": "Oct 23, 2025",
-      "additions": 52,
-      "deletions": 2,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Update lance_utils.py to use newer lance.dataset API",
-      "repo": "gemma-facet/synthetic-data-kit",
-      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/2",
-      "description": "# Pull Request\r\n\r\nUpdate lance_utils.py to use newer lance.dataset API\r\n\r\n## Description\r\n - Update imports in lance_uti...",
-      "status": "Merged",
-      "date": "Oct 29, 2025",
-      "additions": 4,
-      "deletions": 2,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "[DOC] Added example  for 'AlignerNaive' and 'AlignerLuckyDtw' ",
-      "repo": "sktime/sktime",
-      "url": "https://github.com/sktime/sktime/pull/7795",
-      "description": "<!--\r\nWelcome to sktime, and thanks for contributing!\r\nPlease have a look at our contribution guide:\r\nhttps://www.sktime...",
-      "status": "Merged",
-      "date": "Feb 9, 2025",
-      "additions": 30,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Consolidate repo_name and repo_path into a single repository identifier",
-      "repo": "potpie-ai/potpie",
-      "url": "https://github.com/potpie-ai/potpie/pull/762",
-      "description": "  ## Changes\r\n\r\n  - Added `RepositoryResolver` to classify repository identifiers as local paths\r\n  or remote repos.\r\n  ...",
-      "status": "Closed",
-      "date": "May 4, 2026",
-      "additions": 481,
-      "deletions": 29,
-      "languages": [
-        "Python",
-        "Rust",
-        "Tree-sitter Query"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Add AGENTS.md",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/30",
-      "description": "Fixes #31 \r\n\r\n## Summary\r\nCreate an `AGENTS.md` file that includes the following sections:\r\n\r\n1.  **Who This Is For**: C...",
-      "status": "Closed",
-      "date": "Feb 14, 2026",
-      "additions": 379,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Fix: Update OpenAIEmbedder to support reduced embedding dimensions (sync with Chroma)",
-      "repo": "mem0ai/mem0",
-      "url": "https://github.com/mem0ai/mem0/pull/3471",
-      "description": "## Description\r\n\r\nIssue #1229: Mem0 fails when trying to reduce OpenAI embedding dimensions (e.g., 1024) because `vector...",
-      "status": "Closed",
-      "date": "Sep 17, 2025",
-      "additions": 2,
-      "deletions": 1,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "MDX"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": " feat(update) : Migrate embedchain from google-generativeai to google-genai SDK",
-      "repo": "mem0ai/mem0",
-      "url": "https://github.com/mem0ai/mem0/pull/3487",
-      "description": "## Description\r\n\r\nMigrate embedchain/ from google-generativeai to python-genai\r\n\r\n This PR migrates the legacy Google SD...",
-      "status": "Closed",
-      "date": "Sep 20, 2025",
-      "additions": 330,
-      "deletions": 307,
-      "languages": [
-        "Python",
-        "TypeScript",
-        "MDX"
-      ],
-      "isTopRepo": true
-    },
-    {
-      "title": "Feat: Add pre-commit hook that strips notebooks of metadata",
-      "repo": "google-deepmind/optax",
-      "url": "https://github.com/google-deepmind/optax/pull/1519",
-      "description": "Fixes #1372\r\n\r\n## Summary\r\n\r\nThis PR adds a pre-commit hook using [nbstripout](https://github.com/kynan/nbstripout) to a...",
-      "status": "Closed",
-      "date": "Dec 3, 2025",
-      "additions": 9054,
-      "deletions": 9010,
-      "languages": [],
-      "isTopRepo": true
-    },
-    {
-      "title": "Update make_perturbed_fun",
-      "repo": "google-deepmind/optax",
-      "url": "https://github.com/google-deepmind/optax/pull/1520",
-      "description": "FIxes #1342\r\n\r\n\r\n- update sigma to scale\r\n- change default num_samples to 1\r\n- update examples notebook of perturbations...",
-      "status": "Closed",
-      "date": "Dec 3, 2025",
-      "additions": 44,
-      "deletions": 56,
-      "languages": [],
-      "isTopRepo": true
+      ]
     },
     {
       "title": "feat: Add automatic container image security scanning using Trivy",
       "repo": "kubeflow/katib",
       "url": "https://github.com/kubeflow/katib/pull/2608",
-      "description": "<!--  Thanks for sending a pull request! Here are some tips for you:\r\n1. If this is your first time, check our contribut...",
+      "description": "<!-- Thanks for sending a pull request! Here are some tips for you: 1. If this is your first time, check our contributor guidelines https://www.kubeflow.org/docs/about/contribut...",
       "status": "Closed",
       "date": "Jan 28, 2026",
       "additions": 36,
@@ -485,74 +506,667 @@
         "Python",
         "Go",
         "TypeScript"
-      ],
-      "isTopRepo": true
+      ]
     },
     {
-      "title": "feat: Add agent module for shared utilities",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/6",
-      "description": "## Summary\r\nAdds an `agent-app/` module to centralize shared utilities, preparing the codebase for agentic workflows.\r\n\r...",
+      "title": "feat: Add node selector configuration for Python SDK",
+      "repo": "kubeflow/katib",
+      "url": "https://github.com/kubeflow/katib/pull/2607",
+      "description": "<!-- Thanks for sending a pull request! Here are some tips for you: 1. If this is your first time, check our contributor guidelines https://www.kubeflow.org/docs/about/contribut...",
+      "status": "Open",
+      "date": "Jan 28, 2026",
+      "additions": 123,
+      "deletions": 3,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "refactor: replace gomock with fake client in generator_test.go",
+      "repo": "kubeflow/katib",
+      "url": "https://github.com/kubeflow/katib/pull/2604",
+      "description": "<!-- Thanks for sending a pull request! Here are some tips for you: 1. If this is your first time, check our contributor guidelines https://www.kubeflow.org/docs/about/contribut...",
+      "status": "Open",
+      "date": "Jan 26, 2026",
+      "additions": 57,
+      "deletions": 46,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "feat: Implement Kestra SSE streaming for real-time execution and log …",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/44",
+      "description": "…updates, add new dashboard components, and refactor Kestra client and API interactions. <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by...",
+      "status": "Merged",
+      "date": "Dec 14, 2025",
+      "additions": 3283,
+      "deletions": 1600,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Kestra end to end integration with the frontend and backend",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/37",
+      "description": "#19 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Security scan reports now display in a multi-tab int...",
+      "status": "Merged",
+      "date": "Dec 12, 2025",
+      "additions": 336,
+      "deletions": 40,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "fix build fail",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/36",
+      "description": "<!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **Chores** * Updated scroll animation library to the latest stable version....",
+      "status": "Merged",
+      "date": "Dec 12, 2025",
+      "additions": 208,
+      "deletions": 311,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Revamp frontend",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/35",
+      "description": "<!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit ## Release Notes * **New Features** * Integrated Kestra workflow orchestratio...",
+      "status": "Merged",
+      "date": "Dec 11, 2025",
+      "additions": 3782,
+      "deletions": 1048,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Implement Kestra workflow integration ",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/30",
+      "description": "Fixes #19 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Trigger scans from the UI/API and monitor exec...",
+      "status": "Merged",
+      "date": "Dec 10, 2025",
+      "additions": 2146,
+      "deletions": 841,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "feat: add Docker and Kestra orchestration setup",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/11",
+      "description": "Fix #12 , #13 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Containerization: multi-stage Docker image...",
+      "status": "Merged",
+      "date": "Dec 9, 2025",
+      "additions": 147,
+      "deletions": 284,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "fix(frontend): resolve lint errors",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/10",
+      "description": "Fixes #9 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **Chores** * Removed unused component dependencies and imports fro...",
+      "status": "Merged",
+      "date": "Dec 9, 2025",
+      "additions": 5,
+      "deletions": 5,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "feat: implement FastAPI backend with modular agent architecture",
+      "repo": "haroon0x/RedLoop",
+      "url": "https://github.com/haroon0x/RedLoop/pull/8",
+      "description": "Fixes #2 - Initialize backend/ with uv package manager - Implement AdversaryAgent for vulnerability detection - Implement DefenderAgent for patch generation - Add FastAPI endpoi...",
+      "status": "Merged",
+      "date": "Dec 9, 2025",
+      "additions": 1413,
+      "deletions": 43,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Update make_perturbed_fun",
+      "repo": "google-deepmind/optax",
+      "url": "https://github.com/google-deepmind/optax/pull/1520",
+      "description": "FIxes #1342 - update sigma to scale - change default num_samples to 1 - update examples notebook of perturbations",
       "status": "Closed",
-      "date": "Jan 29, 2026",
-      "additions": 213,
+      "date": "Dec 3, 2025",
+      "additions": 44,
+      "deletions": 56,
+      "languages": [
+        "Python",
+        "Shell"
+      ]
+    },
+    {
+      "title": "Feat: Add pre-commit hook that strips notebooks of metadata",
+      "repo": "google-deepmind/optax",
+      "url": "https://github.com/google-deepmind/optax/pull/1519",
+      "description": "Fixes #1372 ## Summary This PR adds a pre-commit hook using [nbstripout](https://github.com/kynan/nbstripout) to automatically strip metadata from Jupyter notebooks before commi...",
+      "status": "Closed",
+      "date": "Dec 3, 2025",
+      "additions": 9054,
+      "deletions": 9010,
+      "languages": [
+        "Python",
+        "Shell"
+      ]
+    },
+    {
+      "title": "Integrate synthetic data kit to preprocessing module",
+      "repo": "gemma-facet/cloud-services",
+      "url": "https://github.com/gemma-facet/cloud-services/pull/82",
+      "description": "## Description Integrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing module. When the user uploads the local documents it goes t...",
+      "status": "Merged",
+      "date": "Nov 13, 2025",
+      "additions": 1717,
+      "deletions": 940,
+      "languages": [
+        "Python",
+        "HCL",
+        "Makefile"
+      ]
+    },
+    {
+      "title": "Update lance_utils.py to use newer lance.dataset API",
+      "repo": "gemma-facet/synthetic-data-kit",
+      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/2",
+      "description": "# Pull Request Update lance_utils.py to use newer lance.dataset API ## Description - Update imports in lance_utils.py to use `write_dataset` and `LanceDataset` directly from `la...",
+      "status": "Merged",
+      "date": "Oct 29, 2025",
+      "additions": 4,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "feat(genai): add logprobs support",
+      "repo": "langchain-ai/langchain-google",
+      "url": "https://github.com/langchain-ai/langchain-google/pull/1266",
+      "description": "<!-- ## Checklist for PR Creation - [ ] PR Title: \"< feat>[optional scope]: <description>\" - Where type is one of: feat, fix, docs, style, refactor, perf, test, build, ci, chore...",
+      "status": "Closed",
+      "date": "Oct 26, 2025",
+      "additions": 119,
+      "deletions": 16,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Update llm client to add gemini support ",
+      "repo": "meta-llama/synthetic-data-kit",
+      "url": "https://github.com/meta-llama/synthetic-data-kit/pull/78",
+      "description": "## Description Add Gemini support and python-dotenv Fixes #44 ## Type of change Please non-releavant options - [x] New feature (non-breaking change which adds functionality)",
+      "status": "Open",
+      "date": "Oct 23, 2025",
+      "additions": 56,
+      "deletions": 4,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Update llm client to support gemini",
+      "repo": "gemma-facet/synthetic-data-kit",
+      "url": "https://github.com/gemma-facet/synthetic-data-kit/pull/1",
+      "description": "Add Gemini support to llm client and add python-dotenv to dependecies ## Description Added Gemini support and added python-dotenv Fixes #44 ## Type of change - [x] New feature (...",
+      "status": "Merged",
+      "date": "Oct 23, 2025",
+      "additions": 52,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "[FEAT] Integrate synthetic dataset generation for local documents into preprocessing pipeline",
+      "repo": "gemma-facet/cloud-services",
+      "url": "https://github.com/gemma-facet/cloud-services/pull/79",
+      "description": "## Description Integrates [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) to the preprocessing module. When the user uploads the local documents it goes t...",
+      "status": "Closed",
+      "date": "Oct 18, 2025",
+      "additions": 7319,
+      "deletions": 2015,
+      "languages": [
+        "Python",
+        "HCL",
+        "Makefile"
+      ]
+    },
+    {
+      "title": "Add PydanticAI Framework Support and Integration Guide",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0/pull/3538",
+      "description": "## Description This pr adds a [documentation](https://github.com/mem0ai/mem0/blob/e5f026c7c1cbe3bc070b617491fc3d1c964e99f7/docs/integrations/pydanticai.mdx) that demonstrates ho...",
+      "status": "Closed",
+      "date": "Oct 4, 2025",
+      "additions": 203,
+      "deletions": 0,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "Shell"
+      ]
+    },
+    {
+      "title": "Add test artifact service",
+      "repo": "google/adk-python",
+      "url": "https://github.com/google/adk-python/pull/3091",
+      "description": "No description provided.",
+      "status": "Closed",
+      "date": "Oct 4, 2025",
+      "additions": 181,
+      "deletions": 3,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Enhance local dataset upload & preprocessing with extended document format support",
+      "repo": "gemma-facet/cloud-services",
+      "url": "https://github.com/gemma-facet/cloud-services/pull/75",
+      "description": "# Description This PR introduces support for parsing additional document formats (.pdf, .html, .pptx, .docx) in the preprocessing service. #72 All core parsers (DOCX, PDF, HTML,...",
+      "status": "Closed",
+      "date": "Oct 1, 2025",
+      "additions": 1375,
+      "deletions": 953,
+      "languages": [
+        "Python",
+        "HCL",
+        "Makefile"
+      ]
+    },
+    {
+      "title": " feat(update) : Migrate embedchain from google-generativeai to google-genai SDK",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0/pull/3487",
+      "description": "## Description Migrate embedchain/ from google-generativeai to python-genai This PR migrates the legacy Google SDK to the new google-genai SDK. This update brings several improv...",
+      "status": "Closed",
+      "date": "Sep 20, 2025",
+      "additions": 330,
+      "deletions": 307,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "Shell"
+      ]
+    },
+    {
+      "title": "Fix: Update OpenAIEmbedder to support reduced embedding dimensions (sync with Chroma)",
+      "repo": "mem0ai/mem0",
+      "url": "https://github.com/mem0ai/mem0/pull/3471",
+      "description": "## Description Issue #1229: Mem0 fails when trying to reduce OpenAI embedding dimensions (e.g., 1024) because `vector_dimension` in the config was never passed to Chroma's OpenA...",
+      "status": "Closed",
+      "date": "Sep 17, 2025",
+      "additions": 2,
+      "deletions": 1,
+      "languages": [
+        "TypeScript",
+        "Python",
+        "Shell"
+      ]
+    },
+    {
+      "title": "Frontend - dashboard ui",
+      "repo": "haroon0x/Containerized-agent",
+      "url": "https://github.com/haroon0x/Containerized-agent/pull/2",
+      "description": "No description provided.",
+      "status": "Closed",
+      "date": "Sep 2, 2025",
+      "additions": 5455,
       "deletions": 0,
       "languages": [
         "Python",
-        "JavaScript",
-        "CSS"
-      ],
-      "isTopRepo": true
+        "Shell",
+        "Dockerfile"
+      ]
     },
     {
-      "title": "Add Milvus connection pooling with auto-reconnection",
-      "repo": "kubeflow/docs-agent",
-      "url": "https://github.com/kubeflow/docs-agent/pull/27",
-      "description": "Fixes #28 \r\n## Summary\r\n\r\nImplements connection pooling for Milvus to eliminate the overhead of creating a new connectio...",
+      "title": "Freshdesk mcp server",
+      "repo": "Klavis-AI/klavis",
+      "url": "https://github.com/Klavis-AI/klavis/pull/322",
+      "description": "## Description Adding the freshdesk mcp server ## Type of change <!-- Please delete options that are not relevant --> - [ ] Bug fix (non-breaking change which fixes an issue) - ...",
       "status": "Closed",
-      "date": "Feb 14, 2026",
-      "additions": 101,
-      "deletions": 32,
+      "date": "Aug 14, 2025",
+      "additions": 1023,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "Go",
+        "TypeScript"
+      ]
+    },
+    {
+      "title": "Debian",
+      "repo": "haroon0x/Containerized-agent",
+      "url": "https://github.com/haroon0x/Containerized-agent/pull/1",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Jul 13, 2025",
+      "additions": 1676,
+      "deletions": 377,
+      "languages": [
+        "Python",
+        "Shell",
+        "Dockerfile"
+      ]
+    },
+    {
+      "title": "pr for integrating tests and ci",
+      "repo": "Isap31/DiabetesAI-Tracking",
+      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/5",
+      "description": "dont merge this pr",
+      "status": "Merged",
+      "date": "Jun 28, 2025",
+      "additions": 3,
+      "deletions": 7,
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "integrating tests and ci",
+      "repo": "Isap31/DiabetesAI-Tracking",
+      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/4",
+      "description": "No description provided.",
+      "status": "Closed",
+      "date": "Jun 28, 2025",
+      "additions": 0,
+      "deletions": 0,
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "update testing",
+      "repo": "tempest2023/ObiAgent",
+      "url": "https://github.com/tempest2023/ObiAgent/pull/9",
+      "description": "this pr is not ready to merge yet. dont merge this",
+      "status": "Closed",
+      "date": "Jun 28, 2025",
+      "additions": 13158,
+      "deletions": 6,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Test",
+      "repo": "The-Pocket/PocketFlow",
+      "url": "https://github.com/The-Pocket/PocketFlow/pull/82",
+      "description": "No description provided.",
+      "status": "Closed",
+      "date": "Jun 28, 2025",
+      "additions": 13163,
+      "deletions": 5,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Tests",
+      "repo": "Isap31/DiabetesAI-Tracking",
+      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/3",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Jun 28, 2025",
+      "additions": 9482,
+      "deletions": 1307,
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "Mobile resp",
+      "repo": "Isap31/DiabetesAI-Tracking",
+      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/2",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Jun 28, 2025",
+      "additions": 292,
+      "deletions": 109,
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "Deploy",
+      "repo": "tempest2023/ObiAgent",
+      "url": "https://github.com/tempest2023/ObiAgent/pull/8",
+      "description": "No description provided.",
+      "status": "Closed",
+      "date": "Jun 28, 2025",
+      "additions": 3023,
+      "deletions": 365,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Agent demo",
+      "repo": "tempest2023/ObiAgent",
+      "url": "https://github.com/tempest2023/ObiAgent/pull/7",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Jun 28, 2025",
+      "additions": 2168,
+      "deletions": 307,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "mobile responsiveness",
+      "repo": "Isap31/DiabetesAI-Tracking",
+      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/1",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Jun 28, 2025",
+      "additions": 670,
+      "deletions": 454,
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "Refactor backend: API-only server, improved environment setup and added gemini support",
+      "repo": "tempest2023/ObiAgent",
+      "url": "https://github.com/tempest2023/ObiAgent/pull/1",
+      "description": "- Move backend code to `backend/agent` and create a clean `server.py` entrypoint. - - Enhance `setup_env.py` to support both OPENAI_API_KEY and GEMINI_API_KEY. - Add CORS, loggi...",
+      "status": "Merged",
+      "date": "Jun 22, 2025",
+      "additions": 1097,
+      "deletions": 2,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Fix Experience calculator ",
+      "repo": "ivanrj7j/ResumeGen",
+      "url": "https://github.com/ivanrj7j/ResumeGen/pull/4",
+      "description": "## 🔧 Fix: Bugs in `Skill` Model and Typo Corrections fixes #2 This PR resolves critical issues in the `Skill` model related to experience calculation and corrects typo througho...",
+      "status": "Merged",
+      "date": "Jun 1, 2025",
+      "additions": 11,
+      "deletions": 10,
+      "languages": [
+        "Python",
+        "TeX"
+      ]
+    },
+    {
+      "title": "test: Add namespace isolation , concurrency , versioning test for artifact_service.py",
+      "repo": "google/adk-python",
+      "url": "https://github.com/google/adk-python/pull/947",
+      "description": "test(artifact-service): add unit tests for namespace isolation, concurrency, versioning, and delete edge cases Contributes to improving unit test coverage (see issue #542). Adds...",
+      "status": "Closed",
+      "date": "May 26, 2025",
+      "additions": 181,
+      "deletions": 3,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "HTML"
+      ]
+    },
+    {
+      "title": "Partial Implementation of Additional Non-Linear Activation Functions (Issue #4)",
+      "repo": "haroon0x/NNFromScratch",
+      "url": "https://github.com/haroon0x/NNFromScratch/pull/7",
+      "description": "PR introduces a partial implementation of the suggested non-linear activation functions into activation.py addressing issue #4 Code Updates: - Extended the Activation abstract b...",
+      "status": "Merged",
+      "date": "Feb 25, 2025",
+      "additions": 97,
+      "deletions": 17,
+      "languages": [
+        "Jupyter Notebook",
+        "Python"
+      ]
+    },
+    {
+      "title": "[DOC] Added example  for 'AlignerNaive' and 'AlignerLuckyDtw' ",
+      "repo": "sktime/sktime",
+      "url": "https://github.com/sktime/sktime/pull/7795",
+      "description": "<!-- Welcome to sktime, and thanks for contributing! Please have a look at our contribution guide: https://www.sktime.net/en/latest/get_involved/contributing.html --> #### Refer...",
+      "status": "Merged",
+      "date": "Feb 9, 2025",
+      "additions": 30,
+      "deletions": 0,
+      "languages": [
+        "Python",
+        "Jupyter Notebook",
+        "CSS"
+      ]
+    },
+    {
+      "title": "🔨 Added Tests for POT and NNCF Compression Types",
+      "repo": "open-edge-platform/anomalib",
+      "url": "https://github.com/open-edge-platform/anomalib/pull/2438",
+      "description": "## 📝 Description -This PR addresses the missing tests for the POT (Post-Training Optimization Tool) and NNCF (Neural Network Compression Framework) features in Engine.export. T...",
+      "status": "Closed",
+      "date": "Nov 26, 2024",
+      "additions": 24,
+      "deletions": 12,
+      "languages": [
+        "Python",
+        "TypeScript",
+        "SCSS"
+      ]
+    },
+    {
+      "title": "chat history Api bug and ui changes",
+      "repo": "haroon0x/WeCode-Ai-Learning",
+      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/10",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Oct 1, 2024",
+      "additions": 76,
+      "deletions": 53,
       "languages": [
         "Python",
         "JavaScript",
         "CSS"
-      ],
-      "isTopRepo": true
+      ]
     },
     {
-      "title": "feat(config): add per-chat-type model routing (DM vs Group Chat)",
-      "repo": "openclaw/openclaw",
-      "url": "https://github.com/openclaw/openclaw/pull/36310",
-      "description": " ## Summary\r\n\r\n  Describe the problem and fix in 2–5 bullets:\r\n\r\n  - **Problem**: The model field in agent configuration...",
-      "status": "Closed",
-      "date": "Mar 5, 2026",
-      "additions": 249,
-      "deletions": 1,
-      "languages": [],
-      "isTopRepo": false
+      "title": "Resolved score card bug ",
+      "repo": "haroon0x/WeCode-Ai-Learning",
+      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/9",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Sep 30, 2024",
+      "additions": 30,
+      "deletions": 18,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Api bug fix ",
+      "repo": "haroon0x/WeCode-Ai-Learning",
+      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/7",
+      "description": "No description provided.",
+      "status": "Merged",
+      "date": "Sep 29, 2024",
+      "additions": 453,
+      "deletions": 60,
+      "languages": [
+        "Python",
+        "JavaScript",
+        "CSS"
+      ]
     }
   ],
-  "topRepos": [
-    "RetroShare/RetroShare",
-    "moorcheh-ai/memanto",
-    "meshery/meshery",
-    "potpie-ai/potpie",
-    "gemma-facet/cloud-services",
-    "gemma-facet/synthetic-data-kit",
-    "sktime/sktime",
-    "kubeflow/docs-agent",
-    "kubeflow/pipelines",
-    "kubeflow/katib",
-    "kubeflow/sdk",
-    "kubeflow/mcp-server",
-    "mem0ai/mem0",
-    "google-deepmind/optax",
-    "meta-llama/synthetic-data-kit",
-    "OWASP-BLT/BLT"
-  ],
-  "lastUpdated": "2026-07-15T08:20:47.011Z",
-  "total": 34,
-  "open": 16,
-  "merged": 8
+  "lastUpdated": "2026-07-16T07:41:02.992Z",
+  "total": 78,
+  "open": 19,
+  "merged": 30
 }
