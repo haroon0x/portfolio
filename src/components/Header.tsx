@@ -72,9 +72,7 @@ export default function Header() {
           className="group flex min-h-11 items-center gap-3 text-left"
           aria-label="Go to top"
         >
-          <span className="text-xl font-medium tracking-[-0.04em] text-text-primary">MH</span>
-          <span className="h-5 w-px bg-border" />
-          <span className="hidden font-mono text-[0.66rem] uppercase tracking-[0.2em] text-text-secondary transition-colors group-hover:text-text-primary sm:block">
+          <span className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-text-secondary transition-colors group-hover:text-text-primary">
             Muhammed Haroon
           </span>
         </button>
