@@ -1,30 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownUp, ArrowUpRight, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest } from 'lucide-react';
-
-interface PullRequest {
-  title: string;
-  repo: string;
-  url: string;
-  description: string;
-  status: "Merged" | "Open" | "Closed";
-  date: string;
-  additions: number;
-  deletions: number;
-  languages: string[];
-}
-
-interface PRData {
-  prs: PullRequest[];
-  lastUpdated: string;
-  total: number;
-  open: number;
-  merged: number;
-}
+import { ArrowDownUp, ArrowUpRight, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest, Search } from 'lucide-react';
+import { loadPRData, type PRData, type PullRequest } from '../data/prData';
 
 type SortBy = 'status' | 'date' | 'repo';
 type SortOrder = 'asc' | 'desc';
 type FilterStatus = 'all' | 'merged' | 'open';
+
+const PAGE_SIZE = 24;
 
 const statusOrder: Record<PullRequest['status'], number> = {
   Merged: 2,
@@ -39,35 +22,45 @@ const PullRequests = () => {
   const [sortBy, setSortBy] = useState<SortBy>('status');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let active = true;
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/pr-data.json', { signal: controller.signal });
-        if (!response.ok) throw new Error('Failed to load PR data');
-        const prData = (await response.json()) as PRData;
-        setData(prData);
-      } catch (err) {
-        if (controller.signal.aborted) return;
+    loadPRData()
+      .then((prData) => {
+        if (active) setData(prData);
+      })
+      .catch((err: unknown) => {
+        if (!active) return;
         console.error('Error loading PR data:', err);
         setError('Failed to load pull requests data.');
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    };
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
 
-    fetchData();
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const filteredPRs = useMemo(() => {
     if (!data) return [];
 
-    const prs = filterStatus === 'all'
+    const statusFiltered = filterStatus === 'all'
       ? [...data.prs]
       : data.prs.filter((pr) => pr.status.toLowerCase() === filterStatus);
+    const query = searchQuery.trim().toLocaleLowerCase();
+    const prs = query
+      ? statusFiltered.filter((pr) => (
+          pr.title.toLocaleLowerCase().includes(query) ||
+          pr.repo.toLocaleLowerCase().includes(query) ||
+          pr.description.toLocaleLowerCase().includes(query) ||
+          pr.languages.some((language) => language.toLocaleLowerCase().includes(query))
+        ))
+      : statusFiltered;
 
     return prs.sort((a, b) => {
       if (sortBy === 'status') {
@@ -83,7 +76,9 @@ const PullRequests = () => {
       const difference = a.repo.localeCompare(b.repo);
       return sortOrder === 'asc' ? difference : -difference;
     });
-  }, [data, filterStatus, sortBy, sortOrder]);
+  }, [data, filterStatus, searchQuery, sortBy, sortOrder]);
+
+  const visiblePRs = filteredPRs.slice(0, visibleCount);
 
   const totalAdditions = useMemo(
     () => data?.prs.reduce((total, pr) => total + pr.additions, 0) ?? 0,
@@ -91,6 +86,7 @@ const PullRequests = () => {
   );
 
   const toggleSort = (nextSortBy: SortBy) => {
+    setVisibleCount(PAGE_SIZE);
     if (sortBy === nextSortBy) {
       setSortOrder((currentOrder) => currentOrder === 'asc' ? 'desc' : 'asc');
       return;
@@ -103,6 +99,17 @@ const PullRequests = () => {
   const sortLabel = (label: string, value: SortBy) => (
     sortBy === value ? `Sort by ${label}, currently ${sortOrder === 'asc' ? 'ascending' : 'descending'}` : `Sort by ${label}`
   );
+
+  const selectFilter = (status: FilterStatus) => {
+    setFilterStatus(status);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const resetControls = () => {
+    setFilterStatus('all');
+    setSearchQuery('');
+    setVisibleCount(PAGE_SIZE);
+  };
 
   return (
     <main id="main-content" className="safe-x mx-auto min-h-[100svh] max-w-[96rem] bg-background pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-40 lg:px-12 lg:pb-40">
@@ -140,7 +147,7 @@ const PullRequests = () => {
       <section aria-label="Pull request controls" className="mt-12 border-y border-border py-5 sm:mt-16">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           <p aria-live="polite" className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-text-primary">
-            {filteredPRs.length} of {data?.total ?? 0} pull requests
+            Showing {visiblePRs.length} of {filteredPRs.length} matches
           </p>
           {data?.lastUpdated && (
             <p className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
@@ -148,6 +155,21 @@ const PullRequests = () => {
             </p>
           )}
         </div>
+
+        <label className="relative mt-5 block max-w-2xl">
+          <span className="sr-only">Search pull requests</span>
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              setVisibleCount(PAGE_SIZE);
+            }}
+            placeholder="Search title, repository, or technology"
+            className="min-h-12 w-full rounded-control border border-border bg-surface py-3 pl-11 pr-4 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted hover:border-border-strong focus:border-accent"
+          />
+        </label>
 
         <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -157,7 +179,7 @@ const PullRequests = () => {
             </span>
             <button
               type="button"
-              onClick={() => setFilterStatus('all')}
+              onClick={() => selectFilter('all')}
               aria-label="Show all pull requests"
               aria-pressed={filterStatus === 'all'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'all' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
@@ -166,7 +188,7 @@ const PullRequests = () => {
             </button>
             <button
               type="button"
-              onClick={() => setFilterStatus('merged')}
+              onClick={() => selectFilter('merged')}
               aria-label="Show merged pull requests"
               aria-pressed={filterStatus === 'merged'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'merged' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
@@ -175,7 +197,7 @@ const PullRequests = () => {
             </button>
             <button
               type="button"
-              onClick={() => setFilterStatus('open')}
+              onClick={() => selectFilter('open')}
               aria-label="Show open pull requests"
               aria-pressed={filterStatus === 'open'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'open' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
@@ -242,18 +264,19 @@ const PullRequests = () => {
           </div>
         ) : filteredPRs.length === 0 ? (
           <div className="flex flex-wrap items-center justify-between gap-5 border-b border-border py-10">
-            <p className="text-text-secondary">No pull requests match this filter.</p>
+            <p className="text-text-secondary">No pull requests match this search or filter.</p>
             <button
               type="button"
-              onClick={() => setFilterStatus('all')}
+              onClick={resetControls}
               className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
             >
               Reset to all
             </button>
           </div>
         ) : (
-          <ul>
-            {filteredPRs.map((pr, index) => (
+          <>
+            <ul>
+            {visiblePRs.map((pr, index) => (
               <motion.li
                 key={pr.url}
                 initial={{ opacity: 0, y: 16 }}
@@ -306,7 +329,19 @@ const PullRequests = () => {
                 </a>
               </motion.li>
             ))}
-          </ul>
+            </ul>
+            {visiblePRs.length < filteredPRs.length && (
+              <div className="flex justify-center border-b border-border py-8">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                  className="min-h-11 rounded-control border border-border px-5 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
+                >
+                  Show {Math.min(PAGE_SIZE, filteredPRs.length - visiblePRs.length)} more
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
     </main>

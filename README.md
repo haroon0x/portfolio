@@ -36,7 +36,7 @@ The scheduled `fetch-prs` workflow discovers public pull requests authored by `h
 
 ## Deployment routing
 
-The production origin is hosted as a free Render static site. `render.yaml` defines exact Rewrite rules from `/pull-requests` and `/pull-requests/*` to `/index.html`. These rules keep direct navigation and refresh working while allowing unknown server paths to return a real HTTP 404.
+The production origin is hosted as a free Render static site. The production build emits `dist/pull-requests/index.html` with route-specific metadata, so direct navigation and refresh work without a catch-all rewrite. `render.yaml` also defines exact Rewrite rules for compatibility and gives hashed assets a one-year immutable browser cache.
 
 If the existing Render service is not managed as a Blueprint, add the same two rules under Redirects/Rewrites in its dashboard; Render does not automatically apply a new Blueprint file to an independently created service. The client also renders its own not-found page for unknown routes reached through in-app navigation and applies `noindex, nofollow` metadata there. `public/_redirects` mirrors the primary exact-route behavior for hosts that support that file.
 
