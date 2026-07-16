@@ -1,27 +1,13 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 type Theme = 'dark' | 'light';
 
-interface RippleState {
-  x: number;
-  y: number;
-  nextTheme: Theme;
-  active: boolean;
-}
-
 interface ThemeContextValue {
   theme: Theme;
-  toggleTheme: (clickX?: number, clickY?: number) => void;
-  ripple: RippleState | null;
-  onRippleDone: () => void;
+  toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'dark',
-  toggleTheme: () => {},
-  ripple: null,
-  onRippleDone: () => {},
-});
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const STORAGE_KEY = 'portfolio-theme';
 
@@ -33,28 +19,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return 'dark';
   });
 
-  const [ripple, setRipple] = useState<RippleState | null>(null);
-
-  const onRippleDone = useCallback(() => {
-    setRipple(null);
-  }, []);
-
-  const toggleTheme = useCallback((clickX?: number, clickY?: number) => {
-    setTheme((prev) => prev === 'dark' ? 'light' : 'dark');
-    if (clickX !== undefined && clickY !== undefined) {
-      const next = theme === 'dark' ? 'light' : 'dark';
-      setRipple({ x: clickX, y: clickY, nextTheme: next, active: true });
-    }
+  const toggleTheme = useCallback(() => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(STORAGE_KEY, nextTheme);
+    setTheme(nextTheme);
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, theme);
-    document.documentElement.classList.remove('theme-dark', 'theme-light');
-    document.documentElement.classList.add(`theme-${theme}`);
+    const root = document.documentElement;
+    root.classList.remove('theme-dark', 'theme-light');
+    root.classList.add(`theme-${theme}`);
 
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#faf8f4');
+      const background = getComputedStyle(root).getPropertyValue('--color-bg').trim();
+      if (background) {
+        meta.setAttribute('content', `rgb(${background})`);
+      }
     }
   }, [theme]);
 
@@ -62,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = (e: MediaQueryListEvent) => {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) {
+      if (stored !== 'light' && stored !== 'dark') {
         setTheme(e.matches ? 'dark' : 'light');
       }
     };
@@ -71,7 +52,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, ripple, onRippleDone }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

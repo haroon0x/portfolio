@@ -1,9 +1,6 @@
-import { motion } from "framer-motion";
-import { ArrowUpRight, GitPullRequest, ArrowLeft, Calendar, GitCommit, ArrowDownUp, CheckCircle2, Circle, Building2, Filter } from "lucide-react";
-import { Link } from 'react-router-dom';
-import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import { useEffect, useState } from "react";
-import Magnetic from "../components/Magnetic";
+import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowDownUp, ArrowUpRight, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest } from 'lucide-react';
 
 interface PullRequest {
   title: string;
@@ -15,421 +12,304 @@ interface PullRequest {
   additions: number;
   deletions: number;
   languages: string[];
-  isTopRepo?: boolean;
 }
 
 interface PRData {
   prs: PullRequest[];
-  topRepos: string[];
   lastUpdated: string;
   total: number;
   open: number;
   merged: number;
 }
 
-interface OrgStats {
-  name: string;
-  repos: string[];
-  totalPRs: number;
-  mergedPRs: number;
-  openPRs: number;
-  totalAdditions: number;
-  totalDeletions: number;
-  languages: string[];
-  isTopOrg: boolean;
-}
+type SortBy = 'status' | 'date' | 'repo';
+type SortOrder = 'asc' | 'desc';
+type FilterStatus = 'all' | 'merged' | 'open';
+
+const statusOrder: Record<PullRequest['status'], number> = {
+  Merged: 2,
+  Open: 1,
+  Closed: 0,
+};
 
 const PullRequests = () => {
-  const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
   const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<"status" | "date" | "repo">("status")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [filterStatus, setFilterStatus] = useState<"all" | "merged" | "open">("all");
-  const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
-
-  const topOrgs = ["kubeflow", "mem0ai", "google-deepmind", "meta-llama", "owasp", "meshery", "potpie-ai", "retroshare", "moorcheh-ai"];
+  const [sortBy, setSortBy] = useState<SortBy>('status');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
-        const response = await fetch('/pr-data.json');
+        const response = await fetch('/pr-data.json', { signal: controller.signal });
         if (!response.ok) throw new Error('Failed to load PR data');
         const prData = (await response.json()) as PRData;
         setData(prData);
       } catch (err) {
+        if (controller.signal.aborted) return;
         console.error('Error loading PR data:', err);
         setError('Failed to load pull requests data.');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
+
     fetchData();
+    return () => controller.abort();
   }, []);
 
-  const orgStats: OrgStats[] = data ? Object.entries(
-    data.prs.reduce((acc: Record<string, PullRequest[]>, pr: PullRequest) => {
-      const org = pr.repo.split('/')[0];
-      if (!acc[org]) acc[org] = [];
-      acc[org].push(pr);
-      return acc;
-    }, {})
-  ).map(([org, prs]) => {
-    const prList = prs as PullRequest[];
-    const allLanguages = prList.flatMap(pr => pr.languages);
-    return {
-      name: org,
-      repos: [...new Set(prList.map(pr => pr.repo))],
-      totalPRs: prList.length,
-      mergedPRs: prList.filter(pr => pr.status === "Merged").length,
-      openPRs: prList.filter(pr => pr.status === "Open").length,
-      totalAdditions: prList.reduce((sum, pr) => sum + pr.additions, 0),
-      totalDeletions: prList.reduce((sum, pr) => sum + pr.deletions, 0),
-      languages: [...new Set(allLanguages)].slice(0, 5),
-      isTopOrg: topOrgs.includes(org.toLowerCase())
-    };
-  }).sort((a, b) => {
-    if (a.isTopOrg && !b.isTopOrg) return -1;
-    if (!a.isTopOrg && b.isTopOrg) return 1;
-    return b.totalPRs - a.totalPRs;
-  }) : [];
-
-  const toggleOrg = (orgName: string) => {
-    setExpandedOrgs(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(orgName)) {
-        newSet.delete(orgName);
-      } else {
-        newSet.add(orgName);
-      }
-      return newSet;
-    });
-  };
-
-  const getFilteredAndSortedPRs = () => {
+  const filteredPRs = useMemo(() => {
     if (!data) return [];
-    
-    let prs = [...data.prs];
-    
-    if (filterStatus !== "all") {
-      prs = prs.filter(pr => pr.status.toLowerCase() === filterStatus);
-    }
-    
+
+    const prs = filterStatus === 'all'
+      ? [...data.prs]
+      : data.prs.filter((pr) => pr.status.toLowerCase() === filterStatus);
+
     return prs.sort((a, b) => {
-      const aIsTop = a.isTopRepo || false;
-      const bIsTop = b.isTopRepo || false;
-      
-      if (aIsTop && !bIsTop) return -1;
-      if (!aIsTop && bIsTop) return 1;
-      
-      if (sortBy === "status") {
-        const statusOrder = { "Merged": 2, "Open": 1, "Closed": 0 };
-        const aOrder = statusOrder[a.status];
-        const bOrder = statusOrder[b.status];
-        return sortOrder === "asc" ? aOrder - bOrder : bOrder - aOrder;
-      } else if (sortBy === "date") {
-        const dateA = Date.parse(a.date);
-        const dateB = Date.parse(b.date);
-        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-      } else {
-        return sortOrder === "asc" ? a.repo.localeCompare(b.repo) : b.repo.localeCompare(a.repo);
+      if (sortBy === 'status') {
+        const difference = statusOrder[a.status] - statusOrder[b.status];
+        return sortOrder === 'asc' ? difference : -difference;
       }
+
+      if (sortBy === 'date') {
+        const difference = Date.parse(a.date) - Date.parse(b.date);
+        return sortOrder === 'asc' ? difference : -difference;
+      }
+
+      const difference = a.repo.localeCompare(b.repo);
+      return sortOrder === 'asc' ? difference : -difference;
     });
-  };
+  }, [data, filterStatus, sortBy, sortOrder]);
 
-  const toggleSort = (newSortBy: "status" | "date" | "repo") => {
-    if (sortBy === newSortBy) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(newSortBy);
-      setSortOrder(newSortBy === "status" ? "desc" : "asc");
+  const totalAdditions = useMemo(
+    () => data?.prs.reduce((total, pr) => total + pr.additions, 0) ?? 0,
+    [data],
+  );
+
+  const toggleSort = (nextSortBy: SortBy) => {
+    if (sortBy === nextSortBy) {
+      setSortOrder((currentOrder) => currentOrder === 'asc' ? 'desc' : 'asc');
+      return;
     }
+
+    setSortBy(nextSortBy);
+    setSortOrder(nextSortBy === 'status' ? 'desc' : 'asc');
   };
 
-  const filteredPRs = getFilteredAndSortedPRs();
+  const sortLabel = (label: string, value: SortBy) => (
+    sortBy === value ? `Sort by ${label}, currently ${sortOrder === 'asc' ? 'ascending' : 'descending'}` : `Sort by ${label}`
+  );
 
   return (
-      <section className="safe-x fluid-section relative z-10 min-h-[100svh] bg-background sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8 sm:mb-12">
-            <Magnetic>
-              <Link to="/" aria-label="Back to home page" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-hover-bg px-4 py-2 text-text-muted backdrop-blur-sm transition-colors duration-300 hover:bg-hover-bg-strong hover:text-text-primary">
-                <ArrowLeft className="w-4 h-4" />
-                <span className="text-sm font-medium">Back to Home</span>
-              </Link>
-            </Magnetic>
+    <main id="main-content" className="safe-x mx-auto min-h-[100svh] max-w-[96rem] bg-background pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-40 lg:px-12 lg:pb-40">
+      <header className="max-w-5xl">
+        <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Public engineering record</p>
+        <h1 className="text-[clamp(2.6rem,6vw,7rem)] font-medium leading-[0.96] tracking-[-0.055em] text-text-primary">
+          Open source contributions
+        </h1>
+        <p className="mt-8 max-w-3xl text-lg leading-8 text-text-secondary sm:text-xl sm:leading-9">
+          Pull requests across infrastructure, developer tooling, machine learning, and the open-source systems behind them.
+        </p>
+      </header>
+
+      {data && !loading && (
+        <dl className="mt-14 grid grid-cols-2 border-y border-border sm:mt-20 md:grid-cols-4">
+          <div className="flex flex-col border-b border-r border-border py-6 pr-5 md:border-b-0 md:px-6 md:first:pl-0">
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Total</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-text-primary sm:text-4xl">{data.total}</dd>
+          </div>
+          <div className="flex flex-col border-b border-border py-6 pl-5 md:border-b-0 md:border-r md:px-6">
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Merged</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-merged sm:text-4xl">{data.merged}</dd>
+          </div>
+          <div className="flex flex-col border-r border-border py-6 pr-5 md:px-6">
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Open</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-open sm:text-4xl">{data.open}</dd>
+          </div>
+          <div className="flex flex-col py-6 pl-5 md:px-6 md:last:pr-0">
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Additions</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-text-primary sm:text-4xl">+{totalAdditions.toLocaleString()}</dd>
+          </div>
+        </dl>
+      )}
+
+      <section aria-label="Pull request controls" className="mt-12 border-y border-border py-5 sm:mt-16">
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+          <p aria-live="polite" className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-text-primary">
+            {filteredPRs.length} of {data?.total ?? 0} pull requests
+          </p>
+          {data?.lastUpdated && (
+            <p className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+              Updated {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+              <Filter className="h-3.5 w-3.5" />
+              Filter
+            </span>
+            <button
+              type="button"
+              onClick={() => setFilterStatus('all')}
+              aria-label="Show all pull requests"
+              aria-pressed={filterStatus === 'all'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'all' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              All
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilterStatus('merged')}
+              aria-label="Show merged pull requests"
+              aria-pressed={filterStatus === 'merged'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'merged' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              Merged
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilterStatus('open')}
+              aria-label="Show open pull requests"
+              aria-pressed={filterStatus === 'open'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'open' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              Open
+            </button>
           </div>
 
-          <div ref={ref} className={`transition-[opacity,transform] duration-slow ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-            <div className="mb-10 sm:mb-16">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-5 flex items-start gap-3 sm:mb-6 sm:items-center sm:gap-4">
-                <div className="rounded-2xl border border-accent/20 bg-accent/10 p-2.5 text-accent sm:p-3">
-                  <GitPullRequest className="h-6 w-6 sm:h-8 sm:w-8" />
-                </div>
-                <h2 className="text-[clamp(2rem,10vw,3.5rem)] font-bold leading-tight text-text-primary text-balance md:text-5xl">
-                  Open Source <span className="text-accent">Contributions</span>
-                </h2>
-              </motion.div>
-              <p className="max-w-prose text-body-lg text-text-secondary font-light text-pretty">
-                Impactful contributions to the open source ecosystem, ranging from feature implementations to core architectural improvements.
-              </p>
-            </div>
-
-            {/* Stats Overview */}
-            {data && !loading && (
-              <div className="mb-10 grid grid-cols-2 gap-3 sm:gap-4 md:mb-12 md:grid-cols-4">
-                <div className="rounded-2xl border border-card-border bg-card-bg p-4 sm:p-5 flex flex-col justify-between">
-                  <p className="text-2xl font-bold text-text-primary tabular-nums sm:text-3xl">{data.total}</p>
-                  <p className="text-sm text-text-muted">Total PRs</p>
-                </div>
-                <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-4 sm:p-5 flex flex-col justify-between">
-                  <p className="text-2xl font-bold text-purple-400 tabular-nums sm:text-3xl">{data.merged}</p>
-                  <p className="text-sm text-purple-300">Merged</p>
-                </div>
-                <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4 sm:p-5">
-                  <p className="text-2xl font-bold text-green-400 tabular-nums sm:text-3xl">{data.open}</p>
-                  <p className="text-sm text-green-300">Open</p>
-                </div>
-                <div className="rounded-2xl border border-card-border bg-card-bg p-4 sm:p-5">
-                  <p className="text-2xl font-bold text-text-primary tabular-nums sm:text-3xl">+{data.prs.reduce((s, pr) => s + pr.additions, 0)}</p>
-                  <p className="text-sm text-text-muted">Lines Added</p>
-                </div>
-              </div>
-            )}
-
-            {/* Organization Cards */}
-            {orgStats.length > 0 && !loading && (
-              <div className="mb-12">
-                <div className="mb-6 flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-accent" />
-                  <h3 className="text-xl font-semibold text-text-primary">Organizations</h3>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {orgStats.map((org, index) => (
-                    <motion.div
-                      key={org.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: Math.min(index * 0.1, 0.4) }}
-                      className={`group rounded-2xl overflow-hidden transition-[border-color,background-color,transform] duration-300 ${
-                        org.isTopOrg ? "bg-gradient-to-br from-accent/10 to-purple-500/10 border border-accent/20 hover:border-accent/50" : "bg-card-bg border border-card-border hover:border-card-border-hover"
-                      }`}
-                    >
-                      <button
-                        onClick={() => toggleOrg(org.name)}
-                        aria-expanded={expandedOrgs.has(org.name)}
-                        aria-label={`Toggle ${org.name} pull request list`}
-                        className="w-full p-4 text-left sm:p-5"
-                      >
-                        <div className="mb-3 flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <h4 className="truncate text-lg font-bold text-text-primary">{org.name}</h4>
-                            </div>
-                            <p className="text-sm text-text-muted">{org.repos.length} repos • {org.totalPRs} PRs</p>
-                          </div>
-                          <ArrowUpRight className={`h-5 w-5 shrink-0 text-text-muted transition-transform duration-300 ${expandedOrgs.has(org.name) ? 'rotate-90' : ''}`} />
-                        </div>
-
-                        <div className="flex flex-wrap gap-3 text-sm sm:gap-4">
-                          <div className="flex items-center gap-1.5 text-purple-400">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>{org.mergedPRs} merged</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 text-green-400">
-                            <Circle className="w-3.5 h-3.5" />
-                            <span>{org.openPRs} open</span>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-wrap gap-1.5 mt-3">
-                          {org.languages.map(lang => (
-                            <span key={lang} className="text-xs text-text-muted bg-hover-bg px-2 py-0.5 rounded">{lang}</span>
-                          ))}
-                        </div>
-                      </button>
-
-                      <motion.div
-                        initial={false}
-                        animate={{ height: expandedOrgs.has(org.name) ? 'auto' : 0, opacity: expandedOrgs.has(org.name) ? 1 : 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-5 pb-5 space-y-2">
-                          {filteredPRs.filter(pr => pr.repo.startsWith(org.name + '/')).slice(0, 5).map((pr) => (
-                            <a key={pr.url} href={pr.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-hover-bg hover:bg-hover-bg-strong transition-colors group/pr">
-                              <div className={`w-2 h-2 rounded-full ${pr.status === "Merged" ? "bg-purple-500" : pr.status === "Open" ? "bg-green-500" : "bg-red-500"}`} />
-                              <span className="text-sm text-text-secondary group-hover/pr:text-text-primary truncate flex-1">{pr.title}</span>
-                              <GitPullRequest className="w-3.5 h-3.5 text-text-muted" />
-                            </a>
-                          ))}
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Toolbar */}
-            <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-card-border bg-surface/50 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="flex items-center gap-2 text-sm text-text-muted">
-                  <Filter className="w-4 h-4" />
-                  Filter:
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setFilterStatus("all")}
-                    aria-label="Show all pull requests"
-                    className={`min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    filterStatus === "all" ? "bg-accent text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    All ({data?.total || 0})
-                  </button>
-                  <button
-                    onClick={() => setFilterStatus("merged")}
-                    aria-label="Show merged pull requests"
-                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    filterStatus === "merged" ? "bg-purple-500 text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    Merged ({data?.merged || 0})
-                  </button>
-                  <button
-                    onClick={() => setFilterStatus("open")}
-                    aria-label="Show open pull requests"
-                    className={`flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    filterStatus === "open" ? "bg-green-500 text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    <Circle className="w-4 h-4" />
-                    Open ({data?.open || 0})
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="flex items-center gap-2 text-sm text-text-muted">
-                  <ArrowDownUp className="w-4 h-4" />
-                  Sort:
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => toggleSort("status")}
-                    aria-label="Sort pull requests by status"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    sortBy === "status" ? "bg-accent text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    Status {sortBy === "status" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                  <button
-                    onClick={() => toggleSort("date")}
-                    aria-label="Sort pull requests by date"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    sortBy === "date" ? "bg-accent text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    <Calendar className="w-4 h-4" />
-                    Date {sortBy === "date" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                  <button
-                    onClick={() => toggleSort("repo")}
-                    aria-label="Sort pull requests by repository"
-                    className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,border-color,transform] duration-fast active:scale-[0.96] ${
-                    sortBy === "repo" ? "bg-accent text-white" : "bg-hover-bg text-text-muted hover:bg-hover-bg-strong hover:text-text-primary border border-border"
-                  }`}
-                  >
-                    <GitCommit className="w-4 h-4" />
-                    Repo {sortBy === "repo" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Last Updated */}
-            {data?.lastUpdated && (
-              <div className="mb-6 text-xs text-text-muted">
-                Last updated: {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-              </div>
-            )}
-
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-64 rounded-2xl bg-hover-bg animate-pulse border border-card-border" />
-                ))}
-              </div>
-            ) : error ? (
-              <div className="p-8 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-center">{error}</div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredPRs.map((pr, index) => (
-                  <motion.a
-                    key={pr.url}
-                    href={pr.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                    className="card-container group relative flex flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-5 backdrop-blur-xl transition-[border-color,transform] duration-base hover:border-accent/50 active:scale-[0.96] sm:p-6 md:p-8"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-base" />
-
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="mb-5 flex items-start justify-between gap-3 sm:mb-6">
-                        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
-                          <div className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${
-                            pr.status === "Merged" ? "bg-purple-500/10 text-purple-300 border-purple-500/20" : 
-                            pr.status === "Open" ? "bg-green-500/10 text-green-300 border-green-500/20" : "bg-red-500/10 text-red-300 border-red-500/20"
-                          }`}>
-                            <GitPullRequest className="w-3 h-3" />
-                            {pr.status}
-                          </div>
-                          <span className="flex min-w-0 items-center gap-1.5 text-xs text-text-muted">
-                            <Calendar className="h-3 w-3 shrink-0" />
-                            {pr.date}
-                          </span>
-                        </div>
-                        <div className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-hover-bg p-2 text-text-muted transition-[background-color,color,transform] duration-300 group-hover:bg-accent group-hover:text-white">
-                          <ArrowUpRight className="w-4 h-4" />
-                        </div>
-                      </div>
-
-                      <h3 className="cq-card-title mb-2 text-lg font-bold leading-snug text-text-primary transition-colors duration-300 line-clamp-2 group-hover:text-accent sm:text-xl">{pr.title}</h3>
-
-                      <div className="mb-4 flex min-w-0 items-center gap-2 font-mono text-xs text-text-muted sm:text-sm">
-                        <GitCommit className="h-4 w-4 shrink-0" />
-                        <span className="min-w-0 truncate">{pr.repo}</span>
-                      </div>
-
-                      <p className="mb-6 flex-grow text-sm leading-7 text-text-secondary line-clamp-3">{pr.description}</p>
-
-                      <div className="mt-auto flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between sm:pt-6">
-                        <div className="flex items-center gap-3 text-xs font-mono">
-                          <span className="text-green-400 bg-green-400/10 px-2 py-1 rounded tabular-nums">+{pr.additions}</span>
-                          <span className="text-red-400 bg-red-400/10 px-2 py-1 rounded tabular-nums">-{pr.deletions}</span>
-                        </div>
-                        <div className="flex flex-wrap gap-2 sm:justify-end">
-                          {pr.languages.map((lang) => (
-                            <span key={lang} className="text-xs text-text-muted bg-hover-bg px-2 py-1 rounded border border-border">{lang}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
-            )}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+              <ArrowDownUp className="h-3.5 w-3.5" />
+              Sort
+            </span>
+            <button
+              type="button"
+              onClick={() => toggleSort('status')}
+              aria-label={sortLabel('status', 'status')}
+              aria-pressed={sortBy === 'status'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'status' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+            </button>
+            <button
+              type="button"
+              onClick={() => toggleSort('date')}
+              aria-label={sortLabel('date', 'date')}
+              aria-pressed={sortBy === 'date'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'date' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              Date {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
+            </button>
+            <button
+              type="button"
+              onClick={() => toggleSort('repo')}
+              aria-label={sortLabel('repository', 'repo')}
+              aria-pressed={sortBy === 'repo'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'repo' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+            >
+              Repo {sortBy === 'repo' && (sortOrder === 'asc' ? '↑' : '↓')}
+            </button>
           </div>
         </div>
       </section>
+
+      <section aria-label="Pull requests" className="mt-10 border-t border-border sm:mt-12">
+        {loading ? (
+          <div role="status" aria-label="Loading pull requests">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="grid animate-pulse gap-5 border-b border-border py-8 md:grid-cols-[10rem_minmax(0,1fr)_minmax(12rem,0.45fr)_2.75rem] md:gap-8">
+                <div className="h-5 bg-surface-strong" />
+                <div className="space-y-3">
+                  <div className="h-4 w-1/3 bg-surface-strong" />
+                  <div className="h-7 w-4/5 bg-surface-strong" />
+                  <div className="h-4 w-full bg-surface" />
+                </div>
+                <div className="h-12 bg-surface" />
+                <div className="h-11 w-11 border border-border bg-surface" />
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          <div role="alert" className="border-b border-border py-10 text-status-closed">
+            <p className="font-mono text-xs uppercase tracking-[0.14em]">{error}</p>
+          </div>
+        ) : filteredPRs.length === 0 ? (
+          <div className="flex flex-wrap items-center justify-between gap-5 border-b border-border py-10">
+            <p className="text-text-secondary">No pull requests match this filter.</p>
+            <button
+              type="button"
+              onClick={() => setFilterStatus('all')}
+              className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
+            >
+              Reset to all
+            </button>
+          </div>
+        ) : (
+          <ul>
+            {filteredPRs.map((pr, index) => (
+              <motion.li
+                key={pr.url}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: Math.min(index * 0.025, 0.2), ease: [0.16, 1, 0.3, 1] }}
+                className="group border-b border-border transition-colors hover:bg-surface"
+              >
+                <a
+                  href={pr.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${pr.title} on GitHub`}
+                  className={`grid gap-5 py-8 md:grid-cols-[10rem_minmax(0,1fr)_minmax(12rem,0.45fr)_2.75rem] md:gap-8 md:px-4 ${index === 0 ? 'md:pt-10' : ''}`}
+                >
+                  <div className="flex flex-wrap items-center gap-3 md:block">
+                    <span className={`inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1 font-mono text-[0.64rem] uppercase tracking-[0.12em] ${pr.status === 'Merged' ? 'border-status-merged/30 bg-status-merged/10 text-status-merged' : pr.status === 'Open' ? 'border-status-open/30 bg-status-open/10 text-status-open' : 'border-status-closed/30 bg-status-closed/10 text-status-closed'}`}>
+                      {pr.status === 'Merged' ? <CheckCircle2 className="h-3.5 w-3.5" /> : pr.status === 'Open' ? <Circle className="h-3.5 w-3.5" /> : <GitPullRequest className="h-3.5 w-3.5" />}
+                      {pr.status}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[0.64rem] uppercase tracking-[0.1em] text-text-muted md:mt-3 md:flex">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {pr.date}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="flex min-w-0 items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+                      <GitCommit className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{pr.repo}</span>
+                    </p>
+                    <h2 className="mt-3 text-xl font-medium leading-snug tracking-[-0.025em] text-text-primary transition-colors group-hover:text-accent sm:text-2xl">
+                      {pr.title}
+                    </h2>
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary line-clamp-3 sm:text-base">{pr.description}</p>
+                  </div>
+
+                  <div className="flex flex-col gap-4 md:items-start">
+                    <div className="flex gap-3 font-mono text-xs tabular-nums">
+                      <span className="text-status-open">+{pr.additions.toLocaleString()}</span>
+                      <span className="text-status-closed">−{pr.deletions.toLocaleString()}</span>
+                    </div>
+                    <p className="font-mono text-[0.62rem] uppercase leading-5 tracking-[0.12em] text-text-muted">
+                      {pr.languages.join(', ')}
+                    </p>
+                  </div>
+
+                  <span className="flex h-11 w-11 items-center justify-center rounded-control border border-border text-text-primary transition-[border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent group-hover:text-accent">
+                    <ArrowUpRight className="h-5 w-5" />
+                  </span>
+                </a>
+              </motion.li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </main>
   );
 };
 

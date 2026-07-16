@@ -1,206 +1,256 @@
-import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Project {
   title: string;
   description: string;
   tags: string[];
-  github?: string;
+  github: string;
   link?: string;
 }
 
+interface FeaturedProject extends Project {
+  problem: string;
+  system: string;
+  proof: string[];
+}
+
+const featuredProjects: FeaturedProject[] = [
+  {
+    title: 'Wake AI',
+    description: 'Private, searchable AI memory built for Android.',
+    problem: 'Useful information is scattered across notifications, screens, apps, and conversations, then becomes difficult to retrieve when only its meaning is remembered.',
+    system: 'Wake captures text on device, stores it in Room, combines FTS keyword retrieval with local embeddings, and grounds answers in cited memories using an on-device or user-selected cloud model.',
+    proof: ['On-device text and embeddings', 'Hybrid semantic and keyword retrieval', 'Cited answers with approval-gated actions'],
+    tags: ['Kotlin', 'Jetpack Compose', 'Gemma'],
+    github: 'https://github.com/haroon0x/Wake-ai',
+  },
+  {
+    title: 'DeadDrop',
+    description: 'A local-first coding task inbox reachable from anywhere.',
+    problem: 'Remote task handoff should not require exposing a developer machine, local repositories, or credentials to a hosted service.',
+    system: 'A hosted FastAPI inbox queues work while an authenticated Go worker polls outbound, runs the configured local agent, and returns logs, status, summary, and git diff.',
+    proof: ['Outbound-only local worker', 'Token-separated owner and worker access', 'Human-reviewed diff receipts'],
+    tags: ['Go', 'FastAPI', 'PostgreSQL'],
+    github: 'https://github.com/haroon0x/DeadDrop',
+    link: 'https://deaddrop-dpk8.onrender.com/',
+  },
+  {
+    title: 'OutSync',
+    description: 'Reliable database event delivery through the transactional outbox pattern.',
+    problem: 'Writing business data and publishing its event separately creates a failure window where state changes can reach the database but never reach the queue.',
+    system: 'The application writes business data and an outbox record in one transaction; an asynchronous worker then publishes pending events to Kafka and marks them processed.',
+    proof: ['Transactional outbox', 'Asynchronous polling worker', 'Containerized Kafka and PostgreSQL stack'],
+    tags: ['FastAPI', 'Kafka', 'PostgreSQL'],
+    github: 'https://github.com/haroon0x/OutSync',
+  },
+];
+
+const archiveProjects: Project[] = [
+  {
+    title: 'Containerized Agent',
+    description: 'Natural-language shell and Python task execution in isolated Docker environments.',
+    tags: ['Docker', 'FastAPI', 'Python'],
+    github: 'https://github.com/haroon0x/Containerized-agent',
+  },
+  {
+    title: 'CrawlWise',
+    description: 'High-performance crawling and structured extraction across thousands of domains.',
+    tags: ['TypeScript', 'React', 'AI/ML'],
+    github: 'https://github.com/haroon0x/CrawlWise',
+    link: 'https://crawlwise.netlify.app/',
+  },
+  {
+    title: 'PromoAgent',
+    description: 'Autonomous community outreach with tailored, high-engagement content.',
+    tags: ['Python', 'LangGraph', 'Marketing'],
+    github: 'https://github.com/haroon0x/PromoAgent',
+    link: 'https://promoagent.onrender.com/',
+  },
+  {
+    title: 'Percolation Hypotheses',
+    description: 'A hypothesis generation engine built to accelerate computational research.',
+    tags: ['Python', 'NLP', 'Research'],
+    github: 'https://github.com/haroon0x/percolation-hypotheses-gen',
+    link: 'https://percolation-hypotheses.onrender.com/',
+  },
+  {
+    title: 'Neural Network From Scratch',
+    description: 'Deep learning fundamentals implemented from first principles.',
+    tags: ['Python', 'ML Fundamentals'],
+    github: 'https://github.com/haroon0x/NNFromScratch',
+  },
+];
+
 export default function Work() {
-  const projects: Project[] = [
-    {
-      title: 'Containerized Agent',
-      description: 'A secure, containerized code execution agent that runs untrusted AI-generated code in isolated sandbox environments to protect host systems from malicious processes.',
-      tags: ['Docker', 'FastAPI', 'Security'],
-      github: 'https://github.com/haroon0x/Containerized-agent',
-    },
-    {
-      title: 'DeadDrop - Asynchronous Task Agent',
-      description: 'A sovereign, asynchronous coding task inbox and local agent runner powered by a FastAPI dashboard and a high-performance Go worker polling outbound via secure tokens.',
-      tags: ['Go', 'FastAPI', 'Supabase', 'Agent Orchestration'],
-      github: 'https://github.com/haroon0x/DeadDrop',
-    },
-    {
-      title: 'OutSync - Distributed Event System',
-      description: 'An asynchronous backend system that implements the transactional outbox pattern to safely forward PostgreSQL database events to Redis queues for event-driven webhooks and automation pipelines.',
-      tags: ['Python', 'Redis', 'PostgreSQL', 'Asyncio'],
-      github: 'https://github.com/haroon0x/OutSync',
-    },
-    {
-      title: 'CrawlWise - The GEOAgent',
-      description: 'An intelligent web crawling agent designed for high-performance asynchronous web crawling and large-scale, structured data extraction across thousands of domains.',
-      tags: ['TypeScript', 'React', 'AI/ML'],
-      github: 'https://github.com/haroon0x/CrawlWise',
-      link: 'https://crawlwise.netlify.app/',
-    },
-    {
-      title: 'PromoAgent',
-      description: 'An autonomous agent that automates marketing outreach on community platforms by generating tailored, high-engagement content.',
-      tags: ['Python', 'LangGraph', 'Marketing'],
-      github: 'https://github.com/haroon0x/PromoAgent',
-      link: 'https://promoagent.onrender.com/',
-    },
-    {
-      title: 'Percolation Hypotheses Generator',
-      description: 'A hypothesis generation engine that automates the exploration of hypothesis complexity to accelerate computational research.',
-      tags: ['Python', 'NLP', 'Research'],
-      github: 'https://github.com/haroon0x/percolation-hypotheses-gen',
-      link: 'https://percolation-hypotheses.onrender.com/',
-    },
-    {
-      title: 'Neural Network From Scratch',
-      description: 'An educational project implementing deep learning and neural network structures from scratch to achieve high classification accuracy.',
-      tags: ['Python', 'ML Fundamentals'],
-      github: 'https://github.com/haroon0x/NNFromScratch',
-    }
-  ];
-
   return (
-    <section id="work" className="safe-x fluid-section relative z-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-10 sm:mb-16"
-      >
-        <h2 className="mb-4 text-title font-bold text-text-primary text-balance sm:mb-6">
-          Selected <span className="text-accent">Works</span>
-        </h2>
-        <p className="max-w-2xl text-body-lg text-text-secondary font-light text-pretty">
-          A collection of projects exploring AI, autonomous agents, and interactive web experiences.
-        </p>
-      </motion.div>
+    <>
+      <section id="work" className="safe-x mx-auto max-w-[96rem] scroll-mt-24 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-10 flex items-end justify-between gap-8 sm:mb-14"
+        >
+          <div>
+            <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Selected work</p>
+            <h2 className="text-[clamp(2.25rem,4vw,4.75rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">
+              Built to work in the real world.
+            </h2>
+          </div>
+          <span className="hidden font-mono text-[0.68rem] uppercase tracking-[0.18em] text-text-muted sm:block">2023—2026</span>
+        </motion.div>
 
-      <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:gap-8">
-        {projects.map((project, index) => (
-          <SpotlightCard key={project.title} project={project} index={index} />
-        ))}
-      </div>
-    </section>
+        <div className="space-y-16 sm:space-y-24">
+          {featuredProjects.map((project, index) => (
+            <FeaturedProjectCaseStudy key={project.title} project={project} index={index} />
+          ))}
+        </div>
+
+        <div className="mt-24 sm:mt-32">
+          <div className="mb-6 flex items-center justify-between gap-6">
+            <h3 className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Project archive</h3>
+            <span className="font-mono text-[0.64rem] tabular-nums tracking-[0.14em] text-text-muted">04—08</span>
+          </div>
+          <div className="border-t border-border">
+            {archiveProjects.map((project, index) => (
+              <ProjectRow key={project.title} project={project} index={index + featuredProjects.length} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="safe-x mx-auto max-w-[96rem] scroll-mt-24 pb-24 sm:px-8 sm:pb-32 lg:px-12 lg:pb-40">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="grid gap-10 border-y border-border py-14 sm:py-20 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20"
+        >
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">About</p>
+          <div>
+            <p className="max-w-4xl text-[clamp(1.8rem,3.5vw,4rem)] font-medium leading-[1.08] tracking-[-0.04em] text-text-primary">
+              I care about clear thinking, resilient systems, and shipping work that earns its place.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
+              <a
+                href="https://drive.google.com/file/d/1fcm8Z6ul2k97JCTBcJoufh6UHVeSKiOv/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary transition-colors hover:text-accent"
+              >
+                Read résumé
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+              <Link
+                to="/pull-requests"
+                className="group inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary transition-colors hover:text-accent"
+              >
+                Open-source contributions
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+    </>
   );
 }
 
-function SpotlightCard({ project, index }: { project: Project; index: number }) {
-  const divRef = React.useRef<HTMLDivElement>(null);
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = React.useState(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current) return;
-
-    const div = divRef.current;
-    const rect = div.getBoundingClientRect();
-
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleFocus = () => {
-    setOpacity(1);
-  };
-
-  const handleBlur = () => {
-    setOpacity(0);
-  };
-
-  const handleMouseEnter = () => {
-    setOpacity(1);
-  };
-
-  const handleMouseLeave = () => {
-    setOpacity(0);
-  };
-
-  const spotlightOpacity = opacity * 0.06;
+function FeaturedProjectCaseStudy({ project, index }: { project: FeaturedProject; index: number }) {
+  const primaryUrl = project.link ?? project.github;
 
   return (
-    <motion.div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 20 }}
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="card-container group relative overflow-hidden rounded-2xl border border-card-border bg-card-bg backdrop-blur-md transition-colors duration-base hover:border-card-border-hover"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      className="border-t border-border pt-7 sm:pt-9"
     >
-      <div
-        className="pointer-events-none absolute -inset-px transition duration-300"
-        style={{
-          opacity: spotlightOpacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, var(--text-primary), transparent 40%)`,
-        }}
-      />
-
-      <div className="cq-card-pad relative p-5 sm:p-8 md:p-10">
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          <div className="min-w-0 flex-1">
-            <div className="mb-4 flex items-start justify-between gap-3 sm:items-center">
-              <h3 className="cq-card-title text-heading font-bold leading-tight text-text-primary transition-colors group-hover:text-accent">
-                {project.title}
-              </h3>
-              <div className="flex shrink-0 gap-2">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open ${project.title} on GitHub`}
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-card-border-subtle bg-hover-bg p-2 text-text-muted transition-colors hover:border-card-border-hover hover:bg-hover-bg-strong hover:text-text-primary"
-                  >
-                    <Github size={20} />
-                  </a>
-                )}
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open live link for ${project.title}`}
-                    className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-card-border-subtle bg-hover-bg p-2 text-text-muted transition-colors hover:border-card-border-hover hover:bg-hover-bg-strong hover:text-text-primary"
-                  >
-                    <ExternalLink size={20} />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            <p className="mb-6 max-w-2xl text-sm leading-7 text-text-secondary sm:mb-8 sm:text-base sm:leading-relaxed font-light">
-              {project.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              {project.tags.map((tag: string) => (
-                <span key={tag} className="rounded-full border border-card-border-subtle bg-hover-bg px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-hover-bg-strong hover:text-text-primary sm:px-4 sm:text-sm">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center self-start md:self-center">
-            {(project.link || project.github) && (
-                <a
-                  href={project.link || project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`View project details for ${project.title}`}
-                  className="flex min-h-11 items-center gap-2 rounded-lg py-1 text-sm font-medium text-accent opacity-100 transition-[opacity,transform] duration-base sm:text-base md:translate-x-[-10px] md:opacity-0 md:group-hover:translate-x-0 md:group-hover:opacity-100"
-                >
-                <span>View Project</span>
-                <ArrowRight size={20} />
+      <div className="grid gap-8 lg:grid-cols-[4rem_minmax(16rem,0.8fr)_minmax(0,1.2fr)] lg:gap-10">
+        <span className="font-mono text-xs tabular-nums tracking-[0.12em] text-text-muted">{String(index + 1).padStart(2, '0')}</span>
+        <div>
+          <p className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-accent">Featured system</p>
+          <h3 className="mt-3 text-[clamp(2rem,3.4vw,4rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">{project.title}</h3>
+          <p className="mt-5 max-w-md text-lg leading-8 text-text-secondary">{project.description}</p>
+          <p className="mt-5 font-mono text-[0.64rem] uppercase leading-5 tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
+          <div className="mt-8 flex items-center gap-5">
+            {project.link && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-accent">
+                View code
               </a>
             )}
+            <a href={primaryUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:text-accent">
+              {project.link ? 'Open project' : 'View repository'}
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
           </div>
         </div>
+        <div className="border-l border-border pl-6 sm:pl-8">
+          <dl className="space-y-8">
+            <div>
+              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Problem</dt>
+              <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.problem}</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">System</dt>
+              <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.system}</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Engineering proof</dt>
+              <dd className="mt-4 flex flex-wrap gap-2">
+                {project.proof.map((item) => (
+                  <span key={item} className="border border-border px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-text-secondary">{item}</span>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
-    </motion.div>
+    </motion.article>
+  );
+}
+
+function ProjectRow({ project, index }: { project: Project; index: number }) {
+  const primaryUrl = project.link ?? project.github;
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ duration: 0.55, delay: Math.min((index - featuredProjects.length) * 0.04, 0.2), ease: [0.16, 1, 0.3, 1] }}
+      className="group relative border-b border-border py-8 transition-colors sm:py-10"
+    >
+      <div className="absolute inset-0 -z-10 origin-left scale-x-0 bg-surface transition-transform duration-500 ease-out group-hover:scale-x-100" />
+      <div className="grid items-start gap-5 sm:grid-cols-[3rem_minmax(12rem,1fr)_minmax(16rem,1.15fr)_auto] sm:gap-8">
+        <span className="font-mono text-xs tabular-nums tracking-[0.12em] text-text-muted">{String(index + 1).padStart(2, '0')}</span>
+        <h4 className="text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">{project.title}</h4>
+        <div>
+          <p className="max-w-lg leading-7 text-text-secondary">{project.description}</p>
+          <p className="mt-4 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
+        </div>
+        <div className="flex items-center gap-4 sm:justify-end">
+          {project.link && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted transition-colors hover:text-text-primary">
+              Code
+            </a>
+          )}
+          <a
+            href={primaryUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${project.title}`}
+            className="flex h-11 w-11 items-center justify-center rounded-control border border-border text-text-primary transition-[border-color,color,transform] duration-300 hover:border-accent hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          >
+            <ArrowUpRight className="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    </motion.article>
   );
 }

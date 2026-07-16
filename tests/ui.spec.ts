@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('core routes', () => {
   test('home renders and has no critical accessibility violations', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1, name: /building intelligent/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /building ambitious systems, end to end/i })).toBeVisible();
     await page.waitForTimeout(1400);
     await page.addStyleTag({
       content: `
@@ -23,8 +23,11 @@ test.describe('core routes', () => {
     expect(seriousOrCritical).toEqual([]);
   });
 
-  test('pull requests page renders key section', async ({ page }) => {
+  test('pull requests direct route survives refresh', async ({ page }) => {
     await page.goto('/pull-requests');
+    await expect(page.getByRole('heading', { name: /open source contributions/i })).toBeVisible();
+    await page.reload();
+    await expect(page).toHaveURL(/\/pull-requests$/);
     await expect(page.getByRole('heading', { name: /open source contributions/i })).toBeVisible();
   });
 
@@ -38,8 +41,9 @@ test.describe('core routes', () => {
     test.skip(!isMobile, 'mobile-only interaction');
     await page.goto('/');
     await page.getByRole('button', { name: /open menu/i }).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByRole('dialog').getByRole('link', { name: /pull requests/i }).click();
+    const navigation = page.getByRole('navigation', { name: /mobile navigation/i });
+    await expect(navigation).toBeVisible();
+    await navigation.getByRole('link', { name: /pull requests/i }).click();
     await expect(page.getByRole('heading', { name: /open source contributions/i })).toBeVisible();
   });
 
@@ -47,9 +51,9 @@ test.describe('core routes', () => {
     await page.goto('/pull-requests');
     await page.getByRole('button', { name: /show merged pull requests/i }).click();
     await expect(page.getByRole('button', { name: /show merged pull requests/i })).toBeVisible();
-    // every visible status chip in the card grid should now read "Merged"
-    const chips = page.locator('a:has(h3) >> text=/^(Open|Closed)$/');
-    await expect(chips).toHaveCount(0);
+    const results = page.getByRole('region', { name: /pull requests/i });
+    await expect(results.getByText('Merged', { exact: true }).first()).toBeVisible();
+    await expect(results.getByText(/^(Open|Closed)$/, { exact: true })).toHaveCount(0);
   });
 
   test('favicon and og image are served', async ({ page }) => {

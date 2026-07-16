@@ -1,5 +1,8 @@
 # Plan 002: Rebuild the portfolio as a light "white lily garden" anime aesthetic
 
+> **REJECTED 2026-07-16**: The operator retained the current editorial
+> systems-engineering identity. Do not execute this plan.
+
 > **Executor instructions**: Follow this plan phase by phase, in order. Run
 > every verification command and confirm the expected result before moving on.
 > If anything in the "STOP conditions" section occurs, stop and report — do

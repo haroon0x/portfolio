@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: haroon0x
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /pull-requests
+        destination: /index.html
+      - type: rewrite
+        source: /pull-requests/*
+        destination: /index.html

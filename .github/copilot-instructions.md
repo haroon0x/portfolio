@@ -1,79 +1,43 @@
 # AI Agent Instructions for haroon0x Portfolio
 
-This guide helps AI agents understand the essential patterns and workflows of this portfolio project.
+This is a React, TypeScript, Vite, Tailwind CSS, and Framer Motion portfolio. It is a frontend-only application with static project and pull-request content.
 
-## Project Overview
+## Current structure
 
-A React + TypeScript portfolio website showcasing AI/ML projects with:
-- Modern React practices (hooks, context)
-- Smooth page transitions and animations
-- Theme switching with system preference detection
-- Real-time GitHub integration
+- `src/App.tsx` owns the router, global `Header` and `Footer`, route scrolling, lazy route loading, and route metadata.
+- `src/pages/Home.tsx` composes the homepage sections from `src/components/`.
+- `src/pages/PullRequests.tsx` fetches and presents `public/pr-data.json`.
+- `src/pages/NotFound.tsx` renders the fallback route.
+- `src/contexts/ThemeContext.tsx` owns the live dark/light theme, persistence, system preference handling, and browser theme color.
+- `src/index.css` is the only source of palette, radius, and shadow values. Components use semantic Tailwind classes mapped in `tailwind.config.js`.
+- `scripts/fetch-prs.cjs` generates the static pull-request data used by the frontend.
 
-## Architecture & Patterns
+## Frontend conventions
 
-### Frontend Structure
-- `src/pages/` - Route components (`Home.tsx`, `PullRequests.tsx`)
-- `src/components/` - Reusable UI components with animations
-- `src/contexts/` - React Context providers (theme, etc.)
-- `src/hooks/` - Custom React hooks
+- Build mobile-first layouts and preserve accessible landmarks, focus states, touch targets, and reduced-motion behavior.
+- Use semantic classes such as `bg-background`, `bg-surface`, `text-text-primary`, `text-text-muted`, `border-border`, and `text-accent`.
+- Do not add raw color values or palette utilities to components, HTML, or Tailwind configuration. Change shared visual values in `src/index.css`.
+- Use `useTheme` from `src/contexts/ThemeContext.tsx` for the current theme and toggle action.
+- Keep the global header and footer in `App.tsx`; route pages should provide their own main content.
+- Add route title, description, canonical, social, and robots values to the metadata map in `App.tsx` when adding a route.
+- Preserve existing user changes and keep edits scoped to the requested task.
+- Do not add code comments.
+- Do not add or modify tests unless explicitly requested.
 
-### Key Patterns
+## Pull-request data
 
-1. **Theme Management**
-```tsx
-// Use the useTheme hook for theme access:
-import { useTheme } from '../hooks/useTheme';
-const { isDark, toggleTheme } = useTheme();
-```
+`npm run fetch-prs` runs `scripts/fetch-prs.cjs` and updates `public/pr-data.json`. The scheduled `.github/workflows/fetch-prs.yml` workflow refreshes that file from public GitHub data. The site does not run a webhook or backend service.
 
-2. **Page Transitions**
-- Components are wrapped in `PageTransition` for smooth loading effects
-- See `PageTransition.tsx` for animation implementation
+## Development gates
 
-3. **GitHub Integration**
-- Webhook endpoint in `backend-webhoook/main.py` handles GitHub events
-- Real-time PR updates in `pages/PullRequests.tsx`
-
-## Development Workflow
-
-### Setup & Running
 ```bash
-# Frontend
 npm install
-npm run dev   # Start dev server
-
-# Backend webhook (optional)
-cd backend-webhoook
-pip install -r requirements.txt
-uvicorn main:app --reload
+npm run dev
+npm run lint
+npm run type-check
+npm run build
+npm run fetch-prs
+npm run test:e2e
 ```
 
-### Common Tasks
-- Type checking: `npm run type-check`
-- Linting: `npm run lint`
-- Production build: `npm run build`
-
-## Tech Stack Dependencies
-- Vite for build tooling
-- Framer Motion for animations
-- Tailwind CSS for styling
-- Lucide React for icons
-- FastAPI for backend webhook
-
-## Best Practices
-1. Always wrap page content in `PageTransition` component
-2. Use `useScrollAnimation` hook for scroll-triggered animations
-3. Theme-sensitive styles should check `isDark` from ThemeContext
-4. Keep components focused and reusable
-5. Use TypeScript types/interfaces for component props
-
-## Project Structure Summary
-```
-src/
-  ├── components/   # Reusable UI components
-  ├── contexts/    # React Context providers
-  ├── hooks/       # Custom React hooks
-  ├── pages/       # Route components
-  └── App.tsx      # Root component
-```
+Run lint, type checking, and the production build for frontend changes. Run end-to-end tests only when the user explicitly requests them.

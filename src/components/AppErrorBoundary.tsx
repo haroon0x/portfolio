@@ -26,7 +26,7 @@ export default class AppErrorBoundary extends React.Component<AppErrorBoundaryPr
     if (this.state.hasError) {
       return (
         <main className="min-h-[100svh] flex items-center justify-center px-6">
-          <div className="max-w-lg text-center rounded-2xl border border-red-500/30 bg-red-500/10 p-8">
+          <div className="max-w-lg rounded-panel border border-status-closed/30 bg-status-closed/10 p-8 text-center shadow-panel">
             <h1 className="text-2xl font-semibold text-text-primary text-balance">Something went wrong</h1>
             <p className="mt-3 text-text-secondary text-pretty">
               Unexpected error crashed this page. Refresh once. If issue persists, come back later.
