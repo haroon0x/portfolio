@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import InteractiveHands from './InteractiveHands';
+import AsciiHands from './AsciiHands';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -28,7 +28,7 @@ export default function Hero() {
             </h1>
           </motion.div>
           <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-            <InteractiveHands onExplore={scrollToWork} />
+            <AsciiHands onExplore={scrollToWork} />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
