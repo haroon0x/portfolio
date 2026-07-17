@@ -102,6 +102,7 @@
   width: max-content;
   max-width: none;
   overflow: visible;
+  font-family: "JetBrains Mono", monospace;
   font-size: clamp(0.75rem, 1.1vw, 1.05rem);
   font-variant-ligatures: none;
   letter-spacing: 0;
@@ -111,6 +112,15 @@
   transform-origin: center;
   user-select: none;
   white-space: pre;
+}
+
+.ascii-hand-glyph {
+  display: inline-block;
+  width: 1ch;
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center;
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 280ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .skip-link {
