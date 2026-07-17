@@ -4,6 +4,12 @@ const path = require('path');
 const GITHUB_AUTHOR = process.env.GITHUB_AUTHOR || 'haroon0x';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const outputPath = path.join(__dirname, '../public/pr-data.json');
+const excludedRepositoryOwners = new Set([
+  GITHUB_AUTHOR.toLowerCase(),
+  'isap31',
+  'tempest2023',
+  'ivanrj7j',
+]);
 
 const headers = {
   Accept: 'application/vnd.github+json',
@@ -14,12 +20,12 @@ if (GITHUB_TOKEN) {
   headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
 }
 
-function isOwnedRepository(repo) {
-  return repo.split('/')[0]?.toLowerCase() === GITHUB_AUTHOR.toLowerCase();
+function isExcludedRepository(repo) {
+  return excludedRepositoryOwners.has(repo.split('/')[0]?.toLowerCase());
 }
 
-function withExternalRepositoriesOnly(data) {
-  const prs = (data.prs ?? []).filter((pr) => !isOwnedRepository(pr.repo));
+function withAllowedRepositoriesOnly(data) {
+  const prs = (data.prs ?? []).filter((pr) => !isExcludedRepository(pr.repo));
 
   return {
     ...data,
@@ -30,9 +36,9 @@ function withExternalRepositoriesOnly(data) {
   };
 }
 
-function isExternalSearchResult(item) {
+function isAllowedSearchResult(item) {
   const segments = new URL(item.repository_url).pathname.split('/').filter(Boolean);
-  return segments[0] === 'repos' && segments[1]?.toLowerCase() !== GITHUB_AUTHOR.toLowerCase();
+  return segments[0] === 'repos' && !excludedRepositoryOwners.has(segments[1]?.toLowerCase());
 }
 
 function readExistingData() {
@@ -69,7 +75,7 @@ async function discoverPullRequests() {
     const query = encodeURIComponent(`type:pr author:${GITHUB_AUTHOR}`);
     const url = `https://api.github.com/search/issues?q=${query}&sort=created&order=desc&per_page=100&page=${page}`;
     const data = await githubRequest(url);
-    items.push(...data.items.filter((item) => item.pull_request?.url && isExternalSearchResult(item)));
+    items.push(...data.items.filter((item) => item.pull_request?.url && isAllowedSearchResult(item)));
 
     if (data.items.length < 100 || page * 100 >= Math.min(data.total_count, 1000)) {
       break;
@@ -113,7 +119,7 @@ async function fetchPRs() {
   if (GITHUB_TOKEN) console.log('Using GitHub token for authenticated requests.');
 
   const storedData = readExistingData();
-  const existingData = storedData ? withExternalRepositoriesOnly(storedData) : null;
+  const existingData = storedData ? withAllowedRepositoriesOnly(storedData) : null;
   const cachedByUrl = new Map((existingData?.prs ?? []).map((pr) => [pr.url, pr]));
   let discovered;
 
@@ -188,7 +194,7 @@ async function fetchPRs() {
     throw new Error(`Fetched ${fetchedPRs.length} of ${discovered.length} pull requests.`);
   }
 
-  const validPRs = fetchedPRs.filter((pr) => !isOwnedRepository(pr.repo));
+  const validPRs = fetchedPRs.filter((pr) => !isExcludedRepository(pr.repo));
 
   const output = {
     prs: validPRs,

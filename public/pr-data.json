@@ -717,51 +717,6 @@
       ]
     },
     {
-      "title": "pr for integrating tests and ci",
-      "repo": "Isap31/DiabetesAI-Tracking",
-      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/5",
-      "description": "dont merge this pr",
-      "status": "Merged",
-      "date": "Jun 28, 2025",
-      "additions": 3,
-      "deletions": 7,
-      "languages": [
-        "TypeScript",
-        "CSS",
-        "JavaScript"
-      ]
-    },
-    {
-      "title": "integrating tests and ci",
-      "repo": "Isap31/DiabetesAI-Tracking",
-      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/4",
-      "description": "No description provided.",
-      "status": "Closed",
-      "date": "Jun 28, 2025",
-      "additions": 0,
-      "deletions": 0,
-      "languages": [
-        "TypeScript",
-        "CSS",
-        "JavaScript"
-      ]
-    },
-    {
-      "title": "update testing",
-      "repo": "tempest2023/ObiAgent",
-      "url": "https://github.com/tempest2023/ObiAgent/pull/9",
-      "description": "this pr is not ready to merge yet. dont merge this",
-      "status": "Closed",
-      "date": "Jun 28, 2025",
-      "additions": 13158,
-      "deletions": 6,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ]
-    },
-    {
       "title": "Test",
       "repo": "The-Pocket/PocketFlow",
       "url": "https://github.com/The-Pocket/PocketFlow/pull/82",
@@ -774,110 +729,6 @@
         "Python",
         "Jupyter Notebook",
         "HTML"
-      ]
-    },
-    {
-      "title": "Tests",
-      "repo": "Isap31/DiabetesAI-Tracking",
-      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/3",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Jun 28, 2025",
-      "additions": 9482,
-      "deletions": 1307,
-      "languages": [
-        "TypeScript",
-        "CSS",
-        "JavaScript"
-      ]
-    },
-    {
-      "title": "Mobile resp",
-      "repo": "Isap31/DiabetesAI-Tracking",
-      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/2",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Jun 28, 2025",
-      "additions": 292,
-      "deletions": 109,
-      "languages": [
-        "TypeScript",
-        "CSS",
-        "JavaScript"
-      ]
-    },
-    {
-      "title": "Deploy",
-      "repo": "tempest2023/ObiAgent",
-      "url": "https://github.com/tempest2023/ObiAgent/pull/8",
-      "description": "No description provided.",
-      "status": "Closed",
-      "date": "Jun 28, 2025",
-      "additions": 3023,
-      "deletions": 365,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ]
-    },
-    {
-      "title": "Agent demo",
-      "repo": "tempest2023/ObiAgent",
-      "url": "https://github.com/tempest2023/ObiAgent/pull/7",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Jun 28, 2025",
-      "additions": 2168,
-      "deletions": 307,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ]
-    },
-    {
-      "title": "mobile responsiveness",
-      "repo": "Isap31/DiabetesAI-Tracking",
-      "url": "https://github.com/Isap31/DiabetesAI-Tracking/pull/1",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Jun 28, 2025",
-      "additions": 670,
-      "deletions": 454,
-      "languages": [
-        "TypeScript",
-        "CSS",
-        "JavaScript"
-      ]
-    },
-    {
-      "title": "Refactor backend: API-only server, improved environment setup and added gemini support",
-      "repo": "tempest2023/ObiAgent",
-      "url": "https://github.com/tempest2023/ObiAgent/pull/1",
-      "description": "- Move backend code to `backend/agent` and create a clean `server.py` entrypoint. - - Enhance `setup_env.py` to support both OPENAI_API_KEY and GEMINI_API_KEY. - Add CORS, loggi...",
-      "status": "Merged",
-      "date": "Jun 22, 2025",
-      "additions": 1097,
-      "deletions": 2,
-      "languages": [
-        "Python",
-        "Jupyter Notebook",
-        "HTML"
-      ]
-    },
-    {
-      "title": "Fix Experience calculator ",
-      "repo": "ivanrj7j/ResumeGen",
-      "url": "https://github.com/ivanrj7j/ResumeGen/pull/4",
-      "description": "## 🔧 Fix: Bugs in `Skill` Model and Typo Corrections fixes #2 This PR resolves critical issues in the `Skill` model related to experience calculation and corrects typo througho...",
-      "status": "Merged",
-      "date": "Jun 1, 2025",
-      "additions": 11,
-      "deletions": 10,
-      "languages": [
-        "Python",
-        "TeX"
       ]
     },
     {
@@ -926,8 +777,8 @@
       ]
     }
   ],
-  "lastUpdated": "2026-07-17T10:53:45.299Z",
-  "total": 62,
+  "lastUpdated": "2026-07-17T10:58:35.659Z",
+  "total": 52,
   "open": 19,
-  "merged": 16
+  "merged": 9
 }
