@@ -1,11 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDownUp, ArrowUpRight, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest, Search } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { ArrowDownUp, ArrowUpRight, Building2, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest, Search } from 'lucide-react';
 import { loadPRData, type PRData, type PullRequest } from '../data/prData';
 
 type SortBy = 'status' | 'date' | 'repo';
 type SortOrder = 'asc' | 'desc';
 type FilterStatus = 'all' | 'merged' | 'open';
+
+interface OrganizationSummary {
+  name: string;
+  pullRequests: number;
+  repositories: number;
+  merged: number;
+  open: number;
+  closed: number;
+}
 
 const PAGE_SIZE = 24;
 
@@ -16,6 +25,7 @@ const statusOrder: Record<PullRequest['status'], number> = {
 };
 
 const PullRequests = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +34,7 @@ const PullRequests = () => {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const organizationParam = searchParams.get('org');
 
   useEffect(() => {
     let active = true;
@@ -46,12 +57,57 @@ const PullRequests = () => {
     };
   }, []);
 
+  const organizations = useMemo<OrganizationSummary[]>(() => {
+    if (!data) return [];
+    const summaries = new Map<string, OrganizationSummary & { repositoryNames: Set<string> }>();
+
+    data.prs.forEach((pr) => {
+      const [owner, repository] = pr.repo.split('/');
+      const key = owner.toLocaleLowerCase();
+      const existing = summaries.get(key) ?? {
+        name: owner,
+        pullRequests: 0,
+        repositories: 0,
+        merged: 0,
+        open: 0,
+        closed: 0,
+        repositoryNames: new Set<string>(),
+      };
+
+      existing.pullRequests += 1;
+      existing.merged += pr.status === 'Merged' ? 1 : 0;
+      existing.open += pr.status === 'Open' ? 1 : 0;
+      existing.closed += pr.status === 'Closed' ? 1 : 0;
+      existing.repositoryNames.add(repository);
+      existing.repositories = existing.repositoryNames.size;
+      summaries.set(key, existing);
+    });
+
+    return Array.from(summaries.values())
+      .map((summary) => ({
+        name: summary.name,
+        pullRequests: summary.pullRequests,
+        repositories: summary.repositories,
+        merged: summary.merged,
+        open: summary.open,
+        closed: summary.closed,
+      }))
+      .sort((a, b) => b.pullRequests - a.pullRequests || a.name.localeCompare(b.name));
+  }, [data]);
+
+  const activeOrganization = organizations.find(
+    (organization) => organization.name.toLocaleLowerCase() === organizationParam?.toLocaleLowerCase(),
+  ) ?? null;
+
   const filteredPRs = useMemo(() => {
     if (!data) return [];
 
+    const organizationFiltered = activeOrganization
+      ? data.prs.filter((pr) => pr.repo.split('/')[0].toLocaleLowerCase() === activeOrganization.name.toLocaleLowerCase())
+      : data.prs;
     const statusFiltered = filterStatus === 'all'
-      ? [...data.prs]
-      : data.prs.filter((pr) => pr.status.toLowerCase() === filterStatus);
+      ? [...organizationFiltered]
+      : organizationFiltered.filter((pr) => pr.status.toLowerCase() === filterStatus);
     const query = searchQuery.trim().toLocaleLowerCase();
     const prs = query
       ? statusFiltered.filter((pr) => (
@@ -76,14 +132,9 @@ const PullRequests = () => {
       const difference = a.repo.localeCompare(b.repo);
       return sortOrder === 'asc' ? difference : -difference;
     });
-  }, [data, filterStatus, searchQuery, sortBy, sortOrder]);
+  }, [activeOrganization, data, filterStatus, searchQuery, sortBy, sortOrder]);
 
   const visiblePRs = filteredPRs.slice(0, visibleCount);
-
-  const totalAdditions = useMemo(
-    () => data?.prs.reduce((total, pr) => total + pr.additions, 0) ?? 0,
-    [data],
-  );
 
   const toggleSort = (nextSortBy: SortBy) => {
     setVisibleCount(PAGE_SIZE);
@@ -105,9 +156,21 @@ const PullRequests = () => {
     setVisibleCount(PAGE_SIZE);
   };
 
+  const selectOrganization = (organization: string | null) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (organization) {
+      nextParams.set('org', organization);
+    } else {
+      nextParams.delete('org');
+    }
+    setSearchParams(nextParams, { replace: true });
+    setVisibleCount(PAGE_SIZE);
+  };
+
   const resetControls = () => {
     setFilterStatus('all');
     setSearchQuery('');
+    selectOrganization(null);
     setVisibleCount(PAGE_SIZE);
   };
 
@@ -138,16 +201,102 @@ const PullRequests = () => {
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-open sm:text-4xl">{data.open}</dd>
           </div>
           <div className="flex flex-col py-6 pl-5 md:px-6 md:last:pr-0">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Additions</dt>
-            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-text-primary sm:text-4xl">+{totalAdditions.toLocaleString()}</dd>
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Organizations</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-accent sm:text-4xl">{organizations.length}</dd>
           </div>
         </dl>
+      )}
+
+      {data && !loading && (
+        <section aria-labelledby="organization-index-title" className="mt-16 scroll-mt-28 sm:mt-24">
+          <div className="grid gap-8 border-b border-border pb-9 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.55fr)] lg:items-end lg:gap-16">
+            <div>
+              <p className="mb-4 inline-flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent">
+                <Building2 className="h-3.5 w-3.5" />
+                Contribution network / {organizations.length.toString().padStart(2, '0')}
+              </p>
+              <h2 id="organization-index-title" className="max-w-3xl text-[clamp(2.4rem,5vw,5.6rem)] font-medium leading-[0.92] tracking-[-0.055em] text-text-primary">
+                Where the work landed.
+              </h2>
+            </div>
+            <div className="lg:pb-1">
+              <p className="max-w-xl text-base leading-7 text-text-secondary sm:text-lg sm:leading-8">
+                An organization-level view of contribution depth, repository reach, and current outcomes. Select one to inspect its complete record.
+              </p>
+              <button
+                type="button"
+                onClick={() => selectOrganization(null)}
+                aria-pressed={!activeOrganization}
+                className={`mt-6 inline-flex min-h-11 items-center gap-3 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-[border-color,background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${!activeOrganization ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-accent hover:text-accent'}`}
+              >
+                All organizations
+                <span className="tabular-nums">{data.total.toString().padStart(2, '0')} PRs</span>
+              </button>
+              <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-text-muted">
+                <span className="text-status-merged">M / merged</span>
+                <span className="text-status-open">O / open</span>
+                <span className="text-status-closed">C / closed</span>
+              </p>
+            </div>
+          </div>
+
+          <ol className="grid border-l border-t border-border sm:grid-cols-2 xl:grid-cols-4">
+            {organizations.map((organization, index) => {
+              const isActive = activeOrganization?.name === organization.name;
+              const contributionWidth = Math.max(8, (organization.pullRequests / organizations[0].pullRequests) * 100);
+              const mark = organization.name.replace(/[^a-z0-9]/gi, '').slice(0, 3).toLocaleUpperCase();
+
+              return (
+                <li key={organization.name} className={`border-b border-r border-border ${index === 0 ? 'xl:col-span-2' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => selectOrganization(isActive ? null : organization.name)}
+                    aria-pressed={isActive}
+                    aria-label={`${isActive ? 'Clear' : 'Show'} ${organization.name} contributions: ${organization.pullRequests} pull requests across ${organization.repositories} repositories`}
+                    className={`group relative flex min-h-40 w-full flex-col overflow-hidden p-5 text-left transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.985] sm:p-6 ${isActive ? 'bg-accent-muted' : 'hover:bg-surface'}`}
+                  >
+                    <span className={`absolute inset-y-0 left-0 w-0.5 transition-colors duration-150 ${isActive ? 'bg-accent' : 'bg-transparent group-hover:bg-border-strong'}`} />
+                    <span className="flex w-full items-start justify-between gap-5">
+                      <span className="inline-flex items-center gap-3 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-text-muted">
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        <span aria-hidden="true" className={`flex h-8 min-w-10 items-center justify-center border px-2 tracking-[0.1em] transition-colors duration-150 ${isActive ? 'border-accent text-accent' : 'border-border text-text-secondary group-hover:border-border-strong group-hover:text-text-primary'}`}>
+                          {mark}
+                        </span>
+                      </span>
+                      <span className={`font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors duration-150 ${isActive ? 'text-accent' : 'text-text-muted group-hover:text-text-primary'}`}>
+                        {organization.pullRequests.toString().padStart(2, '0')} PRs
+                      </span>
+                    </span>
+
+                    <span className={`mt-5 block font-medium tracking-[-0.035em] text-text-primary ${index === 0 ? 'text-[clamp(1.4rem,2.4vw,2.15rem)]' : 'text-[clamp(1.25rem,2vw,1.65rem)]'}`}>
+                      {organization.name}
+                    </span>
+
+                    <span className="mt-auto block w-full pt-5">
+                      <span className="block h-px w-full bg-border">
+                        <span className={`block h-px ${isActive ? 'bg-accent' : 'bg-border-strong'}`} style={{ width: `${contributionWidth}%` }} />
+                      </span>
+                      <span className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-text-muted">
+                        <span>{organization.repositories} {organization.repositories === 1 ? 'repository' : 'repositories'}</span>
+                        <span className="flex items-center gap-3 tabular-nums">
+                          <span className="text-status-merged">M {organization.merged}</span>
+                          <span className="text-status-open">O {organization.open}</span>
+                          <span className="text-status-closed">C {organization.closed}</span>
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
       )}
 
       <section aria-label="Pull request controls" className="mt-12 border-y border-border py-5 sm:mt-16">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           <p aria-live="polite" className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-text-primary">
-            Showing {visiblePRs.length} of {filteredPRs.length} matches
+            {activeOrganization ? `${activeOrganization.name} / ` : ''}Showing {visiblePRs.length} of {filteredPRs.length} matches
           </p>
           {data?.lastUpdated && (
             <p className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
@@ -243,6 +392,23 @@ const PullRequests = () => {
       </section>
 
       <section aria-label="Pull requests" className="mt-10 border-t border-border sm:mt-12">
+        <header className="flex flex-wrap items-end justify-between gap-6 border-b border-border py-7 sm:py-9">
+          <div>
+            <p className="font-mono text-[0.64rem] uppercase tracking-[0.17em] text-text-muted">Contribution ledger</p>
+            <h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">
+              {activeOrganization ? `${activeOrganization.name} contributions` : 'All contributions'}
+            </h2>
+          </div>
+          {activeOrganization && (
+            <button
+              type="button"
+              onClick={() => selectOrganization(null)}
+              className="min-h-11 rounded-control border border-accent bg-accent-muted px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+            >
+              Clear {activeOrganization.name} ×
+            </button>
+          )}
+        </header>
         {loading ? (
           <div role="status" aria-label="Loading pull requests">
             {[1, 2, 3, 4].map((item) => (
@@ -277,11 +443,8 @@ const PullRequests = () => {
           <>
             <ul>
             {visiblePRs.map((pr, index) => (
-              <motion.li
+              <li
                 key={pr.url}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: Math.min(index * 0.025, 0.2), ease: [0.16, 1, 0.3, 1] }}
                 className="group border-b border-border transition-colors hover:bg-surface"
               >
                 <a
@@ -307,9 +470,9 @@ const PullRequests = () => {
                       <GitCommit className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">{pr.repo}</span>
                     </p>
-                    <h2 className="mt-3 text-xl font-medium leading-snug tracking-[-0.025em] text-text-primary transition-colors group-hover:text-accent sm:text-2xl">
+                    <h3 className="mt-3 text-xl font-medium leading-snug tracking-[-0.025em] text-text-primary transition-colors group-hover:text-accent sm:text-2xl">
                       {pr.title}
-                    </h2>
+                    </h3>
                     <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary line-clamp-3 sm:text-base">{pr.description}</p>
                   </div>
 
@@ -327,7 +490,7 @@ const PullRequests = () => {
                     <ArrowUpRight className="h-5 w-5" />
                   </span>
                 </a>
-              </motion.li>
+              </li>
             ))}
             </ul>
             {visiblePRs.length < filteredPRs.length && (
