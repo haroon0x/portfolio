@@ -9,13 +9,30 @@ const columns = 52;
 const rows = 59;
 const characters = ' .:-=+*#%@';
 
-interface PointerSample {
+type FieldMode = 'live' | 'idle';
+
+interface FieldSource {
   x: number;
   y: number;
   velocityX: number;
   velocityY: number;
   intensity: number;
+  mode: FieldMode;
+  waveRadius: number;
+  waveWidth: number;
+}
+
+interface PointerSample extends FieldSource {
   time: number;
+  blendFrom?: FieldSource;
+  blendProgress: number;
+}
+
+interface HandoffState {
+  from: FieldSource;
+  target: FieldSource;
+  startedAt: number;
+  targetUpdatedAt: number;
 }
 
 interface GlyphNode {
@@ -30,8 +47,48 @@ type FieldPhase = 'loading' | 'decoding' | 'live' | 'idle';
 const decodeDuration = 1400;
 const idleDelay = 4000;
 const idlePeriod = 14000;
+const idleWavePeriod = 6000;
+const handoffDuration = 300;
+let decodePlayedThisPage = false;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(maximum, Math.max(minimum, value));
+
+const cubicCoordinate = (time: number, first: number, second: number) => {
+  const inverse = 1 - time;
+  return 3 * inverse * inverse * time * first + 3 * inverse * time * time * second + time * time * time;
+};
+
+const cubicSlope = (time: number, first: number, second: number) => {
+  const inverse = 1 - time;
+  return 3 * inverse * inverse * first + 6 * inverse * time * (second - first) + 3 * time * time * (1 - second);
+};
+
+const cubicBezier = (progress: number, x1: number, y1: number, x2: number, y2: number) => {
+  const target = clamp(progress, 0, 1);
+  let time = target;
+
+  for (let iteration = 0; iteration < 8; iteration += 1) {
+    const slope = cubicSlope(time, x1, x2);
+    if (Math.abs(slope) < 0.000001) break;
+    time = clamp(time - (cubicCoordinate(time, x1, x2) - target) / slope, 0, 1);
+  }
+
+  return cubicCoordinate(time, y1, y2);
+};
+
+const decodeEase = (progress: number) => cubicBezier(progress, 0.16, 1, 0.3, 1);
+const handoffEase = (progress: number) => cubicBezier(progress, 0.65, 0, 0.35, 1);
+
+const fieldSource = (sample: PointerSample): FieldSource => ({
+  x: sample.x,
+  y: sample.y,
+  velocityX: sample.velocityX,
+  velocityY: sample.velocityY,
+  intensity: sample.intensity,
+  mode: sample.mode,
+  waveRadius: sample.waveRadius,
+  waveWidth: sample.waveWidth,
+});
 
 function renderAscii(image: HTMLImageElement) {
   const canvas = document.createElement('canvas');
@@ -81,8 +138,23 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   const drawFrameRef = useRef<number>();
   const decodeFrameRef = useRef<number>();
   const idleFrameRef = useRef<number>();
+  const handoffFrameRef = useRef<number>();
   const idleTimeoutRef = useRef<number>();
-  const pointerRef = useRef<PointerSample>({ x: 0, y: 0, velocityX: 0, velocityY: 0, intensity: 1, time: 0 });
+  const pointerRef = useRef<PointerSample>({
+    x: 0,
+    y: 0,
+    velocityX: 0,
+    velocityY: 0,
+    intensity: 1,
+    mode: 'live',
+    waveRadius: 0,
+    waveWidth: 0,
+    time: 0,
+    blendProgress: 1,
+  });
+  const handoffRef = useRef<HandoffState>();
+  const decodeLockTimesRef = useRef<Map<HTMLSpanElement, number>>(new Map());
+  const decodeStartedRef = useRef(false);
   const phaseRef = useRef<FieldPhase>('loading');
   const decodeCompleteRef = useRef(false);
   const stageVisibleRef = useRef(true);
@@ -105,35 +177,61 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
     const cellHeight = fieldBounds.height / lines.length;
     const horizontalScale = fieldBounds.width / field.offsetWidth || 1;
     const verticalScale = fieldBounds.height / field.offsetHeight || 1;
-    const radius = clamp(stageBounds.width * 0.16, 96, 148);
+    const liveRadius = clamp(stageBounds.width * 0.16, 96, 148);
     const pointer = pointerRef.current;
     const fieldLeft = fieldBounds.left - stageBounds.left;
     const fieldTop = fieldBounds.top - stageBounds.top;
     const nextActiveGlyphs = new Set<GlyphNode>();
+    const sources = pointer.blendFrom
+      ? [
+          { source: pointer.blendFrom, weight: 1 - pointer.blendProgress },
+          { source: fieldSource(pointer), weight: pointer.blendProgress },
+        ]
+      : [{ source: fieldSource(pointer), weight: 1 }];
 
     glyphNodesRef.current.forEach((node) => {
       const x = fieldLeft + (node.column + 0.5) * cellWidth;
       const y = fieldTop + (node.row + 0.5) * cellHeight;
-      const deltaX = x - pointer.x;
-      const deltaY = y - pointer.y;
-      const distance = Math.hypot(deltaX, deltaY);
-      if (distance >= radius) return;
+      let offsetX = 0;
+      let offsetY = 0;
+      let growth = 1;
+      let densityShift = 0;
+      let opacity = 0;
 
-      const strength = 1 - distance / radius;
-      const directionX = distance > 0 ? deltaX / distance : 0;
-      const directionY = distance > 0 ? deltaY / distance : 0;
-      const push = shouldReduceMotion ? 0 : (3 + Math.pow(strength, 1.7) * 15) * pointer.intensity;
-      const velocityOffsetX = shouldReduceMotion ? 0 : clamp(pointer.velocityX * -0.003, -6, 6) * strength * pointer.intensity;
-      const velocityOffsetY = shouldReduceMotion ? 0 : clamp(pointer.velocityY * -0.003, -6, 6) * strength * pointer.intensity;
-      const growth = shouldReduceMotion ? 1 : 1 + strength * 0.46 * pointer.intensity;
+      sources.forEach(({ source, weight }) => {
+        if (weight <= 0 || source.intensity <= 0) return;
+        const deltaX = x - source.x;
+        const deltaY = y - source.y;
+        const distance = Math.hypot(deltaX, deltaY);
+        const edgeDistance = source.mode === 'idle'
+          ? Math.abs(distance - source.waveRadius)
+          : distance;
+        const influenceRadius = source.mode === 'idle' ? source.waveWidth : liveRadius;
+        if (edgeDistance >= influenceRadius) return;
+
+        const strength = 1 - edgeDistance / influenceRadius;
+        const directionX = distance > 0 ? deltaX / distance : 0;
+        const directionY = distance > 0 ? deltaY / distance : 0;
+        const effectiveIntensity = source.intensity * weight;
+        const push = shouldReduceMotion ? 0 : (3 + Math.pow(strength, 1.7) * 15) * effectiveIntensity;
+        const velocityOffsetX = shouldReduceMotion ? 0 : clamp(source.velocityX * -0.003, -6, 6) * strength * effectiveIntensity;
+        const velocityOffsetY = shouldReduceMotion ? 0 : clamp(source.velocityY * -0.003, -6, 6) * strength * effectiveIntensity;
+
+        offsetX += directionX * push + velocityOffsetX;
+        offsetY += directionY * push + velocityOffsetY;
+        growth += shouldReduceMotion ? 0 : strength * 0.46 * effectiveIntensity;
+        densityShift += strength * 2 * effectiveIntensity;
+        opacity += (0.24 + Math.pow(strength, 0.72) * 0.76) * effectiveIntensity;
+      });
+
+      if (opacity <= 0) return;
+
       const sourceIndex = characters.indexOf(node.source);
-      const glyphIndex = clamp(sourceIndex + Math.round(strength * 2 * pointer.intensity), 1, characters.length - 1);
-      const offsetX = (directionX * push + velocityOffsetX) / horizontalScale;
-      const offsetY = (directionY * push + velocityOffsetY) / verticalScale;
+      const glyphIndex = clamp(sourceIndex + Math.round(densityShift), 1, characters.length - 1);
 
       node.element.style.transition = 'none';
-      node.element.style.opacity = String((0.24 + Math.pow(strength, 0.72) * 0.76) * pointer.intensity);
-      node.element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${growth})`;
+      node.element.style.opacity = String(clamp(opacity, 0, 1));
+      node.element.style.transform = `translate3d(${offsetX / horizontalScale}px, ${offsetY / verticalScale}px, 0) scale(${growth})`;
       node.element.textContent = characters[glyphIndex] ?? node.source;
       nextActiveGlyphs.add(node);
     });
@@ -167,21 +265,102 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
     });
   }, [drawField]);
 
-  const moveField = useCallback((x: number, y: number, trackVelocity: boolean, intensity = 1) => {
+  const moveField = useCallback((
+    x: number,
+    y: number,
+    trackVelocity: boolean,
+    intensity = 1,
+    mode: FieldMode = 'live',
+    waveRadius = 0,
+    waveWidth = 0,
+  ) => {
     const now = window.performance.now();
-    const previous = pointerRef.current;
-    const elapsed = Math.max(now - previous.time, 16);
-
-    pointerRef.current = {
+    const handoff = handoffRef.current;
+    const previous = handoff?.target ?? fieldSource(pointerRef.current);
+    const previousTime = handoff?.targetUpdatedAt ?? pointerRef.current.time;
+    const elapsed = Math.max(now - previousTime, 16);
+    const next: FieldSource = {
       x,
       y,
-      velocityX: trackVelocity && previous.time ? ((x - previous.x) / elapsed) * 1000 : 0,
-      velocityY: trackVelocity && previous.time ? ((y - previous.y) / elapsed) * 1000 : 0,
+      velocityX: trackVelocity && previousTime ? ((x - previous.x) / elapsed) * 1000 : 0,
+      velocityY: trackVelocity && previousTime ? ((y - previous.y) / elapsed) * 1000 : 0,
       intensity,
-      time: now,
+      mode,
+      waveRadius,
+      waveWidth,
     };
+
+    if (handoff) {
+      handoff.target = next;
+      handoff.targetUpdatedAt = now;
+      pointerRef.current = {
+        ...next,
+        time: now,
+        blendFrom: handoff.from,
+        blendProgress: pointerRef.current.blendProgress,
+      };
+    } else {
+      pointerRef.current = { ...next, time: now, blendProgress: 1 };
+    }
     scheduleDraw();
   }, [scheduleDraw]);
+
+  const cancelHandoff = useCallback(() => {
+    if (handoffFrameRef.current !== undefined) {
+      window.cancelAnimationFrame(handoffFrameRef.current);
+      handoffFrameRef.current = undefined;
+    }
+    handoffRef.current = undefined;
+    if (pointerRef.current.blendFrom) {
+      pointerRef.current = {
+        ...fieldSource(pointerRef.current),
+        time: window.performance.now(),
+        blendProgress: 1,
+      };
+    }
+  }, []);
+
+  const startHandoff = useCallback((from: FieldSource, x: number, y: number, trackVelocity: boolean) => {
+    cancelHandoff();
+    const startedAt = window.performance.now();
+    const target: FieldSource = {
+      x,
+      y,
+      velocityX: trackVelocity ? clamp((x - from.x) * 3.3, -900, 900) : 0,
+      velocityY: trackVelocity ? clamp((y - from.y) * 3.3, -900, 900) : 0,
+      intensity: 1,
+      mode: 'live',
+      waveRadius: 0,
+      waveWidth: 0,
+    };
+
+    handoffRef.current = { from, target, startedAt, targetUpdatedAt: startedAt };
+
+    const animateHandoff = (now: number) => {
+      const handoff = handoffRef.current;
+      if (!handoff) return;
+      const progress = clamp((now - handoff.startedAt) / handoffDuration, 0, 1);
+      const blendProgress = handoffEase(progress);
+
+      pointerRef.current = {
+        ...handoff.target,
+        time: now,
+        blendFrom: progress < 1 ? handoff.from : undefined,
+        blendProgress,
+      };
+      scheduleDraw();
+
+      if (progress < 1) {
+        handoffFrameRef.current = window.requestAnimationFrame(animateHandoff);
+        return;
+      }
+
+      handoffFrameRef.current = undefined;
+      handoffRef.current = undefined;
+    };
+
+    handoffFrameRef.current = window.requestAnimationFrame(animateHandoff);
+  }, [cancelHandoff, scheduleDraw]);
 
   const stopIdle = useCallback((reset = true) => {
     const wasIdle = phaseRef.current === 'idle';
@@ -226,10 +405,14 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       const elapsed = now - startedAt;
       const angle = (elapsed / idlePeriod) * Math.PI * 2;
       const intensity = Math.min(elapsed / 1000, 1) * 0.3;
-      const x = bounds.width / 2 + Math.sin(angle * 2) * bounds.width * 0.18;
-      const y = bounds.height / 2 + Math.sin(angle * 3 + Math.PI / 2) * bounds.height * 0.16;
+      const orbitRadius = Math.min(bounds.width, bounds.height) * 0.3;
+      const x = bounds.width / 2 + Math.sin(angle * 2) * orbitRadius;
+      const y = bounds.height / 2 + Math.sin(angle * 3 + Math.PI / 2) * orbitRadius;
+      const waveProgress = (elapsed % idleWavePeriod) / idleWavePeriod;
+      const waveRadius = waveProgress * Math.hypot(bounds.width, bounds.height) * 0.75;
+      const waveWidth = clamp(Math.min(bounds.width, bounds.height) * 0.1, 52, 100);
 
-      moveField(x, y, false, intensity);
+      moveField(x, y, false, intensity, 'idle', waveRadius, waveWidth);
       idleFrameRef.current = window.requestAnimationFrame(animateIdle);
     };
 
@@ -245,10 +428,11 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   }, [shouldReduceMotion, startIdle]);
 
   const startDecode = useCallback(() => {
-    if (!ascii || decodeCompleteRef.current) return;
+    if (!ascii || decodeCompleteRef.current || decodeStartedRef.current) return;
+    decodeStartedRef.current = true;
     if (decodeFrameRef.current !== undefined) window.cancelAnimationFrame(decodeFrameRef.current);
 
-    if (shouldReduceMotion) {
+    if (shouldReduceMotion || decodePlayedThisPage) {
       decodeCompleteRef.current = true;
       phaseRef.current = 'live';
       setPhase('live');
@@ -257,10 +441,13 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       return;
     }
 
+    decodePlayedThisPage = true;
+    decodeLockTimesRef.current.clear();
     phaseRef.current = 'decoding';
     setPhase('decoding');
     const startedAt = window.performance.now();
     const columnCount = Math.max(...ascii.split('\n').map((line) => line.length));
+    const sweepDuration = decodeDuration - 240;
 
     const animateDecode = (now: number) => {
       const elapsed = now - startedAt;
@@ -268,13 +455,16 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
 
       glyphNodesRef.current.forEach((node, index) => {
         const rowJitter = ((node.row * 47) % 241) - 120;
-        const lockAt = 180 + (node.column / Math.max(columnCount - 1, 1)) * 980 + rowJitter;
-        const sinceLock = elapsed - lockAt;
+        const sweepStart = 120 + rowJitter;
+        const sweepProgress = decodeEase((elapsed - sweepStart) / sweepDuration);
+        const columnProgress = node.column / Math.max(columnCount - 1, 1);
+        const isLocked = elapsed >= sweepStart && sweepProgress >= columnProgress;
+        let lockAt = decodeLockTimesRef.current.get(node.element);
 
         node.element.style.transition = 'none';
         node.element.style.transform = 'translate3d(0, 0, 0) scale(1)';
 
-        if (sinceLock < 0) {
+        if (!isLocked) {
           const noiseIndex = (index * 7 + noiseFrame * 3) % characters.length;
           node.element.textContent = characters[noiseIndex];
           node.element.style.color = 'rgb(var(--color-text-muted))';
@@ -282,6 +472,11 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
           return;
         }
 
+        if (lockAt === undefined) {
+          lockAt = elapsed;
+          decodeLockTimesRef.current.set(node.element, lockAt);
+        }
+        const sinceLock = elapsed - lockAt;
         node.element.textContent = node.source;
         node.element.style.color = sinceLock < 150
           ? 'rgb(var(--color-accent))'
@@ -330,7 +525,11 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
         velocityX: 0,
         velocityY: 0,
         intensity: 0,
+        mode: 'live',
+        waveRadius: 0,
+        waveWidth: 0,
         time: window.performance.now(),
+        blendProgress: 1,
       };
     });
     observer.observe(stage);
@@ -358,7 +557,9 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       stageVisibleRef.current = entry.isIntersecting;
       if (!entry.isIntersecting) {
         if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+        cancelHandoff();
         stopIdle();
+        resetField();
         return;
       }
       scheduleIdle();
@@ -366,14 +567,16 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
 
     observer.observe(stage);
     return () => observer.disconnect();
-  }, [scheduleIdle, stopIdle]);
+  }, [cancelHandoff, resetField, scheduleIdle, stopIdle]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       documentVisibleRef.current = !document.hidden;
       if (document.hidden) {
         if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+        cancelHandoff();
         stopIdle();
+        resetField();
         return;
       }
       scheduleIdle();
@@ -381,17 +584,20 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [scheduleIdle, stopIdle]);
+  }, [cancelHandoff, resetField, scheduleIdle, stopIdle]);
 
   useEffect(() => () => {
     if (drawFrameRef.current !== undefined) window.cancelAnimationFrame(drawFrameRef.current);
     if (decodeFrameRef.current !== undefined) window.cancelAnimationFrame(decodeFrameRef.current);
     if (idleFrameRef.current !== undefined) window.cancelAnimationFrame(idleFrameRef.current);
+    if (handoffFrameRef.current !== undefined) window.cancelAnimationFrame(handoffFrameRef.current);
     if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+    handoffRef.current = undefined;
     resetField();
   }, [resetField]);
 
   const beginInteraction = useCallback((x: number, y: number, trackVelocity: boolean) => {
+    const idleSource = phaseRef.current === 'idle' ? fieldSource(pointerRef.current) : undefined;
     if (decodeFrameRef.current !== undefined) {
       window.cancelAnimationFrame(decodeFrameRef.current);
       decodeFrameRef.current = undefined;
@@ -411,9 +617,13 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
     phaseRef.current = 'live';
     setPhase('live');
     lastInteractionRef.current = window.performance.now();
-    moveField(x, y, trackVelocity, 1);
+    if (idleSource) {
+      startHandoff(idleSource, x, y, trackVelocity);
+    } else {
+      moveField(x, y, trackVelocity, 1);
+    }
     scheduleIdle();
-  }, [moveField, scheduleIdle, stopIdle]);
+  }, [moveField, scheduleIdle, startHandoff, stopIdle]);
 
   const updatePointer = (event: React.PointerEvent<HTMLButtonElement>) => {
     const bounds = stageRef.current?.getBoundingClientRect();
@@ -428,6 +638,7 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   };
 
   const deactivateField = () => {
+    cancelHandoff();
     resetField();
   };
 
