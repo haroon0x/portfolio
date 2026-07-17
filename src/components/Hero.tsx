@@ -12,7 +12,7 @@ export default function Hero() {
   return (
     <section id="hero" className="safe-x relative mx-auto flex min-h-[100svh] max-w-[96rem] items-center pt-28 sm:px-8 sm:pt-32 lg:px-12">
       <div className="w-full border-b border-border pb-14 pt-10 sm:pb-20 lg:pb-24 lg:pt-12">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(25rem,0.8fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8 xl:gap-x-20">
+        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(30rem,1.05fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-8 xl:gap-x-12">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}

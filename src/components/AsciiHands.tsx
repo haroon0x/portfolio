@@ -32,7 +32,21 @@ function renderAscii(image: HTMLImageElement) {
     lines.push(line.trimEnd());
   }
 
-  return lines.join('\n');
+  let left = columns;
+  let right = 0;
+
+  for (const line of lines) {
+    const first = line.search(/\S/);
+    if (first === -1) continue;
+    left = Math.min(left, first);
+    right = Math.max(right, line.length - 1);
+  }
+
+  if (left > right) return '';
+  left = Math.max(0, left - 1);
+  right = Math.min(columns - 1, right + 1);
+
+  return lines.map((line) => line.padEnd(columns).slice(left, right + 1).trimEnd()).join('\n');
 }
 
 export default function AsciiHands({ onExplore }: AsciiHandsProps) {
@@ -45,7 +59,7 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   const smoothX = useSpring(pointerX, { stiffness: 260, damping: 28, mass: 0.55 });
   const smoothY = useSpring(pointerY, { stiffness: 260, damping: 28, mass: 0.55 });
   const probeTransform = useMotionTemplate`translate3d(${smoothX}px, ${smoothY}px, 0) translate(-50%, -50%)`;
-  const probeMask = useMotionTemplate`radial-gradient(circle 5rem at ${smoothX}px ${smoothY}px, black 0%, black 24%, transparent 72%)`;
+  const probeMask = useMotionTemplate`radial-gradient(circle 7rem at ${smoothX}px ${smoothY}px, black 0%, black 24%, transparent 72%)`;
 
   useEffect(() => {
     const image = new Image();
@@ -80,12 +94,8 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.75, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-      className="mx-auto w-full max-w-[35rem]"
+      className="mx-auto w-full max-w-none lg:-my-10"
     >
-      <div className="mb-3 flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.18em] text-text-muted">
-        <span>Human / machine</span>
-        <span className="text-accent">ASCII signal</span>
-      </div>
       <button
         ref={stageRef}
         type="button"
@@ -94,12 +104,8 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
         onPointerMove={updatePointer}
         onPointerEnter={() => !shouldReduceMotion && setIsActive(true)}
         onPointerLeave={() => setIsActive(false)}
-        className="ascii-hand-stage group relative flex aspect-[4/5] w-full items-center justify-center focus-visible:outline-offset-8"
+        className="ascii-hand-stage relative flex h-[34rem] w-full cursor-crosshair items-center justify-center focus-visible:outline-offset-8 sm:h-[40rem] lg:h-[min(72svh,48rem)] lg:min-h-[42rem]"
       >
-        <span className="absolute left-0 top-0 h-3 w-3 border-l border-t border-border transition-colors duration-200 group-hover:border-accent" />
-        <span className="absolute right-0 top-0 h-3 w-3 border-r border-t border-border transition-colors duration-200 group-hover:border-accent" />
-        <span className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-border transition-colors duration-200 group-hover:border-accent" />
-        <span className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-border transition-colors duration-200 group-hover:border-accent" />
         <pre aria-hidden="true" className="ascii-hand-art text-text-secondary">{ascii}</pre>
         <motion.pre
           aria-hidden="true"
@@ -115,16 +121,12 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
           style={{ transform: probeTransform }}
           animate={{ opacity: isActive ? 1 : 0 }}
           transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-          className="pointer-events-none absolute left-0 top-0 h-5 w-5 rounded-full border border-accent"
+          className="pointer-events-none absolute left-0 top-0 h-7 w-7 rounded-full border border-accent"
         >
-          <span className="absolute left-1/2 top-1/2 h-px w-9 -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
-          <span className="absolute left-1/2 top-1/2 h-9 w-px -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
+          <span className="absolute left-1/2 top-1/2 h-px w-14 -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
+          <span className="absolute left-1/2 top-1/2 h-14 w-px -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
         </motion.span>
       </button>
-      <div className="mt-3 flex items-center justify-between font-mono text-[0.56rem] uppercase tracking-[0.16em] text-text-muted">
-        <span>Move to inspect</span>
-        <span>Click to enter work ↘</span>
-      </div>
     </motion.div>
   );
 }

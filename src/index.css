@@ -94,7 +94,7 @@
 
 .ascii-hand-stage {
   container-type: inline-size;
-  background: radial-gradient(circle at 50% 50%, rgb(var(--color-accent) / 0.055), transparent 44%);
+  background: radial-gradient(circle at 50% 50%, rgb(var(--color-accent) / 0.075), transparent 48%);
 }
 
 .ascii-hand-art {
@@ -102,12 +102,12 @@
   width: max-content;
   max-width: none;
   overflow: visible;
-  font-size: clamp(0.52rem, 2.35cqw, 0.78rem);
+  font-size: clamp(0.75rem, 1.1vw, 1.05rem);
   font-variant-ligatures: none;
   letter-spacing: 0;
-  line-height: 0.82;
+  line-height: 0.78;
   text-align: left;
-  transform: scaleX(1.24);
+  transform: scaleX(1.75);
   transform-origin: center;
   user-select: none;
   white-space: pre;
