@@ -1,4 +1,4 @@
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
 interface AsciiHandsProps {
@@ -14,6 +14,7 @@ interface PointerSample {
   y: number;
   velocityX: number;
   velocityY: number;
+  intensity: number;
   time: number;
 }
 
@@ -23,6 +24,12 @@ interface GlyphNode {
   column: number;
   source: string;
 }
+
+type FieldPhase = 'loading' | 'decoding' | 'live' | 'idle';
+
+const decodeDuration = 1400;
+const idleDelay = 4000;
+const idlePeriod = 14000;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(maximum, Math.max(minimum, value));
 
@@ -71,18 +78,19 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   const fieldRef = useRef<HTMLPreElement>(null);
   const glyphNodesRef = useRef<GlyphNode[]>([]);
   const activeGlyphsRef = useRef<Set<GlyphNode>>(new Set());
-  const frameRef = useRef<number>();
-  const pointerRef = useRef<PointerSample>({ x: 0, y: 0, velocityX: 0, velocityY: 0, time: 0 });
+  const drawFrameRef = useRef<number>();
+  const decodeFrameRef = useRef<number>();
+  const idleFrameRef = useRef<number>();
+  const idleTimeoutRef = useRef<number>();
+  const pointerRef = useRef<PointerSample>({ x: 0, y: 0, velocityX: 0, velocityY: 0, intensity: 1, time: 0 });
+  const phaseRef = useRef<FieldPhase>('loading');
+  const decodeCompleteRef = useRef(false);
+  const stageVisibleRef = useRef(true);
+  const documentVisibleRef = useRef(!document.hidden);
+  const lastInteractionRef = useRef(0);
   const [ascii, setAscii] = useState('');
-  const [isActive, setIsActive] = useState(false);
+  const [phase, setPhase] = useState<FieldPhase>('loading');
   const shouldReduceMotion = useReducedMotion();
-  const pointerX = useMotionValue(0);
-  const pointerY = useMotionValue(0);
-  const smoothX = useSpring(pointerX, { stiffness: 260, damping: 28, mass: 0.55 });
-  const smoothY = useSpring(pointerY, { stiffness: 260, damping: 28, mass: 0.55 });
-  const probePositionX = shouldReduceMotion ? pointerX : smoothX;
-  const probePositionY = shouldReduceMotion ? pointerY : smoothY;
-  const probeTransform = useMotionTemplate`translate3d(${probePositionX}px, ${probePositionY}px, 0) translate(-50%, -50%)`;
 
   const drawField = useCallback(() => {
     const stage = stageRef.current;
@@ -114,17 +122,17 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       const strength = 1 - distance / radius;
       const directionX = distance > 0 ? deltaX / distance : 0;
       const directionY = distance > 0 ? deltaY / distance : 0;
-      const push = shouldReduceMotion ? 0 : 3 + Math.pow(strength, 1.7) * 15;
-      const velocityOffsetX = shouldReduceMotion ? 0 : clamp(pointer.velocityX * -0.003, -6, 6) * strength;
-      const velocityOffsetY = shouldReduceMotion ? 0 : clamp(pointer.velocityY * -0.003, -6, 6) * strength;
-      const growth = shouldReduceMotion ? 1 : 1 + strength * 0.46;
+      const push = shouldReduceMotion ? 0 : (3 + Math.pow(strength, 1.7) * 15) * pointer.intensity;
+      const velocityOffsetX = shouldReduceMotion ? 0 : clamp(pointer.velocityX * -0.003, -6, 6) * strength * pointer.intensity;
+      const velocityOffsetY = shouldReduceMotion ? 0 : clamp(pointer.velocityY * -0.003, -6, 6) * strength * pointer.intensity;
+      const growth = shouldReduceMotion ? 1 : 1 + strength * 0.46 * pointer.intensity;
       const sourceIndex = characters.indexOf(node.source);
-      const glyphIndex = clamp(sourceIndex + Math.round(strength * 2), 1, characters.length - 1);
+      const glyphIndex = clamp(sourceIndex + Math.round(strength * 2 * pointer.intensity), 1, characters.length - 1);
       const offsetX = (directionX * push + velocityOffsetX) / horizontalScale;
       const offsetY = (directionY * push + velocityOffsetY) / verticalScale;
 
       node.element.style.transition = 'none';
-      node.element.style.opacity = String(0.24 + Math.pow(strength, 0.72) * 0.76);
+      node.element.style.opacity = String((0.24 + Math.pow(strength, 0.72) * 0.76) * pointer.intensity);
       node.element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${growth})`;
       node.element.textContent = characters[glyphIndex] ?? node.source;
       nextActiveGlyphs.add(node);
@@ -152,14 +160,14 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   }, []);
 
   const scheduleDraw = useCallback(() => {
-    if (frameRef.current !== undefined) window.cancelAnimationFrame(frameRef.current);
-    frameRef.current = window.requestAnimationFrame(() => {
-      frameRef.current = undefined;
+    if (drawFrameRef.current !== undefined) window.cancelAnimationFrame(drawFrameRef.current);
+    drawFrameRef.current = window.requestAnimationFrame(() => {
+      drawFrameRef.current = undefined;
       drawField();
     });
   }, [drawField]);
 
-  const moveField = useCallback((x: number, y: number, trackVelocity: boolean) => {
+  const moveField = useCallback((x: number, y: number, trackVelocity: boolean, intensity = 1) => {
     const now = window.performance.now();
     const previous = pointerRef.current;
     const elapsed = Math.max(now - previous.time, 16);
@@ -169,12 +177,140 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       y,
       velocityX: trackVelocity && previous.time ? ((x - previous.x) / elapsed) * 1000 : 0,
       velocityY: trackVelocity && previous.time ? ((y - previous.y) / elapsed) * 1000 : 0,
+      intensity,
       time: now,
     };
-    pointerX.set(x);
-    pointerY.set(y);
     scheduleDraw();
-  }, [pointerX, pointerY, scheduleDraw]);
+  }, [scheduleDraw]);
+
+  const stopIdle = useCallback((reset = true) => {
+    const wasIdle = phaseRef.current === 'idle';
+    if (idleFrameRef.current !== undefined) {
+      window.cancelAnimationFrame(idleFrameRef.current);
+      idleFrameRef.current = undefined;
+    }
+    if (wasIdle && drawFrameRef.current !== undefined) {
+      window.cancelAnimationFrame(drawFrameRef.current);
+      drawFrameRef.current = undefined;
+    }
+    if (wasIdle) {
+      phaseRef.current = 'live';
+      setPhase('live');
+      if (reset) resetField();
+    }
+  }, [resetField]);
+
+  const startIdle = useCallback(() => {
+    if (
+      shouldReduceMotion
+      || !decodeCompleteRef.current
+      || !stageVisibleRef.current
+      || !documentVisibleRef.current
+    ) return;
+
+    stopIdle(false);
+    phaseRef.current = 'idle';
+    setPhase('idle');
+    const startedAt = window.performance.now();
+
+    const animateIdle = (now: number) => {
+      if (
+        phaseRef.current !== 'idle'
+        || !stageVisibleRef.current
+        || !documentVisibleRef.current
+      ) return;
+
+      const stage = stageRef.current;
+      if (!stage) return;
+      const bounds = stage.getBoundingClientRect();
+      const elapsed = now - startedAt;
+      const angle = (elapsed / idlePeriod) * Math.PI * 2;
+      const intensity = Math.min(elapsed / 1000, 1) * 0.3;
+      const x = bounds.width / 2 + Math.sin(angle * 2) * bounds.width * 0.18;
+      const y = bounds.height / 2 + Math.sin(angle * 3 + Math.PI / 2) * bounds.height * 0.16;
+
+      moveField(x, y, false, intensity);
+      idleFrameRef.current = window.requestAnimationFrame(animateIdle);
+    };
+
+    idleFrameRef.current = window.requestAnimationFrame(animateIdle);
+  }, [moveField, shouldReduceMotion, stopIdle]);
+
+  const scheduleIdle = useCallback(() => {
+    if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+    if (shouldReduceMotion || !decodeCompleteRef.current) return;
+
+    const elapsed = window.performance.now() - lastInteractionRef.current;
+    idleTimeoutRef.current = window.setTimeout(startIdle, Math.max(0, idleDelay - elapsed));
+  }, [shouldReduceMotion, startIdle]);
+
+  const startDecode = useCallback(() => {
+    if (!ascii || decodeCompleteRef.current) return;
+    if (decodeFrameRef.current !== undefined) window.cancelAnimationFrame(decodeFrameRef.current);
+
+    if (shouldReduceMotion) {
+      decodeCompleteRef.current = true;
+      phaseRef.current = 'live';
+      setPhase('live');
+      lastInteractionRef.current = window.performance.now();
+      scheduleIdle();
+      return;
+    }
+
+    phaseRef.current = 'decoding';
+    setPhase('decoding');
+    const startedAt = window.performance.now();
+    const columnCount = Math.max(...ascii.split('\n').map((line) => line.length));
+
+    const animateDecode = (now: number) => {
+      const elapsed = now - startedAt;
+      const noiseFrame = Math.floor(elapsed / 55);
+
+      glyphNodesRef.current.forEach((node, index) => {
+        const rowJitter = ((node.row * 47) % 241) - 120;
+        const lockAt = 180 + (node.column / Math.max(columnCount - 1, 1)) * 980 + rowJitter;
+        const sinceLock = elapsed - lockAt;
+
+        node.element.style.transition = 'none';
+        node.element.style.transform = 'translate3d(0, 0, 0) scale(1)';
+
+        if (sinceLock < 0) {
+          const noiseIndex = (index * 7 + noiseFrame * 3) % characters.length;
+          node.element.textContent = characters[noiseIndex];
+          node.element.style.color = 'rgb(var(--color-text-muted))';
+          node.element.style.opacity = String(0.18 + ((index + noiseFrame) % 4) * 0.06);
+          return;
+        }
+
+        node.element.textContent = node.source;
+        node.element.style.color = sinceLock < 150
+          ? 'rgb(var(--color-accent))'
+          : 'rgb(var(--color-text-secondary))';
+        node.element.style.opacity = String(Math.min(0.5 + sinceLock / 220, 1));
+      });
+
+      if (elapsed < decodeDuration) {
+        decodeFrameRef.current = window.requestAnimationFrame(animateDecode);
+        return;
+      }
+
+      decodeFrameRef.current = undefined;
+      decodeCompleteRef.current = true;
+      phaseRef.current = 'live';
+      setPhase('live');
+      glyphNodesRef.current.forEach((node) => {
+        node.element.style.removeProperty('transition');
+        node.element.style.removeProperty('color');
+        node.element.style.opacity = '0';
+        node.element.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        node.element.textContent = node.source;
+      });
+      lastInteractionRef.current = window.performance.now();
+      scheduleIdle();
+    };
+
+    decodeFrameRef.current = window.requestAnimationFrame(animateDecode);
+  }, [ascii, scheduleIdle, shouldReduceMotion]);
 
   useEffect(() => {
     const image = new Image();
@@ -188,11 +324,18 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
     if (!stage) return;
 
     const observer = new ResizeObserver(([entry]) => {
-      moveField(entry.contentRect.width / 2, entry.contentRect.height / 2, false);
+      pointerRef.current = {
+        x: entry.contentRect.width / 2,
+        y: entry.contentRect.height / 2,
+        velocityX: 0,
+        velocityY: 0,
+        intensity: 0,
+        time: window.performance.now(),
+      };
     });
     observer.observe(stage);
     return () => observer.disconnect();
-  }, [moveField]);
+  }, []);
 
   useEffect(() => {
     const field = fieldRef.current;
@@ -204,33 +347,87 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       column: Number(element.dataset.column),
       source: element.dataset.asciiGlyph ?? '',
     }));
-    scheduleDraw();
-  }, [ascii, scheduleDraw]);
+    startDecode();
+  }, [ascii, startDecode]);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      stageVisibleRef.current = entry.isIntersecting;
+      if (!entry.isIntersecting) {
+        if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+        stopIdle();
+        return;
+      }
+      scheduleIdle();
+    }, { threshold: 0.05 });
+
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, [scheduleIdle, stopIdle]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      documentVisibleRef.current = !document.hidden;
+      if (document.hidden) {
+        if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+        stopIdle();
+        return;
+      }
+      scheduleIdle();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [scheduleIdle, stopIdle]);
 
   useEffect(() => () => {
-    if (frameRef.current !== undefined) {
-      window.cancelAnimationFrame(frameRef.current);
-      frameRef.current = undefined;
-    }
+    if (drawFrameRef.current !== undefined) window.cancelAnimationFrame(drawFrameRef.current);
+    if (decodeFrameRef.current !== undefined) window.cancelAnimationFrame(decodeFrameRef.current);
+    if (idleFrameRef.current !== undefined) window.cancelAnimationFrame(idleFrameRef.current);
+    if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
     resetField();
   }, [resetField]);
+
+  const beginInteraction = useCallback((x: number, y: number, trackVelocity: boolean) => {
+    if (decodeFrameRef.current !== undefined) {
+      window.cancelAnimationFrame(decodeFrameRef.current);
+      decodeFrameRef.current = undefined;
+    }
+    if (!decodeCompleteRef.current) {
+      decodeCompleteRef.current = true;
+      glyphNodesRef.current.forEach((node) => {
+        node.element.style.removeProperty('transition');
+        node.element.style.removeProperty('color');
+        node.element.style.opacity = '0';
+        node.element.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        node.element.textContent = node.source;
+      });
+    }
+    if (idleTimeoutRef.current !== undefined) window.clearTimeout(idleTimeoutRef.current);
+    stopIdle(false);
+    phaseRef.current = 'live';
+    setPhase('live');
+    lastInteractionRef.current = window.performance.now();
+    moveField(x, y, trackVelocity, 1);
+    scheduleIdle();
+  }, [moveField, scheduleIdle, stopIdle]);
 
   const updatePointer = (event: React.PointerEvent<HTMLButtonElement>) => {
     const bounds = stageRef.current?.getBoundingClientRect();
     if (!bounds) return;
-    moveField(event.clientX - bounds.left, event.clientY - bounds.top, event.pointerType !== 'touch');
-    setIsActive(true);
+    beginInteraction(event.clientX - bounds.left, event.clientY - bounds.top, event.pointerType !== 'touch');
   };
 
   const activateFromKeyboard = () => {
     const bounds = stageRef.current?.getBoundingClientRect();
     if (!bounds) return;
-    moveField(bounds.width / 2, bounds.height / 2, false);
-    setIsActive(true);
+    beginInteraction(bounds.width / 2, bounds.height / 2, false);
   };
 
   const deactivateField = () => {
-    setIsActive(false);
     resetField();
   };
 
@@ -244,6 +441,7 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
       <button
         ref={stageRef}
         type="button"
+        data-field-phase={phase}
         aria-label="Explore selected work"
         onClick={onExplore}
         onFocus={activateFromKeyboard}
@@ -257,9 +455,14 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
           if (event.pointerType !== 'touch') return;
           deactivateField();
         }}
-        className="ascii-hand-stage relative flex h-[34rem] w-full cursor-crosshair items-center justify-center focus-visible:outline-offset-8 sm:h-[40rem] lg:h-[min(72svh,48rem)] lg:min-h-[42rem]"
+        className="ascii-hand-stage relative flex h-[34rem] w-full cursor-pointer items-center justify-center focus-visible:outline-offset-8 sm:h-[40rem] lg:h-[min(72svh,48rem)] lg:min-h-[42rem]"
       >
-        <pre aria-hidden="true" className="ascii-hand-art text-text-secondary">{ascii}</pre>
+        <pre
+          aria-hidden="true"
+          className={`ascii-hand-art text-text-secondary transition-opacity duration-200 ease-out ${phase === 'loading' || phase === 'decoding' ? 'opacity-0' : 'opacity-100'}`}
+        >
+          {ascii}
+        </pre>
         <pre
           ref={fieldRef}
           aria-hidden="true"
@@ -282,21 +485,8 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
             </Fragment>
           ))}
         </pre>
-        <motion.span
-          aria-hidden="true"
-          style={{ transform: probeTransform }}
-          animate={{ opacity: isActive ? 1 : 0 }}
-          transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-          className="pointer-events-none absolute left-0 top-0 flex h-28 w-28 items-center justify-center rounded-full border border-accent/25 bg-accent/[0.025]"
-        >
-          <span className="relative h-7 w-7 rounded-full border border-accent">
-            <span className="absolute left-1/2 top-1/2 h-px w-14 -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
-            <span className="absolute left-1/2 top-1/2 h-14 w-px -translate-x-1/2 -translate-y-1/2 bg-accent/65" />
-          </span>
-        </motion.span>
-        <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-5 hidden items-center justify-between font-mono text-[0.58rem] uppercase tracking-[0.18em] text-text-muted sm:flex">
-          <span>ASCII field / live</span>
-          <span>Move to distort · Click to explore</span>
+        <span aria-hidden="true" className="pointer-events-none absolute left-0 top-5 hidden font-mono text-[0.58rem] uppercase tracking-[0.18em] text-text-muted sm:block">
+          ASCII field / live
         </span>
       </button>
     </motion.div>

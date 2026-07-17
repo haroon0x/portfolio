@@ -16,7 +16,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE }}
+            transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             className="lg:col-start-1 lg:row-start-1"
           >
             <p className="mb-8 flex items-center gap-3 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-text-muted sm:mb-10">
