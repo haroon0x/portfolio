@@ -14,6 +14,27 @@ if (GITHUB_TOKEN) {
   headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
 }
 
+function isOwnedRepository(repo) {
+  return repo.split('/')[0]?.toLowerCase() === GITHUB_AUTHOR.toLowerCase();
+}
+
+function withExternalRepositoriesOnly(data) {
+  const prs = (data.prs ?? []).filter((pr) => !isOwnedRepository(pr.repo));
+
+  return {
+    ...data,
+    prs,
+    total: prs.length,
+    open: prs.filter((pr) => pr.status === 'Open').length,
+    merged: prs.filter((pr) => pr.status === 'Merged').length,
+  };
+}
+
+function isExternalSearchResult(item) {
+  const segments = new URL(item.repository_url).pathname.split('/').filter(Boolean);
+  return segments[0] === 'repos' && segments[1]?.toLowerCase() !== GITHUB_AUTHOR.toLowerCase();
+}
+
 function readExistingData() {
   try {
     if (fs.existsSync(outputPath)) {
@@ -24,6 +45,11 @@ function readExistingData() {
   }
 
   return null;
+}
+
+function retainExistingData(data, message) {
+  console.error(message);
+  fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
 }
 
 async function githubRequest(url) {
@@ -43,9 +69,9 @@ async function discoverPullRequests() {
     const query = encodeURIComponent(`type:pr author:${GITHUB_AUTHOR}`);
     const url = `https://api.github.com/search/issues?q=${query}&sort=created&order=desc&per_page=100&page=${page}`;
     const data = await githubRequest(url);
-    items.push(...data.items.filter((item) => item.pull_request?.url));
+    items.push(...data.items.filter((item) => item.pull_request?.url && isExternalSearchResult(item)));
 
-    if (data.items.length < 100 || items.length >= Math.min(data.total_count, 1000)) {
+    if (data.items.length < 100 || page * 100 >= Math.min(data.total_count, 1000)) {
       break;
     }
   }
@@ -86,7 +112,8 @@ async function fetchPRs() {
   console.log(`Discovering public pull requests authored by ${GITHUB_AUTHOR}...`);
   if (GITHUB_TOKEN) console.log('Using GitHub token for authenticated requests.');
 
-  const existingData = readExistingData();
+  const storedData = readExistingData();
+  const existingData = storedData ? withExternalRepositoriesOnly(storedData) : null;
   const cachedByUrl = new Map((existingData?.prs ?? []).map((pr) => [pr.url, pr]));
   let discovered;
 
@@ -94,7 +121,7 @@ async function fetchPRs() {
     discovered = await discoverPullRequests();
   } catch (error) {
     if (existingData) {
-      console.error(`${error.message}. Retaining cached PR data.`);
+      retainExistingData(existingData, `${error.message}. Retaining cached PR data.`);
       return;
     }
     throw error;
@@ -102,7 +129,7 @@ async function fetchPRs() {
 
   if (discovered.length === 0) {
     if (existingData) {
-      console.error('GitHub returned no pull requests. Retaining cached PR data.');
+      retainExistingData(existingData, 'GitHub returned no pull requests. Retaining cached PR data.');
       return;
     }
     throw new Error(`No public pull requests found for ${GITHUB_AUTHOR}.`);
@@ -151,15 +178,17 @@ async function fetchPRs() {
     }
   });
 
-  const validPRs = prs.filter(Boolean);
+  const fetchedPRs = prs.filter(Boolean);
 
-  if (validPRs.length !== discovered.length) {
+  if (fetchedPRs.length !== discovered.length) {
     if (existingData) {
-      console.error(`Fetched ${validPRs.length} of ${discovered.length} pull requests. Retaining cached PR data.`);
+      retainExistingData(existingData, `Fetched ${fetchedPRs.length} of ${discovered.length} pull requests. Retaining cached PR data.`);
       return;
     }
-    throw new Error(`Fetched ${validPRs.length} of ${discovered.length} pull requests.`);
+    throw new Error(`Fetched ${fetchedPRs.length} of ${discovered.length} pull requests.`);
   }
+
+  const validPRs = fetchedPRs.filter((pr) => !isOwnedRepository(pr.repo));
 
   const output = {
     prs: validPRs,
@@ -169,8 +198,8 @@ async function fetchPRs() {
     merged: validPRs.filter((pr) => pr.status === 'Merged').length,
   };
 
-  if (existingData) {
-    const previous = { ...existingData, lastUpdated: '' };
+  if (storedData) {
+    const previous = { ...storedData, lastUpdated: '' };
     const current = { ...output, lastUpdated: '' };
     if (JSON.stringify(previous) === JSON.stringify(current)) {
       console.log('No changes detected.');

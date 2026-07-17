@@ -1,21 +1,6 @@
 {
   "prs": [
     {
-      "title": "feat: implement plan 001 — dark Linear-style redesign",
-      "repo": "haroon0x/portfolio",
-      "url": "https://github.com/haroon0x/portfolio/pull/1",
-      "description": "Complete 9-phase implementation of the dark Linear aesthetic: - Phase A: Token foundation (single palette, fluid type scale, motion tokens) - Phase B: Remove dead theme system (...",
-      "status": "Merged",
-      "date": "Jul 11, 2026",
-      "additions": 2356,
-      "deletions": 534,
-      "languages": [
-        "TypeScript",
-        "JavaScript",
-        "HTML"
-      ]
-    },
-    {
       "title": "fix(tools): coerce limit/offset in ai-sdk schemas",
       "repo": "supermemoryai/supermemory",
       "url": "https://github.com/supermemoryai/supermemory/pull/1202",
@@ -161,21 +146,6 @@
         "Python",
         "Rust",
         "TypeScript"
-      ]
-    },
-    {
-      "title": "Validate repository name format in get_branch_list() and check_public_repo()",
-      "repo": "haroon0x/potpie",
-      "url": "https://github.com/haroon0x/potpie/pull/1",
-      "description": "## Summary Adds input validation to `get_branch_list()` and `check_public_repo()` in `GithubService` to ensure the `repo_name` parameter follows GitHub's `owner/repo` naming con...",
-      "status": "Closed",
-      "date": "May 4, 2026",
-      "additions": 258,
-      "deletions": 1,
-      "languages": [
-        "Python",
-        "Rust",
-        "Tree-sitter Query"
       ]
     },
     {
@@ -539,126 +509,6 @@
       ]
     },
     {
-      "title": "feat: Implement Kestra SSE streaming for real-time execution and log …",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/44",
-      "description": "…updates, add new dashboard components, and refactor Kestra client and API interactions. <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by...",
-      "status": "Merged",
-      "date": "Dec 14, 2025",
-      "additions": 3283,
-      "deletions": 1600,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "Kestra end to end integration with the frontend and backend",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/37",
-      "description": "#19 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Security scan reports now display in a multi-tab int...",
-      "status": "Merged",
-      "date": "Dec 12, 2025",
-      "additions": 336,
-      "deletions": 40,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "fix build fail",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/36",
-      "description": "<!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **Chores** * Updated scroll animation library to the latest stable version....",
-      "status": "Merged",
-      "date": "Dec 12, 2025",
-      "additions": 208,
-      "deletions": 311,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "Revamp frontend",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/35",
-      "description": "<!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit ## Release Notes * **New Features** * Integrated Kestra workflow orchestratio...",
-      "status": "Merged",
-      "date": "Dec 11, 2025",
-      "additions": 3782,
-      "deletions": 1048,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "Implement Kestra workflow integration ",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/30",
-      "description": "Fixes #19 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Trigger scans from the UI/API and monitor exec...",
-      "status": "Merged",
-      "date": "Dec 10, 2025",
-      "additions": 2146,
-      "deletions": 841,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "feat: add Docker and Kestra orchestration setup",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/11",
-      "description": "Fix #12 , #13 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **New Features** * Containerization: multi-stage Docker image...",
-      "status": "Merged",
-      "date": "Dec 9, 2025",
-      "additions": 147,
-      "deletions": 284,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "fix(frontend): resolve lint errors",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/10",
-      "description": "Fixes #9 <!-- This is an auto-generated comment: release notes by coderabbit.ai --> ## Summary by CodeRabbit * **Chores** * Removed unused component dependencies and imports fro...",
-      "status": "Merged",
-      "date": "Dec 9, 2025",
-      "additions": 5,
-      "deletions": 5,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
-      "title": "feat: implement FastAPI backend with modular agent architecture",
-      "repo": "haroon0x/RedLoop",
-      "url": "https://github.com/haroon0x/RedLoop/pull/8",
-      "description": "Fixes #2 - Initialize backend/ with uv package manager - Implement AdversaryAgent for vulnerability detection - Implement DefenderAgent for patch generation - Add FastAPI endpoi...",
-      "status": "Merged",
-      "date": "Dec 9, 2025",
-      "additions": 1413,
-      "deletions": 43,
-      "languages": [
-        "TypeScript",
-        "Python",
-        "CSS"
-      ]
-    },
-    {
       "title": "Update make_perturbed_fun",
       "repo": "google-deepmind/optax",
       "url": "https://github.com/google-deepmind/optax/pull/1520",
@@ -852,21 +702,6 @@
       ]
     },
     {
-      "title": "Frontend - dashboard ui",
-      "repo": "haroon0x/Containerized-agent",
-      "url": "https://github.com/haroon0x/Containerized-agent/pull/2",
-      "description": "No description provided.",
-      "status": "Closed",
-      "date": "Sep 2, 2025",
-      "additions": 5455,
-      "deletions": 0,
-      "languages": [
-        "Python",
-        "Shell",
-        "Dockerfile"
-      ]
-    },
-    {
       "title": "Freshdesk mcp server",
       "repo": "Klavis-AI/klavis",
       "url": "https://github.com/Klavis-AI/klavis/pull/322",
@@ -879,21 +714,6 @@
         "Python",
         "Go",
         "TypeScript"
-      ]
-    },
-    {
-      "title": "Debian",
-      "repo": "haroon0x/Containerized-agent",
-      "url": "https://github.com/haroon0x/Containerized-agent/pull/1",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Jul 13, 2025",
-      "additions": 1676,
-      "deletions": 377,
-      "languages": [
-        "Python",
-        "Shell",
-        "Dockerfile"
       ]
     },
     {
@@ -1076,20 +896,6 @@
       ]
     },
     {
-      "title": "Partial Implementation of Additional Non-Linear Activation Functions (Issue #4)",
-      "repo": "haroon0x/NNFromScratch",
-      "url": "https://github.com/haroon0x/NNFromScratch/pull/7",
-      "description": "PR introduces a partial implementation of the suggested non-linear activation functions into activation.py addressing issue #4 Code Updates: - Extended the Activation abstract b...",
-      "status": "Merged",
-      "date": "Feb 25, 2025",
-      "additions": 97,
-      "deletions": 17,
-      "languages": [
-        "Jupyter Notebook",
-        "Python"
-      ]
-    },
-    {
       "title": "[DOC] Added example  for 'AlignerNaive' and 'AlignerLuckyDtw' ",
       "repo": "sktime/sktime",
       "url": "https://github.com/sktime/sktime/pull/7795",
@@ -1118,55 +924,10 @@
         "TypeScript",
         "SCSS"
       ]
-    },
-    {
-      "title": "chat history Api bug and ui changes",
-      "repo": "haroon0x/WeCode-Ai-Learning",
-      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/10",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Oct 1, 2024",
-      "additions": 76,
-      "deletions": 53,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ]
-    },
-    {
-      "title": "Resolved score card bug ",
-      "repo": "haroon0x/WeCode-Ai-Learning",
-      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/9",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Sep 30, 2024",
-      "additions": 30,
-      "deletions": 18,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ]
-    },
-    {
-      "title": "Api bug fix ",
-      "repo": "haroon0x/WeCode-Ai-Learning",
-      "url": "https://github.com/haroon0x/WeCode-Ai-Learning/pull/7",
-      "description": "No description provided.",
-      "status": "Merged",
-      "date": "Sep 29, 2024",
-      "additions": 453,
-      "deletions": 60,
-      "languages": [
-        "Python",
-        "JavaScript",
-        "CSS"
-      ]
     }
   ],
-  "lastUpdated": "2026-07-16T07:41:02.992Z",
-  "total": 78,
+  "lastUpdated": "2026-07-17T10:53:45.299Z",
+  "total": 62,
   "open": 19,
-  "merged": 30
+  "merged": 16
 }
