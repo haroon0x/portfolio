@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowDownUp, ArrowUpRight, Building2, Calendar, CheckCircle2, Circle, Filter, GitCommit, GitPullRequest, Search } from 'lucide-react';
+import { ArrowDownUp, ArrowUpRight, Building2, ChevronDown, Filter, Search } from 'lucide-react';
 import { loadPRData, type PRData, type PullRequest } from '../data/prData';
 
-type SortBy = 'status' | 'date' | 'repo';
+type SortBy = 'depth' | 'date' | 'repo';
 type SortOrder = 'asc' | 'desc';
 type FilterStatus = 'all' | 'merged' | 'open';
 
@@ -16,25 +16,37 @@ interface OrganizationSummary {
   closed: number;
 }
 
-const PAGE_SIZE = 24;
+interface RepositorySummary {
+  name: string;
+  pullRequests: number;
+  merged: number;
+  open: number;
+  closed: number;
+  latestActivity: number;
+  languages: string[];
+}
 
-const statusOrder: Record<PullRequest['status'], number> = {
-  Merged: 2,
-  Open: 1,
-  Closed: 0,
-};
+interface RepositoryGroup extends RepositorySummary {
+  prs: PullRequest[];
+}
+
+const cleanDescription = (description: string) => description
+  .replace(/#{1,6}\s*/g, '')
+  .replace(/[*_`]/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
 
 const PullRequests = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<PRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<SortBy>('status');
+  const [sortBy, setSortBy] = useState<SortBy>('depth');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const organizationParam = searchParams.get('org');
+  const repositoryParam = searchParams.get('repo');
 
   useEffect(() => {
     let active = true;
@@ -99,17 +111,52 @@ const PullRequests = () => {
     (organization) => organization.name.toLocaleLowerCase() === organizationParam?.toLocaleLowerCase(),
   ) ?? null;
 
-  const filteredPRs = useMemo(() => {
+  const organizationPRs = useMemo(() => {
     if (!data) return [];
-
-    const organizationFiltered = activeOrganization
+    return activeOrganization
       ? data.prs.filter((pr) => pr.repo.split('/')[0].toLocaleLowerCase() === activeOrganization.name.toLocaleLowerCase())
       : data.prs;
+  }, [activeOrganization, data]);
+
+  const repositories = useMemo<RepositorySummary[]>(() => {
+    const summaries = new Map<string, RepositorySummary>();
+
+    organizationPRs.forEach((pr) => {
+      const existing = summaries.get(pr.repo) ?? {
+        name: pr.repo,
+        pullRequests: 0,
+        merged: 0,
+        open: 0,
+        closed: 0,
+        latestActivity: 0,
+        languages: [],
+      };
+      existing.pullRequests += 1;
+      existing.merged += pr.status === 'Merged' ? 1 : 0;
+      existing.open += pr.status === 'Open' ? 1 : 0;
+      existing.closed += pr.status === 'Closed' ? 1 : 0;
+      existing.latestActivity = Math.max(existing.latestActivity, Date.parse(pr.date));
+      existing.languages = Array.from(new Set([...existing.languages, ...pr.languages])).slice(0, 3);
+      summaries.set(pr.repo, existing);
+    });
+
+    return Array.from(summaries.values())
+      .sort((a, b) => b.pullRequests - a.pullRequests || a.name.localeCompare(b.name));
+  }, [organizationPRs]);
+
+  const activeRepository = repositories.find(
+    (repository) => repository.name.toLocaleLowerCase() === repositoryParam?.toLocaleLowerCase(),
+  ) ?? null;
+
+  const filteredPRs = useMemo(() => {
+    const repositoryFiltered = activeRepository
+      ? organizationPRs.filter((pr) => pr.repo.toLocaleLowerCase() === activeRepository.name.toLocaleLowerCase())
+      : organizationPRs;
     const statusFiltered = filterStatus === 'all'
-      ? [...organizationFiltered]
-      : organizationFiltered.filter((pr) => pr.status.toLowerCase() === filterStatus);
+      ? [...repositoryFiltered]
+      : repositoryFiltered.filter((pr) => pr.status.toLowerCase() === filterStatus);
     const query = searchQuery.trim().toLocaleLowerCase();
-    const prs = query
+    return query
       ? statusFiltered.filter((pr) => (
           pr.title.toLocaleLowerCase().includes(query) ||
           pr.repo.toLocaleLowerCase().includes(query) ||
@@ -117,34 +164,53 @@ const PullRequests = () => {
           pr.languages.some((language) => language.toLocaleLowerCase().includes(query))
         ))
       : statusFiltered;
+  }, [activeRepository, filterStatus, organizationPRs, searchQuery]);
 
-    return prs.sort((a, b) => {
-      if (sortBy === 'status') {
-        const difference = statusOrder[a.status] - statusOrder[b.status];
-        return sortOrder === 'asc' ? difference : -difference;
-      }
+  const repositoryGroups = useMemo<RepositoryGroup[]>(() => {
+    const groups = new Map<string, RepositoryGroup>();
 
-      if (sortBy === 'date') {
-        const difference = Date.parse(a.date) - Date.parse(b.date);
-        return sortOrder === 'asc' ? difference : -difference;
-      }
-
-      const difference = a.repo.localeCompare(b.repo);
-      return sortOrder === 'asc' ? difference : -difference;
+    filteredPRs.forEach((pr) => {
+      const existing = groups.get(pr.repo) ?? {
+        name: pr.repo,
+        pullRequests: 0,
+        merged: 0,
+        open: 0,
+        closed: 0,
+        latestActivity: 0,
+        languages: [],
+        prs: [],
+      };
+      existing.prs.push(pr);
+      existing.pullRequests += 1;
+      existing.merged += pr.status === 'Merged' ? 1 : 0;
+      existing.open += pr.status === 'Open' ? 1 : 0;
+      existing.closed += pr.status === 'Closed' ? 1 : 0;
+      existing.latestActivity = Math.max(existing.latestActivity, Date.parse(pr.date));
+      existing.languages = Array.from(new Set([...existing.languages, ...pr.languages])).slice(0, 3);
+      groups.set(pr.repo, existing);
     });
-  }, [activeOrganization, data, filterStatus, searchQuery, sortBy, sortOrder]);
 
-  const visiblePRs = filteredPRs.slice(0, visibleCount);
+    const direction = sortOrder === 'asc' ? 1 : -1;
+    return Array.from(groups.values())
+      .map((group) => ({
+        ...group,
+        prs: group.prs.sort((a, b) => Date.parse(b.date) - Date.parse(a.date)),
+      }))
+      .sort((a, b) => {
+        if (sortBy === 'depth') return (a.pullRequests - b.pullRequests) * direction || a.name.localeCompare(b.name);
+        if (sortBy === 'date') return (a.latestActivity - b.latestActivity) * direction || a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name) * direction;
+      });
+  }, [filteredPRs, sortBy, sortOrder]);
 
   const toggleSort = (nextSortBy: SortBy) => {
-    setVisibleCount(PAGE_SIZE);
     if (sortBy === nextSortBy) {
       setSortOrder((currentOrder) => currentOrder === 'asc' ? 'desc' : 'asc');
       return;
     }
 
     setSortBy(nextSortBy);
-    setSortOrder(nextSortBy === 'status' ? 'desc' : 'asc');
+    setSortOrder(nextSortBy === 'repo' ? 'asc' : 'desc');
   };
 
   const sortLabel = (label: string, value: SortBy) => (
@@ -153,7 +219,6 @@ const PullRequests = () => {
 
   const selectFilter = (status: FilterStatus) => {
     setFilterStatus(status);
-    setVisibleCount(PAGE_SIZE);
   };
 
   const selectOrganization = (organization: string | null) => {
@@ -163,16 +228,70 @@ const PullRequests = () => {
     } else {
       nextParams.delete('org');
     }
+    nextParams.delete('repo');
     setSearchParams(nextParams, { replace: true });
-    setVisibleCount(PAGE_SIZE);
+  };
+
+  const selectRepository = (repository: string | null) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (repository) {
+      nextParams.set('repo', repository);
+    } else {
+      nextParams.delete('repo');
+    }
+    setSearchParams(nextParams, { replace: true });
   };
 
   const resetControls = () => {
     setFilterStatus('all');
     setSearchQuery('');
-    selectOrganization(null);
-    setVisibleCount(PAGE_SIZE);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('org');
+    nextParams.delete('repo');
+    setSearchParams(nextParams, { replace: true });
   };
+
+  const renderRepositoryIndex = () => (
+    <nav aria-label="Repository index">
+      <button
+        type="button"
+        onClick={() => selectRepository(null)}
+        aria-pressed={!activeRepository}
+        className={`flex min-h-11 w-full items-center justify-between border-b border-border px-4 text-left font-mono text-[0.62rem] uppercase tracking-[0.13em] transition-colors ${!activeRepository ? 'bg-accent-muted text-accent' : 'text-text-secondary hover:bg-surface hover:text-text-primary'}`}
+      >
+        <span>All repositories</span>
+        <span className="tabular-nums">{organizationPRs.length.toString().padStart(2, '0')}</span>
+      </button>
+      <ol>
+        {repositories.map((repository, index) => {
+          const isActive = activeRepository?.name === repository.name;
+          const label = activeOrganization ? repository.name.split('/')[1] : repository.name;
+
+          return (
+            <li key={repository.name}>
+              <button
+                type="button"
+                onClick={() => selectRepository(isActive ? null : repository.name)}
+                aria-pressed={isActive}
+                aria-label={`${isActive ? 'Clear' : 'Show'} ${repository.name}: ${repository.pullRequests} pull requests`}
+                className={`group flex min-h-12 w-full items-center gap-3 border-b border-border px-4 text-left transition-colors ${isActive ? 'bg-accent-muted' : 'hover:bg-surface'}`}
+              >
+                <span className={`font-mono text-[0.56rem] tabular-nums tracking-[0.12em] ${isActive ? 'text-accent' : 'text-text-muted'}`}>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className={`min-w-0 flex-1 truncate text-sm tracking-[-0.015em] ${isActive ? 'text-accent' : 'text-text-primary'}`}>
+                  {label}
+                </span>
+                <span className="font-mono text-[0.58rem] tabular-nums tracking-[0.1em] text-text-muted">
+                  {repository.pullRequests.toString().padStart(2, '0')}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
 
   return (
     <main id="main-content" className="safe-x mx-auto min-h-[100svh] max-w-[96rem] bg-background pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-40 lg:px-12 lg:pb-40">
@@ -296,7 +415,7 @@ const PullRequests = () => {
       <section aria-label="Pull request controls" className="mt-12 border-y border-border py-5 sm:mt-16">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           <p aria-live="polite" className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-text-primary">
-            {activeOrganization ? `${activeOrganization.name} / ` : ''}Showing {visiblePRs.length} of {filteredPRs.length} matches
+            {activeOrganization ? `${activeOrganization.name} / ` : ''}{activeRepository ? `${activeRepository.name.split('/')[1]} / ` : ''}{filteredPRs.length} matches
           </p>
           {data?.lastUpdated && (
             <p className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
@@ -311,10 +430,7 @@ const PullRequests = () => {
           <input
             type="search"
             value={searchQuery}
-            onChange={(event) => {
-              setSearchQuery(event.target.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
+            onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search title, repository, or technology"
             className="min-h-12 w-full rounded-control border border-border bg-surface py-3 pl-11 pr-4 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted hover:border-border-strong focus:border-accent"
           />
@@ -362,21 +478,21 @@ const PullRequests = () => {
             </span>
             <button
               type="button"
-              onClick={() => toggleSort('status')}
-              aria-label={sortLabel('status', 'status')}
-              aria-pressed={sortBy === 'status'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'status' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              onClick={() => toggleSort('depth')}
+              aria-label={sortLabel('contribution depth', 'depth')}
+              aria-pressed={sortBy === 'depth'}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'depth' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
-              Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+              Depth {sortBy === 'depth' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
             <button
               type="button"
               onClick={() => toggleSort('date')}
-              aria-label={sortLabel('date', 'date')}
+              aria-label={sortLabel('recent activity', 'date')}
               aria-pressed={sortBy === 'date'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'date' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
-              Date {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
+              Recent {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
             <button
               type="button"
@@ -385,7 +501,7 @@ const PullRequests = () => {
               aria-pressed={sortBy === 'repo'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'repo' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
-              Repo {sortBy === 'repo' && (sortOrder === 'asc' ? '↑' : '↓')}
+              Repository {sortBy === 'repo' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
           </div>
         </div>
@@ -394,33 +510,47 @@ const PullRequests = () => {
       <section aria-label="Pull requests" className="mt-10 border-t border-border sm:mt-12">
         <header className="flex flex-wrap items-end justify-between gap-6 border-b border-border py-7 sm:py-9">
           <div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.17em] text-text-muted">Contribution ledger</p>
+            <p className="font-mono text-[0.64rem] uppercase tracking-[0.17em] text-accent">Contribution trace</p>
             <h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">
-              {activeOrganization ? `${activeOrganization.name} contributions` : 'All contributions'}
+              {activeRepository?.name ?? (activeOrganization ? `${activeOrganization.name} repositories` : 'Every repository')}
             </h2>
+            <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.13em] text-text-muted">
+              {filteredPRs.length} pull requests / {repositoryGroups.length} {repositoryGroups.length === 1 ? 'repository' : 'repositories'}
+            </p>
           </div>
-          {activeOrganization && (
-            <button
-              type="button"
-              onClick={() => selectOrganization(null)}
-              className="min-h-11 rounded-control border border-accent bg-accent-muted px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
-            >
-              Clear {activeOrganization.name} ×
-            </button>
-          )}
+          <div className="flex flex-wrap gap-2">
+            {activeRepository && (
+              <button
+                type="button"
+                onClick={() => selectRepository(null)}
+                className="min-h-11 rounded-control border border-accent bg-accent-muted px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+              >
+                Clear {activeRepository.name.split('/')[1]} ×
+              </button>
+            )}
+            {activeOrganization && (
+              <button
+                type="button"
+                onClick={() => selectOrganization(null)}
+                className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-text-secondary transition-[border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-accent hover:text-accent active:scale-[0.97]"
+              >
+                Clear {activeOrganization.name} ×
+              </button>
+            )}
+          </div>
         </header>
         {loading ? (
           <div role="status" aria-label="Loading pull requests">
             {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="grid animate-pulse gap-5 border-b border-border py-8 md:grid-cols-[10rem_minmax(0,1fr)_minmax(12rem,0.45fr)_2.75rem] md:gap-8">
-                <div className="h-5 bg-surface-strong" />
-                <div className="space-y-3">
-                  <div className="h-4 w-1/3 bg-surface-strong" />
-                  <div className="h-7 w-4/5 bg-surface-strong" />
+              <div key={item} className="grid animate-pulse gap-4 border-b border-border py-6 md:grid-cols-[5rem_7rem_minmax(0,1fr)_10rem_2.75rem] md:px-6">
+                <div className="h-4 bg-surface-strong" />
+                <div className="h-8 bg-surface" />
+                <div className="space-y-2">
+                  <div className="h-5 w-4/5 bg-surface-strong" />
                   <div className="h-4 w-full bg-surface" />
                 </div>
-                <div className="h-12 bg-surface" />
-                <div className="h-11 w-11 border border-border bg-surface" />
+                <div className="h-8 bg-surface" />
+                <div className="h-9 w-9 border border-border bg-surface" />
               </div>
             ))}
           </div>
@@ -440,71 +570,103 @@ const PullRequests = () => {
             </button>
           </div>
         ) : (
-          <>
-            <ul>
-            {visiblePRs.map((pr, index) => (
-              <li
-                key={pr.url}
-                className="group border-b border-border transition-colors hover:bg-surface"
-              >
-                <a
-                  href={pr.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${pr.title} on GitHub`}
-                  className={`grid gap-5 py-8 md:grid-cols-[10rem_minmax(0,1fr)_minmax(12rem,0.45fr)_2.75rem] md:gap-8 md:px-4 ${index === 0 ? 'md:pt-10' : ''}`}
-                >
-                  <div className="flex flex-wrap items-center gap-3 md:block">
-                    <span className={`inline-flex items-center gap-1.5 rounded-control border px-2.5 py-1 font-mono text-[0.64rem] uppercase tracking-[0.12em] ${pr.status === 'Merged' ? 'border-status-merged/30 bg-status-merged/10 text-status-merged' : pr.status === 'Open' ? 'border-status-open/30 bg-status-open/10 text-status-open' : 'border-status-closed/30 bg-status-closed/10 text-status-closed'}`}>
-                      {pr.status === 'Merged' ? <CheckCircle2 className="h-3.5 w-3.5" /> : pr.status === 'Open' ? <Circle className="h-3.5 w-3.5" /> : <GitPullRequest className="h-3.5 w-3.5" />}
-                      {pr.status}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 font-mono text-[0.64rem] uppercase tracking-[0.1em] text-text-muted md:mt-3 md:flex">
-                      <Calendar className="h-3.5 w-3.5" />
-                      {pr.date}
-                    </span>
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="flex min-w-0 items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
-                      <GitCommit className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">{pr.repo}</span>
-                    </p>
-                    <h3 className="mt-3 text-xl font-medium leading-snug tracking-[-0.025em] text-text-primary transition-colors group-hover:text-accent sm:text-2xl">
-                      {pr.title}
-                    </h3>
-                    <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary line-clamp-3 sm:text-base">{pr.description}</p>
-                  </div>
-
-                  <div className="flex flex-col gap-4 md:items-start">
-                    <div className="flex gap-3 font-mono text-xs tabular-nums">
-                      <span className="text-status-open">+{pr.additions.toLocaleString()}</span>
-                      <span className="text-status-closed">−{pr.deletions.toLocaleString()}</span>
-                    </div>
-                    <p className="font-mono text-[0.62rem] uppercase leading-5 tracking-[0.12em] text-text-muted">
-                      {pr.languages.join(', ')}
-                    </p>
-                  </div>
-
-                  <span className="flex h-11 w-11 items-center justify-center rounded-control border border-border text-text-primary transition-[border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent group-hover:text-accent">
-                    <ArrowUpRight className="h-5 w-5" />
-                  </span>
-                </a>
-              </li>
-            ))}
-            </ul>
-            {visiblePRs.length < filteredPRs.length && (
-              <div className="flex justify-center border-b border-border py-8">
-                <button
-                  type="button"
-                  onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-                  className="min-h-11 rounded-control border border-border px-5 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
-                >
-                  Show {Math.min(PAGE_SIZE, filteredPRs.length - visiblePRs.length)} more
-                </button>
+          <div className="lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+            <details className="group border-b border-border lg:hidden [&>summary::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary">
+                <span className="min-w-0 truncate">{activeRepository ? activeRepository.name : `Repository index / ${repositories.length}`}</span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-text-muted transition-transform duration-150 group-open:rotate-180" />
+              </summary>
+              <div className="max-h-[24rem] overflow-y-auto border-t border-border">
+                {renderRepositoryIndex()}
               </div>
-            )}
-          </>
+            </details>
+
+            <aside className="hidden border-r border-border lg:block">
+              <div className="sticky top-28 max-h-[calc(100svh-8rem)] overflow-y-auto overscroll-contain">
+                <div className="border-b border-border px-4 py-4">
+                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.15em] text-text-muted">Repository index / {repositories.length.toString().padStart(2, '0')}</p>
+                </div>
+                {renderRepositoryIndex()}
+              </div>
+            </aside>
+
+            <div className="min-w-0">
+              {repositoryGroups.map((repository, groupIndex) => {
+                const repositoryId = `repository-${repository.name.replace(/[^a-z0-9]+/gi, '-').toLocaleLowerCase()}`;
+
+                return (
+                  <section key={repository.name} aria-labelledby={repositoryId} className="scroll-mt-24">
+                    <header className="sticky top-20 z-20 flex flex-wrap items-end justify-between gap-4 border-b border-border bg-background/95 px-4 py-4 backdrop-blur-xl sm:px-6 lg:top-24">
+                      <div>
+                        <p className="font-mono text-[0.56rem] uppercase tracking-[0.15em] text-text-muted">Repository / {String(groupIndex + 1).padStart(2, '0')}</p>
+                        <h3 id={repositoryId} className="mt-1 text-lg font-medium tracking-[-0.025em] text-text-primary sm:text-xl">{repository.name}</h3>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.11em] text-text-muted">
+                        <span>{repository.pullRequests} PRs</span>
+                        <span className="flex items-center gap-3 tabular-nums">
+                          <span className="text-status-merged">M {repository.merged}</span>
+                          <span className="text-status-open">O {repository.open}</span>
+                          <span className="text-status-closed">C {repository.closed}</span>
+                        </span>
+                        <span className="hidden max-w-56 truncate xl:inline">{repository.languages.join(' / ')}</span>
+                      </div>
+                    </header>
+
+                    <ul>
+                      {repository.prs.map((pr, index) => {
+                        const number = pr.url.split('/').filter(Boolean).at(-1);
+                        const branch = index === repository.prs.length - 1 ? '└─' : '├─';
+                        const statusClass = pr.status === 'Merged'
+                          ? 'text-status-merged'
+                          : pr.status === 'Open'
+                            ? 'text-status-open'
+                            : 'text-status-closed';
+
+                        return (
+                          <li key={pr.url} className="group border-b border-border transition-colors hover:bg-surface">
+                            <a
+                              href={pr.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`Open ${pr.title} on GitHub`}
+                              className="grid grid-cols-[auto_minmax(0,1fr)_2.5rem] gap-x-3 gap-y-3 px-4 py-5 sm:px-6 md:grid-cols-[5rem_7rem_minmax(0,1fr)_minmax(9rem,0.35fr)_2.5rem] md:items-center md:gap-5"
+                            >
+                              <span className="flex items-center gap-2 font-mono text-[0.64rem] tabular-nums tracking-[0.08em] text-text-muted">
+                                <span aria-hidden="true">{branch}</span>
+                                <span className="text-text-secondary">#{number}</span>
+                              </span>
+
+                              <span className="flex items-center gap-3 md:block">
+                                <span className={`block font-mono text-[0.6rem] uppercase tracking-[0.13em] ${statusClass}`}>{pr.status}</span>
+                                <span className="block font-mono text-[0.56rem] uppercase tracking-[0.09em] text-text-muted md:mt-1.5">{pr.date}</span>
+                              </span>
+
+                              <span className="col-span-3 min-w-0 md:col-span-1">
+                                <span className="block text-base font-medium leading-6 tracking-[-0.018em] text-text-primary transition-colors group-hover:text-accent sm:text-lg">{pr.title}</span>
+                                <span className="mt-1.5 block overflow-hidden text-ellipsis whitespace-nowrap text-sm leading-6 text-text-secondary">{cleanDescription(pr.description)}</span>
+                              </span>
+
+                              <span className="col-span-2 flex flex-wrap items-center gap-x-3 gap-y-1 md:col-span-1 md:block">
+                                <span className="flex gap-2 font-mono text-[0.62rem] tabular-nums">
+                                  <span className="text-status-open">+{pr.additions.toLocaleString()}</span>
+                                  <span className="text-status-closed">−{pr.deletions.toLocaleString()}</span>
+                                </span>
+                                <span className="font-mono text-[0.55rem] uppercase tracking-[0.09em] text-text-muted md:mt-2 md:block md:truncate">{pr.languages.slice(0, 2).join(' / ')}</span>
+                              </span>
+
+                              <span className="col-start-3 row-start-1 flex h-10 w-10 items-center justify-center justify-self-end rounded-control border border-border text-text-primary transition-[border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent group-hover:text-accent md:col-start-auto md:row-start-auto">
+                                <ArrowUpRight className="h-4.5 w-4.5" />
+                              </span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </section>
+                );
+              })}
+            </div>
+          </div>
         )}
       </section>
     </main>
