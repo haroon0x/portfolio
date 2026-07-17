@@ -132,9 +132,27 @@ export default function Work() {
         >
           <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">About</p>
           <div>
-            <p className="max-w-4xl text-[clamp(1.8rem,3.5vw,4rem)] font-medium leading-[1.08] tracking-[-0.04em] text-text-primary">
-              I care about clear thinking, resilient systems, and shipping work that earns its place.
-            </p>
+            <figure>
+              <blockquote cite="https://www.nba.com/watch/video/2017/12/19/20171218-kobe-jersey-retirement-ceremony-kobe-bryant">
+                <p className="max-w-5xl text-[clamp(1.7rem,3.2vw,3.75rem)] font-medium leading-[1.08] tracking-[-0.04em] text-text-primary">
+                  Those times when you don’t feel like working, you’re too tired, you don’t want to push yourself, but you do it anyway.
+                  <span className="mt-5 block text-[clamp(2.35rem,5.4vw,6.5rem)] leading-[0.94] tracking-[-0.055em] text-accent">
+                    That is actually the dream. That’s the dream.
+                  </span>
+                </p>
+              </blockquote>
+              <figcaption className="mt-8 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-text-muted">
+                <span aria-hidden="true" className="h-px w-10 bg-border-strong" />
+                <a
+                  href="https://www.nba.com/watch/video/2017/12/19/20171218-kobe-jersey-retirement-ceremony-kobe-bryant"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-text-primary"
+                >
+                  Kobe Bryant, 2017
+                </a>
+              </figcaption>
+            </figure>
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
               <a
                 href="https://drive.google.com/file/d/1fcm8Z6ul2k97JCTBcJoufh6UHVeSKiOv/view?usp=sharing"
