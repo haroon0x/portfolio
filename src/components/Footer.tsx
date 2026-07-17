@@ -33,7 +33,7 @@ export default function Footer() {
                   key={social.name}
                   href={social.url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="me noopener noreferrer"
                   aria-label={social.name}
                   className="flex h-11 w-11 items-center justify-center rounded-control border border-border text-text-secondary transition-[border-color,color,transform] duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
                 >

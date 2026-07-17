@@ -1,0 +1,27 @@
+# Muhammed Haroon
+
+> Muhammed Haroon is an independent engineer and open-source contributor building reliable AI systems, developer tools, and infrastructure products.
+
+Canonical site: https://haroon0x.onrender.com/
+
+## Core pages
+
+- [Portfolio](https://haroon0x.onrender.com/): Selected systems, engineering work, background, and contact information.
+- [Writing](https://haroon0x.onrender.com/blog): Technical essays and build notes. No entries are published yet.
+- [Open-source contributions](https://haroon0x.onrender.com/pull-requests): Public pull-request record across infrastructure, developer tools, machine learning, and AI systems.
+
+## Selected systems
+
+- [Wake AI](https://github.com/haroon0x/Wake-ai): Private, searchable AI memory for Android with on-device text storage, local embeddings, and cited retrieval.
+- [DeadDrop](https://github.com/haroon0x/DeadDrop): Local-first coding task inbox with an outbound-only worker and human-reviewed diff receipts.
+- [OutSync](https://github.com/haroon0x/OutSync): Reliable database event delivery using the transactional outbox pattern, Kafka, FastAPI, and PostgreSQL.
+
+## Identity
+
+- [GitHub](https://github.com/haroon0x)
+- [LinkedIn](https://linkedin.com/in/muhammed-haroon-0399962b8)
+- [X](https://x.com/skywalkerr0x)
+
+## Contact
+
+- Email: haroonbmc0@gmail.com

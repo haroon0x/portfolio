@@ -89,6 +89,13 @@ export default function Header() {
             </button>
           ))}
           <Link
+            to="/blog"
+            onMouseEnter={() => import('../pages/Blog')}
+            className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
+          >
+            Blog
+          </Link>
+          <Link
             to="/pull-requests"
             onMouseEnter={() => import('../pages/PullRequests')}
             className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
@@ -144,6 +151,14 @@ export default function Header() {
                   <span className="text-accent">↘</span>
                 </button>
               ))}
+              <Link
+                to="/blog"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-primary"
+              >
+                Blog
+                <span className="text-accent">↗</span>
+              </Link>
               <Link
                 to="/pull-requests"
                 onClick={() => setIsMenuOpen(false)}
