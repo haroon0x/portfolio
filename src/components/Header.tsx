@@ -90,14 +90,12 @@ export default function Header() {
           ))}
           <Link
             to="/blog"
-            onMouseEnter={() => import('../pages/Blog')}
             className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
           >
             Blog
           </Link>
           <Link
             to="/pull-requests"
-            onMouseEnter={() => import('../pages/PullRequests')}
             className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
           >
             Pull requests

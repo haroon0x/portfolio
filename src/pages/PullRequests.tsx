@@ -36,10 +36,10 @@ const cleanDescription = (description: string) => description
   .replace(/\s+/g, ' ')
   .trim();
 
-const PullRequests = () => {
+const PullRequests = ({ initialData }: { initialData?: PRData }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [data, setData] = useState<PRData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<PRData | null>(initialData ?? null);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>('depth');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
@@ -49,6 +49,8 @@ const PullRequests = () => {
   const repositoryParam = searchParams.get('repo');
 
   useEffect(() => {
+    if (initialData) return;
+
     let active = true;
 
     loadPRData()
@@ -67,7 +69,7 @@ const PullRequests = () => {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialData]);
 
   const organizations = useMemo<OrganizationSummary[]>(() => {
     if (!data) return [];

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -6,13 +6,13 @@ import ScrollProgress from './components/ScrollProgress';
 import AppErrorBoundary from './components/AppErrorBoundary';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import Blog from './pages/Blog';
+import PullRequests from './pages/PullRequests';
+import NotFound from './pages/NotFound';
+import type { PRData } from './data/prData';
 
-const Home = React.lazy(() => import('./pages/Home'));
-const Blog = React.lazy(() => import('./pages/Blog'));
-const PullRequests = React.lazy(() => import('./pages/PullRequests'));
-const NotFound = React.lazy(() => import('./pages/NotFound'));
-
-const SITE_ORIGIN = 'https://haroon0x.onrender.com';
+const SITE_ORIGIN = 'https://haroon0x.dev';
 
 interface RouteMetadata {
   title: string;
@@ -105,12 +105,6 @@ function createStructuredData(pathname: string, metadata: RouteMetadata) {
   };
 }
 
-const PageLoader = () => (
-  <div className="min-h-[50vh] flex items-center justify-center">
-    <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"></div>
-  </div>
-);
-
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
@@ -151,7 +145,7 @@ function RouteMetadataManager() {
   return null;
 }
 
-function AppShell() {
+function AppShell({ initialPRData }: { initialPRData?: PRData }) {
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
@@ -163,14 +157,12 @@ function AppShell() {
             <div className="min-h-screen text-text-primary">
               <ScrollProgress />
               <Header />
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/pull-requests" element={<PullRequests />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/pull-requests" element={<PullRequests initialData={initialPRData} />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
               <Footer />
             </div>
           </MotionConfig>
@@ -180,12 +172,18 @@ function AppShell() {
   );
 }
 
-function App() {
+export function AppContent({ initialPRData }: { initialPRData?: PRData }) {
+  return (
+    <ThemeProvider>
+      <AppShell initialPRData={initialPRData} />
+    </ThemeProvider>
+  );
+}
+
+function App({ initialPRData }: { initialPRData?: PRData }) {
   return (
     <Router>
-      <ThemeProvider>
-        <AppShell />
-      </ThemeProvider>
+      <AppContent initialPRData={initialPRData} />
     </Router>
   );
 }

@@ -11,13 +11,13 @@ services:
     routes:
       - type: rewrite
         source: /blog
-        destination: /index.html
+        destination: /blog/index.html
       - type: rewrite
         source: /blog/*
         destination: /index.html
       - type: rewrite
         source: /pull-requests
-        destination: /index.html
+        destination: /pull-requests/index.html
       - type: rewrite
         source: /pull-requests/*
         destination: /index.html

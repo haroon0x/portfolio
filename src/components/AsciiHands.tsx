@@ -158,7 +158,7 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
   const phaseRef = useRef<FieldPhase>('loading');
   const decodeCompleteRef = useRef(false);
   const stageVisibleRef = useRef(true);
-  const documentVisibleRef = useRef(!document.hidden);
+  const documentVisibleRef = useRef(typeof document === 'undefined' || !document.hidden);
   const lastInteractionRef = useRef(0);
   const [ascii, setAscii] = useState('');
   const [phase, setPhase] = useState<FieldPhase>('loading');

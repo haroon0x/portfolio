@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://haroon0x.onrender.com/sitemap.xml
+Sitemap: https://haroon0x.dev/sitemap.xml

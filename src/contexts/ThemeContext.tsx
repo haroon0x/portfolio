@@ -12,18 +12,22 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const STORAGE_KEY = 'portfolio-theme';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark') return stored;
-    if (window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
-    return 'dark';
-  });
+  const [theme, setTheme] = useState<Theme>('dark');
 
   const toggleTheme = useCallback(() => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     localStorage.setItem(STORAGE_KEY, nextTheme);
     setTheme(nextTheme);
   }, [theme]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === 'light' || stored === 'dark') {
+      setTheme(stored);
+    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      setTheme('light');
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;

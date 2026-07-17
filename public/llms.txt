@@ -2,13 +2,13 @@
 
 > Muhammed Haroon is an independent engineer and open-source contributor building reliable AI systems, developer tools, and infrastructure products.
 
-Canonical site: https://haroon0x.onrender.com/
+Canonical site: https://haroon0x.dev/
 
 ## Core pages
 
-- [Portfolio](https://haroon0x.onrender.com/): Selected systems, engineering work, background, and contact information.
-- [Writing](https://haroon0x.onrender.com/blog): Technical essays and build notes. No entries are published yet.
-- [Open-source contributions](https://haroon0x.onrender.com/pull-requests): Public pull-request record across infrastructure, developer tools, machine learning, and AI systems.
+- [Portfolio](https://haroon0x.dev/): Selected systems, engineering work, background, and contact information.
+- [Writing](https://haroon0x.dev/blog): Technical essays and build notes. No entries are published yet.
+- [Open-source contributions](https://haroon0x.dev/pull-requests): Public pull-request record across infrastructure, developer tools, machine learning, and AI systems.
 
 ## Selected systems
 
