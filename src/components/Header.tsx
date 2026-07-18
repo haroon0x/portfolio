@@ -136,15 +136,9 @@ export default function Header() {
           ))}
           <Link
             to="/pull-requests"
-            className="pr-nav-link group flex min-h-11 items-center gap-1.5 px-3 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary"
+            className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
           >
-            <span className="pr-nav-mark">
-              <span aria-hidden="true" className="pr-nav-bracket pr-nav-bracket-left" />
-              <span>Pull requests</span>
-              <span aria-hidden="true" className="pr-nav-scan" />
-              <span aria-hidden="true" className="pr-nav-bracket pr-nav-bracket-right" />
-            </span>
-            <span aria-hidden="true" className="text-accent/70 transition-[color,transform] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent">↗</span>
+            Pull requests
           </Link>
           <a
             href="mailto:haroonbmc0@gmail.com"
@@ -198,15 +192,10 @@ export default function Header() {
               <Link
                 to="/pull-requests"
                 onClick={() => setIsMenuOpen(false)}
-                className="pr-nav-link group flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-secondary"
+                className="flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-primary"
               >
-                <span className="pr-nav-mark">
-                  <span aria-hidden="true" className="pr-nav-bracket pr-nav-bracket-left" />
-                  <span>Pull requests</span>
-                  <span aria-hidden="true" className="pr-nav-scan" />
-                  <span aria-hidden="true" className="pr-nav-bracket pr-nav-bracket-right" />
-                </span>
-                <span aria-hidden="true" className="text-accent/70 transition-[color,transform] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent">↗</span>
+                Pull requests
+                <span className="text-accent">↗</span>
               </Link>
               <a
                 href="mailto:haroonbmc0@gmail.com"
