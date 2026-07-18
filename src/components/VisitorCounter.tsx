@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const VISITOR_ID_KEY = 'haroon0x-visitor-id';
-const VISITOR_COUNTER_URL = import.meta.env.VITE_VISITOR_COUNTER_URL?.trim() || 'https://visits.haroon0x.dev/visit';
+const VISITOR_COUNTER_URL = import.meta.env.VITE_VISITOR_COUNTER_URL?.trim();
 const visitorCountFormatter = new Intl.NumberFormat('en-US');
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -18,6 +18,8 @@ export default function VisitorCounter() {
   const [count, setCount] = useState<number>();
 
   useEffect(() => {
+    if (!VISITOR_COUNTER_URL) return undefined;
+
     const controller = new AbortController();
 
     const registerVisit = async () => {

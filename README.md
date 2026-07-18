@@ -44,13 +44,16 @@ If the existing Render service is not managed as a Blueprint, add the same two r
 
 The footer counter records approximate unique browsers rather than page views. A random identifier stays in first-party local storage; the counter stores that identifier and its first-seen timestamp in a Cloudflare SQLite-backed Durable Object. It does not store IP addresses, routes, or referrers.
 
-Deploy the counter Worker from a Cloudflare account that manages `haroon0x.dev`:
+The portfolio remains on Render with DNS managed at Name.com. The counter uses a separate `workers.dev` address, so no domain or nameserver changes are required.
 
 ```bash
-npx wrangler deploy --config visitor-counter/wrangler.jsonc
+npx wrangler@4.112.0 login
+npx wrangler@4.112.0 deploy --config visitor-counter/wrangler.jsonc
 ```
 
-The default production endpoint is `https://visits.haroon0x.dev/visit`. Set `VITE_VISITOR_COUNTER_URL` during the Render build only when deploying the Worker at a different origin.
+Wrangler prints the deployed `workers.dev` URL. Append `/visit`, save the complete URL as `VITE_VISITOR_COUNTER_URL` in the Render static site's environment variables, and trigger a new Render deployment. The footer counter remains hidden until that environment variable points to a working endpoint.
+
+The Worker URL, name, and allowed site origin are public configuration. Keep Cloudflare API tokens and Wrangler development secrets out of the repository; `.dev.vars` and `.wrangler` are ignored.
 
 ## Contact
 

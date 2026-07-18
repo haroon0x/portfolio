@@ -13,7 +13,11 @@ export class VisitorCounter extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
     this.sql = ctx.storage.sql;
-    this.sql.exec('CREATE TABLE IF NOT EXISTS visitors (visitor_id TEXT PRIMARY KEY, first_seen INTEGER NOT NULL)');
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS visitors (visitor_id TEXT PRIMARY KEY, first_seen INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS totals (name TEXT PRIMARY KEY, value INTEGER NOT NULL);
+      INSERT OR IGNORE INTO totals (name, value) VALUES ('visitors', (SELECT COUNT(*) FROM visitors));
+    `);
   }
 
   async fetch(request) {
@@ -29,13 +33,22 @@ export class VisitorCounter extends DurableObject {
       return json({ error: 'Invalid visitor' }, 400);
     }
 
-    this.sql.exec(
-      'INSERT OR IGNORE INTO visitors (visitor_id, first_seen) VALUES (?, ?)',
-      payload.visitorId,
-      Date.now(),
-    );
-    const result = this.sql.exec('SELECT COUNT(*) AS count FROM visitors').one();
-    return json({ count: Number(result.count) });
+    const count = this.ctx.storage.transactionSync(() => {
+      const insertion = this.sql.exec(
+        'INSERT OR IGNORE INTO visitors (visitor_id, first_seen) VALUES (?, ?)',
+        payload.visitorId,
+        Date.now(),
+      );
+
+      if (insertion.rowsWritten > 0) {
+        this.sql.exec("UPDATE totals SET value = value + 1 WHERE name = 'visitors'");
+      }
+
+      const total = this.sql.exec("SELECT value FROM totals WHERE name = 'visitors'").one();
+      return Number(total.value);
+    });
+
+    return json({ count });
   }
 }
 
