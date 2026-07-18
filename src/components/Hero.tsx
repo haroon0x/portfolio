@@ -14,8 +14,8 @@ export default function Hero() {
       <div className="w-full border-b border-border pb-14 pt-10 sm:pb-20 lg:pb-24 lg:pt-12">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(30rem,1.05fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-8 xl:gap-x-12">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             className="lg:col-start-1 lg:row-start-1"
           >
@@ -31,8 +31,8 @@ export default function Hero() {
             <AsciiHands onExplore={scrollToWork} />
           </div>
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.12, ease: EASE }}
             className="lg:col-start-1 lg:row-start-2"
           >

@@ -9,8 +9,8 @@ export default function Blog() {
     <main id="main-content" className="safe-x mx-auto min-h-[100svh] max-w-[96rem] px-4 pb-24 pt-36 sm:px-8 sm:pb-32 sm:pt-44 lg:px-12 lg:pb-40">
       <section aria-labelledby="blog-title">
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE }}
           className="grid gap-10 border-b border-border pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.55fr)] lg:items-end lg:gap-20"
         >
@@ -26,8 +26,8 @@ export default function Blog() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
           className="grid gap-10 border-b border-border py-14 sm:py-20 lg:grid-cols-[5rem_minmax(0,0.8fr)_minmax(20rem,1.2fr)] lg:gap-12"
         >

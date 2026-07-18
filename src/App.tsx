@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { MotionConfig } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig, useReducedMotion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import ScrollProgress from './components/ScrollProgress';
 import AppErrorBoundary from './components/AppErrorBoundary';
@@ -145,6 +145,32 @@ function RouteMetadataManager() {
   return null;
 }
 
+function AnimatedRoutes({ initialPRData }: { initialPRData?: PRData }) {
+  const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+  const enterTransition = shouldReduceMotion ? { duration: 0 } : { duration: 0.25, ease: [0.16, 1, 0.3, 1] as const };
+  const exitTransition = shouldReduceMotion ? { duration: 0 } : { duration: 0.15 };
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location.pathname}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, transition: exitTransition }}
+        transition={enterTransition}
+      >
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/pull-requests" element={<PullRequests initialData={initialPRData} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function AppShell({ initialPRData }: { initialPRData?: PRData }) {
   return (
     <>
@@ -157,12 +183,7 @@ function AppShell({ initialPRData }: { initialPRData?: PRData }) {
             <div className="min-h-screen text-text-primary">
               <ScrollProgress />
               <Header />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/pull-requests" element={<PullRequests initialData={initialPRData} />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <AnimatedRoutes initialPRData={initialPRData} />
               <Footer />
             </div>
           </MotionConfig>

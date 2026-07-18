@@ -9,6 +9,49 @@ const navItems = [
   { label: 'About', id: 'about' },
 ];
 
+const istTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+  timeZone: 'Asia/Kolkata',
+});
+
+function IstClock() {
+  const [time, setTime] = useState('--:--:-- IST');
+
+  useEffect(() => {
+    let intervalId: number | undefined;
+
+    const updateTime = () => setTime(`${istTimeFormatter.format(new Date())} IST`);
+    const startClock = () => {
+      updateTime();
+      window.clearInterval(intervalId);
+      intervalId = window.setInterval(updateTime, 1000);
+    };
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.clearInterval(intervalId);
+      } else {
+        startClock();
+      }
+    };
+
+    startClock();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  return (
+    <time aria-label="Current time in India" className="hidden w-[7.5rem] font-mono text-[0.66rem] tabular-nums uppercase tracking-[0.12em] text-text-muted sm:block">
+      {time}
+    </time>
+  );
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,16 +109,19 @@ export default function Header() {
   return (
     <header ref={headerRef} className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${isScrolled ? 'border-border bg-background/90 shadow-header backdrop-blur-xl' : 'border-transparent bg-background/0'}`}>
       <nav aria-label="Primary navigation" className="safe-x mx-auto flex h-20 max-w-[96rem] items-center justify-between sm:px-8 lg:h-24 lg:px-12">
-        <button
-          type="button"
-          onClick={() => scrollToSection('hero')}
-          className="group flex min-h-11 items-center gap-3 text-left"
-          aria-label="Go to top"
-        >
-          <span className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-text-secondary transition-colors group-hover:text-text-primary">
-            Muhammed Haroon
-          </span>
-        </button>
+        <div className="flex items-center gap-4 lg:gap-6">
+          <button
+            type="button"
+            onClick={() => scrollToSection('hero')}
+            className="group flex min-h-11 items-center gap-3 text-left"
+            aria-label="Go to top"
+          >
+            <span className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-text-secondary transition-colors group-hover:text-text-primary">
+              Muhammed Haroon
+            </span>
+          </button>
+          <IstClock />
+        </div>
 
         <div className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
@@ -88,12 +134,6 @@ export default function Header() {
               {item.label}
             </button>
           ))}
-          <Link
-            to="/blog"
-            className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Blog
-          </Link>
           <Link
             to="/pull-requests"
             className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
@@ -149,14 +189,6 @@ export default function Header() {
                   <span className="text-accent">↘</span>
                 </button>
               ))}
-              <Link
-                to="/blog"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-primary"
-              >
-                Blog
-                <span className="text-accent">↗</span>
-              </Link>
               <Link
                 to="/pull-requests"
                 onClick={() => setIsMenuOpen(false)}

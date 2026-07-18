@@ -1,14 +1,29 @@
+import { useEffect, useRef } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const transitionTimeoutRef = useRef<number>();
+
+  useEffect(() => () => {
+    window.clearTimeout(transitionTimeoutRef.current);
+    document.documentElement.classList.remove('theme-transition');
+  }, []);
+
+  const handleToggle = () => {
+    const root = document.documentElement;
+    window.clearTimeout(transitionTimeoutRef.current);
+    root.classList.add('theme-transition');
+    toggleTheme();
+    transitionTimeoutRef.current = window.setTimeout(() => root.classList.remove('theme-transition'), 350);
+  };
 
   return (
     <button
       type="button"
-      onClick={() => toggleTheme()}
+      onClick={handleToggle}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       className="flex h-11 w-11 items-center justify-center rounded-control border border-border text-text-secondary transition-colors hover:border-accent hover:text-accent"
     >

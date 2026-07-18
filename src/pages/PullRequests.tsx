@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowDownUp, ArrowUpRight, Building2, ChevronDown, Filter, Search } from 'lucide-react';
 import { loadPRData, type PRData, type PullRequest } from '../data/prData';
@@ -6,6 +7,8 @@ import { loadPRData, type PRData, type PullRequest } from '../data/prData';
 type SortBy = 'depth' | 'date' | 'repo';
 type SortOrder = 'asc' | 'desc';
 type FilterStatus = 'all' | 'merged' | 'open';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 interface OrganizationSummary {
   name: string;
@@ -45,6 +48,8 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const shouldReduceMotion = useReducedMotion();
   const organizationParam = searchParams.get('org');
   const repositoryParam = searchParams.get('repo');
 
@@ -70,6 +75,53 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
       active = false;
     };
   }, [initialData]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
+
+      if (event.key === '/' && !isTyping) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+
+      if (event.key === 'Escape' && document.activeElement === searchInputRef.current) {
+        setSearchQuery('');
+        searchInputRef.current?.blur();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const monthlyActivity = useMemo(() => {
+    const now = new Date();
+    const currentMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+    const counts = new Map<string, number>();
+
+    data?.prs.forEach((pr) => {
+      const date = new Date(pr.date);
+      const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    });
+
+    return Array.from({ length: 12 }, (_, index) => {
+      const date = new Date(Date.UTC(currentMonth.getUTCFullYear(), currentMonth.getUTCMonth() - (11 - index), 1));
+      const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+      return {
+        key,
+        date,
+        count: counts.get(key) ?? 0,
+        isCurrent: index === 11,
+      };
+    });
+  }, [data]);
+
+  const peakMonth = monthlyActivity.reduce((peak, month) => month.count > peak.count ? month : peak, monthlyActivity[0]);
+  const peakMonthLabel = peakMonth.date.toLocaleDateString('en', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const peakCount = Math.max(...monthlyActivity.map((month) => month.count), 1);
 
   const organizations = useMemo<OrganizationSummary[]>(() => {
     if (!data) return [];
@@ -308,7 +360,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
       </header>
 
       {data && !loading && (
-        <dl className="mt-14 grid grid-cols-2 border-y border-border sm:mt-20 md:grid-cols-4">
+        <dl className="mt-14 grid grid-cols-2 border-y border-border sm:mt-20 md:grid-cols-5">
           <div className="flex flex-col border-b border-r border-border py-6 pr-5 md:border-b-0 md:px-6 md:first:pl-0">
             <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Total</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-text-primary sm:text-4xl">{data.total}</dd>
@@ -317,15 +369,52 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
             <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Merged</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-merged sm:text-4xl">{data.merged}</dd>
           </div>
-          <div className="flex flex-col border-r border-border py-6 pr-5 md:px-6">
+          <div className="flex flex-col border-b border-r border-border py-6 pr-5 md:border-b-0 md:px-6">
             <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Open</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-open sm:text-4xl">{data.open}</dd>
           </div>
-          <div className="flex flex-col py-6 pl-5 md:px-6 md:last:pr-0">
+          <div className="flex flex-col border-b border-border py-6 pl-5 md:border-b-0 md:border-r md:px-6">
             <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Organizations</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-accent sm:text-4xl">{organizations.length}</dd>
           </div>
+          <div className="col-span-2 flex flex-col py-6 md:col-span-1 md:px-6 md:last:pr-0">
+            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Merge rate</dt>
+            <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-accent sm:text-4xl">{data.total ? Math.round((data.merged / data.total) * 100) : 0}%</dd>
+          </div>
         </dl>
+      )}
+
+      {data && !loading && (
+        <section aria-labelledby="activity-timeline-title" className="mt-10 border-b border-border pb-8 sm:mt-12">
+          <div className="flex items-center justify-between gap-6">
+            <h2 id="activity-timeline-title" className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Activity / last 12 months</h2>
+            <span className="font-mono text-[0.6rem] tabular-nums uppercase tracking-[0.14em] text-text-muted">{monthlyActivity.reduce((total, month) => total + month.count, 0)} PRs</span>
+          </div>
+          <p className="sr-only">12-month activity: peak {peakMonth.count} pull requests in {peakMonthLabel}.</p>
+          <div aria-hidden="true" className="mt-5 grid h-[4.25rem] grid-cols-12 gap-1.5 sm:gap-3">
+            {monthlyActivity.map((month, index) => {
+              const monthLabel = month.date.toLocaleDateString('en', { month: 'short', timeZone: 'UTC' });
+              const showLabel = month.isCurrent || month.date.getUTCMonth() === 0;
+              const height = `${Math.max(month.count ? 4 : 1, (month.count / peakCount) * 48)}px`;
+
+              return (
+                <div key={month.key} className="relative flex h-12 items-end">
+                  <motion.span
+                    initial={shouldReduceMotion ? false : { height: 0 }}
+                    animate={{ height }}
+                    transition={{ duration: 0.3, delay: shouldReduceMotion ? 0 : index * 0.025, ease: EASE }}
+                    className={`block w-full ${month.isCurrent ? 'bg-accent' : 'bg-border-strong'}`}
+                  />
+                  {showLabel && (
+                    <span className={`absolute top-14 font-mono text-[0.55rem] uppercase tracking-[0.1em] ${month.isCurrent ? 'right-0 text-accent' : 'left-0 text-text-muted'}`}>
+                      {monthLabel}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
       )}
 
       {data && !loading && (
@@ -430,7 +519,9 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
           <span className="sr-only">Search pull requests</span>
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <input
+            ref={searchInputRef}
             type="search"
+            aria-keyshortcuts="/ Escape"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search title, repository, or technology"
@@ -481,11 +572,11 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
             <button
               type="button"
               onClick={() => toggleSort('depth')}
-              aria-label={sortLabel('contribution depth', 'depth')}
+              aria-label={sortLabel('pull request volume', 'depth')}
               aria-pressed={sortBy === 'depth'}
               className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'depth' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
-              Depth {sortBy === 'depth' && (sortOrder === 'asc' ? '↑' : '↓')}
+              Volume {sortBy === 'depth' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
             <button
               type="button"
@@ -623,6 +714,9 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                           : pr.status === 'Open'
                             ? 'text-status-open'
                             : 'text-status-closed';
+                        const totalChanges = pr.additions + pr.deletions;
+                        const additionsWidth = totalChanges ? (pr.additions / totalChanges) * 100 : 0;
+                        const deletionsWidth = totalChanges ? (pr.deletions / totalChanges) * 100 : 0;
 
                         return (
                           <li key={pr.url} className="group border-b border-border transition-colors hover:bg-surface">
@@ -652,6 +746,10 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                                 <span className="flex gap-2 font-mono text-[0.62rem] tabular-nums">
                                   <span className="text-status-open">+{pr.additions.toLocaleString()}</span>
                                   <span className="text-status-closed">−{pr.deletions.toLocaleString()}</span>
+                                </span>
+                                <span aria-hidden="true" className="mt-1.5 flex h-0.5 w-16 overflow-hidden bg-border">
+                                  <span className="h-full bg-status-open" style={{ width: `${additionsWidth}%` }} />
+                                  <span className="h-full bg-status-closed" style={{ width: `${deletionsWidth}%` }} />
                                 </span>
                                 <span className="font-mono text-[0.55rem] uppercase tracking-[0.09em] text-text-muted md:mt-2 md:block md:truncate">{pr.languages.slice(0, 2).join(' / ')}</span>
                               </span>

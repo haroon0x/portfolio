@@ -92,6 +92,15 @@
   background: rgb(var(--color-bg));
 }
 
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, border-color;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
 .ascii-hand-stage {
   container-type: inline-size;
   background: radial-gradient(circle at 50% 50%, rgb(var(--color-accent) / 0.075), transparent 48%);
