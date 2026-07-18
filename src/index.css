@@ -123,6 +123,188 @@
   transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 280ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+.system-schematic-shell {
+  width: 100%;
+  margin-bottom: 2.5rem;
+  perspective: 900px;
+}
+
+.system-schematic-frame {
+  width: 100%;
+  transform-style: preserve-3d;
+  transform-origin: center;
+}
+
+.system-schematic-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.system-schematic-boundary {
+  fill: rgb(var(--color-surface) / 0.45);
+  stroke: rgb(var(--color-border));
+  stroke-width: 1;
+}
+
+.system-schematic-caption,
+.system-schematic-zone-label {
+  fill: rgb(var(--color-text-muted));
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.system-schematic-zone {
+  fill: none;
+  stroke: rgb(var(--color-border));
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+
+.system-schematic-detail,
+.system-schematic-bracket {
+  fill: none;
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 1;
+}
+
+.system-schematic-node {
+  opacity: 0;
+  transform: translateY(7px);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 320ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.system-schematic-node.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.system-schematic-node rect {
+  fill: rgb(var(--color-bg));
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 1;
+}
+
+.system-schematic-node text {
+  fill: rgb(var(--color-text-secondary));
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.system-schematic-edge {
+  fill: none;
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.system-schematic-edge-mask {
+  fill: none;
+  stroke: white;
+  stroke-width: 5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.system-schematic-edge-mask.is-revealed {
+  animation: system-schematic-draw 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.system-schematic-arrow,
+.system-schematic-dot {
+  fill: rgb(var(--color-accent));
+}
+
+@keyframes system-schematic-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hours-dial {
+  min-width: 0;
+}
+
+.hours-dial-track,
+.hours-dial-inner {
+  fill: none;
+  stroke: rgb(var(--color-border));
+  stroke-width: 1;
+}
+
+.hours-dial-inner {
+  stroke-dasharray: 2 5;
+}
+
+.hours-dial-arc {
+  fill: none;
+  cursor: pointer;
+  stroke-linecap: butt;
+  transform-box: view-box;
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), stroke-width 180ms ease, filter 180ms ease;
+}
+
+.hours-dial-arc-accent {
+  stroke: rgb(var(--color-accent));
+  stroke-width: 20;
+}
+
+.hours-dial-arc-strong {
+  stroke: rgb(var(--color-text-secondary));
+  stroke-width: 15;
+}
+
+.hours-dial-arc-thin {
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 7;
+}
+
+.hours-dial-arc-muted {
+  stroke: rgb(var(--color-text-muted));
+  stroke-width: 11;
+}
+
+.hours-dial-arc-wide {
+  stroke: rgb(var(--color-surface-strong));
+  stroke-width: 21;
+}
+
+.hours-dial-arc-outline {
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 14;
+}
+
+.hours-dial-arc.is-active {
+  stroke-width: 24;
+  filter: drop-shadow(0 3px 5px rgb(var(--color-bg) / 0.5));
+}
+
+.hours-dial-readout-primary,
+.hours-dial-readout-secondary {
+  fill: rgb(var(--color-text));
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+.hours-dial-readout-secondary {
+  fill: rgb(var(--color-text-muted));
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.hours-dial-tick {
+  stroke: rgb(var(--color-border-strong));
+  stroke-width: 1;
+}
+
 .skip-link {
   position: fixed;
   top: 0.75rem;
