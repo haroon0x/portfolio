@@ -40,6 +40,18 @@ The production origin is hosted as a free Render static site. The production bui
 
 If the existing Render service is not managed as a Blueprint, add the same two rules under Redirects/Rewrites in its dashboard; Render does not automatically apply a new Blueprint file to an independently created service. The client also renders its own not-found page for unknown routes reached through in-app navigation and applies `noindex, nofollow` metadata there. `public/_redirects` mirrors the primary exact-route behavior for hosts that support that file.
 
+## Visitor counter
+
+The footer counter records approximate unique browsers rather than page views. A random identifier stays in first-party local storage; the counter stores that identifier and its first-seen timestamp in a Cloudflare SQLite-backed Durable Object. It does not store IP addresses, routes, or referrers.
+
+Deploy the counter Worker from a Cloudflare account that manages `haroon0x.dev`:
+
+```bash
+npx wrangler deploy --config visitor-counter/wrangler.jsonc
+```
+
+The default production endpoint is `https://visits.haroon0x.dev/visit`. Set `VITE_VISITOR_COUNTER_URL` during the Render build only when deploying the Worker at a different origin.
+
 ## Contact
 
 - GitHub: [haroon0x](https://github.com/haroon0x)

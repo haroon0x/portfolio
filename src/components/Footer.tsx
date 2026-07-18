@@ -1,5 +1,6 @@
 import { ArrowUpRight, Github, Linkedin } from 'lucide-react';
 import { XIcon } from './icons/XIcon';
+import VisitorCounter from './VisitorCounter';
 
 const socialLinks = [
   { name: 'GitHub', icon: Github, url: 'https://github.com/haroon0x' },
@@ -44,12 +45,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 flex flex-col gap-4 border-t border-border pt-6 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted sm:mt-28 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-20 flex flex-col gap-4 border-t border-border pt-6 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted sm:mt-28 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center">
           <span>© {new Date().getFullYear()} Muhammed Haroon</span>
+          <VisitorCounter />
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="self-start transition-colors hover:text-text-primary sm:self-auto"
+            className="self-start transition-colors hover:text-text-primary sm:justify-self-end"
           >
             Back to top ↑
           </button>
