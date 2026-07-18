@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { GitPullRequest, Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
@@ -136,8 +136,9 @@ export default function Header() {
           ))}
           <Link
             to="/pull-requests"
-            className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
+            className="flex min-h-11 items-center gap-2 px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
           >
+            <GitPullRequest aria-hidden="true" className="h-3.5 w-3.5 text-accent" strokeWidth={1.75} />
             Pull requests
           </Link>
           <a
@@ -194,7 +195,10 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
                 className="flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-primary"
               >
-                Pull requests
+                <span className="flex items-center gap-3">
+                  <GitPullRequest aria-hidden="true" className="h-4 w-4 text-accent" strokeWidth={1.75} />
+                  Pull requests
+                </span>
                 <span className="text-accent">↗</span>
               </Link>
               <a
