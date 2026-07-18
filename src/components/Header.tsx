@@ -52,6 +52,30 @@ function IstClock() {
   );
 }
 
+function PullRequestFlow({ begin }: { begin: string }) {
+  return (
+    <circle className="live-pr-flow" r="1.15">
+      <animateMotion
+        begin={begin}
+        dur="3.2s"
+        repeatCount="indefinite"
+        path="M10 5h2.5A3.5 3.5 0 0 1 16 8.5v6.25"
+        keyTimes="0;1"
+        calcMode="spline"
+        keySplines="0.35 0 0.15 1"
+      />
+      <animate
+        begin={begin}
+        attributeName="opacity"
+        dur="3.2s"
+        repeatCount="indefinite"
+        values="0;1;1;0"
+        keyTimes="0;0.08;0.9;1"
+      />
+    </circle>
+  );
+}
+
 function PullRequestMark({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <span
@@ -67,24 +91,10 @@ function PullRequestMark({ reduceMotion }: { reduceMotion: boolean }) {
         {reduceMotion ? (
           <circle className="live-pr-flow" cx="16" cy="14.75" r="1.15" />
         ) : (
-          <circle className="live-pr-flow" r="1.15">
-            <animateMotion
-              dur="4.8s"
-              repeatCount="indefinite"
-              path="M10 5h2.5A3.5 3.5 0 0 1 16 8.5v6.25"
-              keyTimes="0;0.3;0.42;1"
-              keyPoints="0;1;1;1"
-              calcMode="spline"
-              keySplines="0.16 1 0.3 1;0 0 1 1;0 0 1 1"
-            />
-            <animate
-              attributeName="opacity"
-              dur="4.8s"
-              repeatCount="indefinite"
-              values="0;1;1;0;0"
-              keyTimes="0;0.04;0.3;0.42;1"
-            />
-          </circle>
+          <>
+            <PullRequestFlow begin="0s" />
+            <PullRequestFlow begin="-1.6s" />
+          </>
         )}
       </svg>
     </span>

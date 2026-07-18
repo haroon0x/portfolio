@@ -134,24 +134,18 @@
 }
 
 .live-pr-mark--animated {
-  animation: live-pr-merge 4.8s linear infinite;
+  animation: live-pr-merge 3.2s ease-in-out infinite;
 }
 
 @keyframes live-pr-merge {
   0%,
-  27%,
-  43%,
   100% {
-    border-color: rgb(var(--color-border));
-    box-shadow: 0 0 0 0 rgb(var(--color-status-merged) / 0);
+    border-color: rgb(var(--color-status-open) / 0.68);
+    box-shadow: 0 0 0 1px rgb(var(--color-status-open) / 0.06);
   }
 
-  32% {
-    border-color: rgb(var(--color-status-open) / 0.8);
-  }
-
-  36% {
-    border-color: rgb(var(--color-status-merged) / 0.9);
+  50% {
+    border-color: rgb(var(--color-status-merged) / 0.88);
     box-shadow: 0 0 0 2px rgb(var(--color-status-merged) / 0.1);
   }
 }
