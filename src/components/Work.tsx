@@ -1,8 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import HoursDial from './HoursDial';
-import SystemSchematic from './SystemSchematic';
 
 interface Project {
   title: string;
@@ -13,7 +11,6 @@ interface Project {
 }
 
 interface FeaturedProject extends Project {
-  title: 'Wake AI' | 'DeadDrop' | 'OutSync';
   problem: string;
   system: string;
   proof: string[];
@@ -133,7 +130,7 @@ export default function Work() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="grid gap-10 border-y border-border py-14 sm:py-20 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20"
         >
-          <HoursDial />
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">About</p>
           <div>
             <figure>
               <blockquote cite="https://www.nba.com/watch/video/2017/12/19/20171218-kobe-jersey-retirement-ceremony-kobe-bryant">
@@ -212,7 +209,6 @@ function FeaturedProjectCaseStudy({ project, index }: { project: FeaturedProject
           </div>
         </div>
         <div className="border-l border-border pl-6 sm:pl-8">
-          <SystemSchematic project={project.title} />
           <dl className="space-y-8">
             <div>
               <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Problem</dt>
