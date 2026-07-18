@@ -52,55 +52,6 @@ function IstClock() {
   );
 }
 
-function PullRequestFlow({ begin }: { begin: string }) {
-  return (
-    <circle className="live-pr-flow" r="1.15">
-      <animateMotion
-        begin={begin}
-        dur="3.2s"
-        repeatCount="indefinite"
-        path="M10 5h2.5A3.5 3.5 0 0 1 16 8.5v6.25"
-        keyTimes="0;1"
-        calcMode="spline"
-        keySplines="0.35 0 0.15 1"
-      />
-      <animate
-        begin={begin}
-        attributeName="opacity"
-        dur="3.2s"
-        repeatCount="indefinite"
-        values="0;1;1;0"
-        keyTimes="0;0.08;0.9;1"
-      />
-    </circle>
-  );
-}
-
-function PullRequestMark({ reduceMotion }: { reduceMotion: boolean }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`live-pr-mark${reduceMotion ? '' : ' live-pr-mark--animated'}`}
-    >
-      <svg viewBox="0 0 22 22" fill="none" className="h-4 w-4">
-        <path className="live-pr-branch" d="M5 6.5v9" />
-        <path className="live-pr-branch" d="M10 5h2.5A3.5 3.5 0 0 1 16 8.5V15" />
-        <circle className="live-pr-node" cx="5" cy="4.5" r="1.75" />
-        <circle className="live-pr-node" cx="5" cy="17.5" r="1.75" />
-        <circle className="live-pr-merge-node" cx="16" cy="17.5" r="1.75" />
-        {reduceMotion ? (
-          <circle className="live-pr-flow" cx="16" cy="14.75" r="1.15" />
-        ) : (
-          <>
-            <PullRequestFlow begin="0s" />
-            <PullRequestFlow begin="-1.6s" />
-          </>
-        )}
-      </svg>
-    </span>
-  );
-}
-
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -185,9 +136,8 @@ export default function Header() {
           ))}
           <Link
             to="/pull-requests"
-            className="group flex min-h-11 items-center gap-2.5 px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
+            className="flex min-h-11 items-center px-4 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary transition-colors hover:text-text-primary"
           >
-            <PullRequestMark reduceMotion={shouldReduceMotion ?? false} />
             Pull requests
           </Link>
           <a
@@ -244,10 +194,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
                 className="flex min-h-14 items-center justify-between border-b border-border font-mono text-xs uppercase tracking-[0.16em] text-text-primary"
               >
-                <span className="flex items-center gap-3">
-                  <PullRequestMark reduceMotion={shouldReduceMotion ?? false} />
-                  Pull requests
-                </span>
+                Pull requests
                 <span className="text-accent">↗</span>
               </Link>
               <a
