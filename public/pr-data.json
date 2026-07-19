@@ -59,7 +59,7 @@
       ]
     },
     {
-      "title": "feat: Add Custom Latency Benchmarking and HTML Reporting for Trainer MCP Tools",
+      "title": "feat: add latency benchmarking and HTML reporting for trainer MCP tools",
       "repo": "kubeflow/mcp-server",
       "url": "https://github.com/kubeflow/mcp-server/pull/26",
       "description": "First thing: this is not a vibe coded AI slop PR. I have added the initial benchmark suite for trainer MCP tools as mentioned in #10 . This PR focuses only on latency benchmarks...",
@@ -777,7 +777,7 @@
       ]
     }
   ],
-  "lastUpdated": "2026-07-17T10:58:35.659Z",
+  "lastUpdated": "2026-07-19T08:24:13.193Z",
   "total": 52,
   "open": 19,
   "merged": 9
