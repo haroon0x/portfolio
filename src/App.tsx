@@ -180,7 +180,7 @@ function AppShell({ initialPRData }: { initialPRData?: PRData }) {
       <div className="site-shell">
         <AppErrorBoundary>
           <MotionConfig reducedMotion="user">
-            <div className="min-h-screen text-text-primary">
+            <div className="min-h-[100dvh] text-text-primary">
               <ScrollProgress />
               <Header />
               <AnimatedRoutes initialPRData={initialPRData} />

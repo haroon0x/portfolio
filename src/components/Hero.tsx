@@ -1,12 +1,16 @@
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import AsciiHands from './AsciiHands';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
   const scrollToWork = () => {
-    document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('work')?.scrollIntoView({
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+    });
   };
 
   return (
@@ -19,10 +23,6 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             className="lg:col-start-1 lg:row-start-1"
           >
-            <p className="mb-8 flex items-center gap-3 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-text-muted sm:mb-10">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Independent engineer & builder
-            </p>
             <h1 className="max-w-5xl text-[clamp(3.1rem,6.4vw,7rem)] font-medium uppercase leading-[0.93] tracking-[-0.055em] text-text-primary text-balance">
               Building ambitious systems, end to end.
             </h1>
@@ -40,15 +40,9 @@ export default function Hero() {
               <p className="max-w-xl text-lg leading-8 text-text-secondary sm:text-xl sm:leading-9">
                 I&apos;m Muhammed Haroon, an independent engineer focused on turning difficult ideas into reliable products.
               </p>
-              <div className="sm:text-right">
-                <div className="flex items-center gap-3 font-mono text-[0.66rem] uppercase tracking-[0.17em] text-text-secondary sm:justify-end">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-40" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-                  </span>
-                  Available
-                </div>
-                <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-text-muted">India · Global</p>
+              <div className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.17em] text-text-secondary sm:justify-end">
+                <span className="h-2 w-2 rounded-full bg-accent" />
+                Available for work
               </div>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">

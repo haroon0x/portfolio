@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="" />
+  <meta name="theme-color" content="#0b0b0a" />
   <title>Muhammed Haroon | Independent Engineer & Builder</title>
   <meta name="description"
     content="Muhammed Haroon is an independent engineer building reliable systems and ambitious products." />
@@ -27,24 +27,22 @@
   <meta property="og:image" content="https://haroon0x.dev/og-card.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Muhammed Haroon — independent engineer and builder" />
+  <meta property="og:image:alt" content="Muhammed Haroon, independent engineer and builder" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Muhammed Haroon | Independent Engineer & Builder" />
   <meta name="twitter:description"
     content="Muhammed Haroon is an independent engineer building reliable systems and ambitious products." />
   <meta name="twitter:image" content="https://haroon0x.dev/og-card.png" />
-  <meta name="twitter:image:alt" content="Muhammed Haroon — independent engineer and builder" />
+  <meta name="twitter:image:alt" content="Muhammed Haroon, independent engineer and builder" />
   <meta name="twitter:creator" content="@skywalkerr0x" />
   <script id="structured-data" type="application/ld+json">
     {"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://haroon0x.dev/#person","name":"Muhammed Haroon","alternateName":"haroon0x","url":"https://haroon0x.dev/","jobTitle":"Independent Engineer & Builder","sameAs":["https://github.com/haroon0x","https://linkedin.com/in/muhammed-haroon-0399962b8","https://x.com/skywalkerr0x"],"knowsAbout":["Artificial intelligence","Machine learning","Developer tools","Distributed systems","Open-source software"]},{"@type":"WebSite","@id":"https://haroon0x.dev/#website","url":"https://haroon0x.dev/","name":"Muhammed Haroon","description":"Muhammed Haroon is an independent engineer building reliable systems and ambitious products.","publisher":{"@id":"https://haroon0x.dev/#person"},"inLanguage":"en"},{"@type":"ProfilePage","@id":"https://haroon0x.dev/#webpage","url":"https://haroon0x.dev/","name":"Muhammed Haroon | Independent Engineer & Builder","description":"Muhammed Haroon is an independent engineer building reliable systems and ambitious products.","isPartOf":{"@id":"https://haroon0x.dev/#website"},"mainEntity":{"@id":"https://haroon0x.dev/#person"},"inLanguage":"en"}]}
   </script>
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <!-- Self-hosted fonts: no third-party origin before first paint -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/archivo-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/manrope-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrains-mono-latin.woff2" crossorigin />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHVPNSB7K1"></script>
   <script>
@@ -58,14 +56,14 @@
   <script>
     (function () {
       const stored = localStorage.getItem('portfolio-theme');
-      if (stored === 'light') {
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const light = stored === 'light' || (stored !== 'dark' && prefersLight);
+      if (light) {
         document.documentElement.classList.remove('theme-dark');
         document.documentElement.classList.add('theme-light');
-      } else if (stored === 'dark') {
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f2f0ea');
+      } else {
         document.documentElement.classList.add('theme-dark');
-      } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-        document.documentElement.classList.remove('theme-dark');
-        document.documentElement.classList.add('theme-light');
       }
     })();
   </script>

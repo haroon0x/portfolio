@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowDownUp, ArrowUpRight, Building2, ChevronDown, Filter, Search } from 'lucide-react';
+import { ArrowDownUp, ArrowUpRight, ChevronDown, Filter, Search } from 'lucide-react';
 import { loadPRData, type PRData, type PullRequest } from '../data/prData';
 
 type SortBy = 'depth' | 'date' | 'repo';
@@ -311,7 +311,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
         type="button"
         onClick={() => selectRepository(null)}
         aria-pressed={!activeRepository}
-        className={`flex min-h-11 w-full items-center justify-between border-b border-border px-4 text-left font-mono text-[0.62rem] uppercase tracking-[0.13em] transition-colors ${!activeRepository ? 'bg-accent-muted text-accent' : 'text-text-secondary hover:bg-surface hover:text-text-primary'}`}
+        className={`flex min-h-11 w-full items-center justify-between border-b border-border px-4 text-left font-mono text-[0.7rem] uppercase tracking-[0.13em] transition-colors ${!activeRepository ? 'bg-accent-muted text-accent' : 'text-text-secondary hover:bg-surface hover:text-text-primary'}`}
       >
         <span>All repositories</span>
         <span className="tabular-nums">{organizationPRs.length.toString().padStart(2, '0')}</span>
@@ -330,13 +330,13 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                 aria-label={`${isActive ? 'Clear' : 'Show'} ${repository.name}: ${repository.pullRequests} pull requests`}
                 className={`group flex min-h-12 w-full items-center gap-3 border-b border-border px-4 text-left transition-colors ${isActive ? 'bg-accent-muted' : 'hover:bg-surface'}`}
               >
-                <span className={`font-mono text-[0.56rem] tabular-nums tracking-[0.12em] ${isActive ? 'text-accent' : 'text-text-muted'}`}>
+                <span className={`font-mono text-[0.7rem] tabular-nums tracking-[0.12em] ${isActive ? 'text-accent' : 'text-text-muted'}`}>
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className={`min-w-0 flex-1 truncate text-sm tracking-[-0.015em] ${isActive ? 'text-accent' : 'text-text-primary'}`}>
                   {label}
                 </span>
-                <span className="font-mono text-[0.58rem] tabular-nums tracking-[0.1em] text-text-muted">
+                <span className="font-mono text-[0.7rem] tabular-nums tracking-[0.1em] text-text-muted">
                   {repository.pullRequests.toString().padStart(2, '0')}
                 </span>
               </button>
@@ -350,7 +350,6 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
   return (
     <main id="main-content" className="safe-x mx-auto min-h-[100svh] max-w-[96rem] bg-background pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-40 lg:px-12 lg:pb-40">
       <header className="max-w-5xl">
-        <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Public engineering record</p>
         <h1 className="text-[clamp(2.6rem,6vw,7rem)] font-medium leading-[0.96] tracking-[-0.055em] text-text-primary">
           Open source contributions
         </h1>
@@ -362,23 +361,23 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
       {data && !loading && (
         <dl className="mt-14 grid grid-cols-2 border-y border-border sm:mt-20 md:grid-cols-5">
           <div className="flex flex-col border-b border-r border-border py-6 pr-5 md:border-b-0 md:px-6 md:first:pl-0">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Total</dt>
+            <dt className="order-2 mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Total</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-text-primary sm:text-4xl">{data.total}</dd>
           </div>
           <div className="flex flex-col border-b border-border py-6 pl-5 md:border-b-0 md:border-r md:px-6">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Merged</dt>
+            <dt className="order-2 mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Merged</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-merged sm:text-4xl">{data.merged}</dd>
           </div>
           <div className="flex flex-col border-b border-r border-border py-6 pr-5 md:border-b-0 md:px-6">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Open</dt>
+            <dt className="order-2 mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Open</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-status-open sm:text-4xl">{data.open}</dd>
           </div>
           <div className="flex flex-col border-b border-border py-6 pl-5 md:border-b-0 md:border-r md:px-6">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Organizations</dt>
+            <dt className="order-2 mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Organizations</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-accent sm:text-4xl">{organizations.length}</dd>
           </div>
           <div className="col-span-2 flex flex-col py-6 md:col-span-1 md:px-6 md:last:pr-0">
-            <dt className="order-2 mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Merge rate</dt>
+            <dt className="order-2 mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Merge rate</dt>
             <dd className="order-1 text-3xl font-medium tabular-nums tracking-[-0.04em] text-accent sm:text-4xl">{data.total ? Math.round((data.merged / data.total) * 100) : 0}%</dd>
           </div>
         </dl>
@@ -387,8 +386,8 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
       {data && !loading && (
         <section aria-labelledby="activity-timeline-title" className="mt-10 border-b border-border pb-8 sm:mt-12">
           <div className="flex items-center justify-between gap-6">
-            <h2 id="activity-timeline-title" className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Activity / last 12 months</h2>
-            <span className="font-mono text-[0.6rem] tabular-nums uppercase tracking-[0.14em] text-text-muted">{monthlyActivity.reduce((total, month) => total + month.count, 0)} PRs</span>
+            <h2 id="activity-timeline-title" className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">Activity / last 12 months</h2>
+            <span className="font-mono text-[0.7rem] tabular-nums uppercase tracking-[0.14em] text-text-muted">{monthlyActivity.reduce((total, month) => total + month.count, 0)} PRs</span>
           </div>
           <p className="sr-only">12-month activity: peak {peakMonth.count} pull requests in {peakMonthLabel}.</p>
           <div aria-hidden="true" className="mt-5 grid h-[4.25rem] grid-cols-12 gap-1.5 sm:gap-3">
@@ -406,7 +405,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                     className={`block w-full ${month.isCurrent ? 'bg-accent' : 'bg-border-strong'}`}
                   />
                   {showLabel && (
-                    <span className={`absolute top-14 font-mono text-[0.55rem] uppercase tracking-[0.1em] ${month.isCurrent ? 'right-0 text-accent' : 'left-0 text-text-muted'}`}>
+                    <span className={`absolute top-14 font-mono text-[0.7rem] uppercase tracking-[0.1em] ${month.isCurrent ? 'right-0 text-accent' : 'left-0 text-text-muted'}`}>
                       {monthLabel}
                     </span>
                   )}
@@ -421,10 +420,6 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
         <section aria-labelledby="organization-index-title" className="mt-16 scroll-mt-28 sm:mt-24">
           <div className="grid gap-8 border-b border-border pb-9 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.55fr)] lg:items-end lg:gap-16">
             <div>
-              <p className="mb-4 inline-flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent">
-                <Building2 className="h-3.5 w-3.5" />
-                Contribution network / {organizations.length.toString().padStart(2, '0')}
-              </p>
               <h2 id="organization-index-title" className="max-w-3xl text-[clamp(2.4rem,5vw,5.6rem)] font-medium leading-[0.92] tracking-[-0.055em] text-text-primary">
                 Where the work landed.
               </h2>
@@ -437,12 +432,12 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                 type="button"
                 onClick={() => selectOrganization(null)}
                 aria-pressed={!activeOrganization}
-                className={`mt-6 inline-flex min-h-11 items-center gap-3 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-[border-color,background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${!activeOrganization ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-accent hover:text-accent'}`}
+                className={`mt-6 inline-flex min-h-11 items-center gap-3 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-[border-color,background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${!activeOrganization ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-accent hover:text-accent'}`}
               >
                 All organizations
                 <span className="tabular-nums">{data.total.toString().padStart(2, '0')} PRs</span>
               </button>
-              <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-text-muted">
+              <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-text-muted">
                 <span className="text-status-merged">M / merged</span>
                 <span className="text-status-open">O / open</span>
                 <span className="text-status-closed">C / closed</span>
@@ -467,13 +462,13 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                   >
                     <span className={`absolute inset-y-0 left-0 w-0.5 transition-colors duration-150 ${isActive ? 'bg-accent' : 'bg-transparent group-hover:bg-border-strong'}`} />
                     <span className="flex w-full items-start justify-between gap-5">
-                      <span className="inline-flex items-center gap-3 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-text-muted">
+                      <span className="inline-flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">
                         <span>{String(index + 1).padStart(2, '0')}</span>
                         <span aria-hidden="true" className={`flex h-8 min-w-10 items-center justify-center border px-2 tracking-[0.1em] transition-colors duration-150 ${isActive ? 'border-accent text-accent' : 'border-border text-text-secondary group-hover:border-border-strong group-hover:text-text-primary'}`}>
                           {mark}
                         </span>
                       </span>
-                      <span className={`font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors duration-150 ${isActive ? 'text-accent' : 'text-text-muted group-hover:text-text-primary'}`}>
+                      <span className={`font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors duration-150 ${isActive ? 'text-accent' : 'text-text-muted group-hover:text-text-primary'}`}>
                         {organization.pullRequests.toString().padStart(2, '0')} PRs
                       </span>
                     </span>
@@ -486,7 +481,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                       <span className="block h-px w-full bg-border">
                         <span className={`block h-px ${isActive ? 'bg-accent' : 'bg-border-strong'}`} style={{ width: `${contributionWidth}%` }} />
                       </span>
-                      <span className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-text-muted">
+                      <span className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-text-muted">
                         <span>{organization.repositories} {organization.repositories === 1 ? 'repository' : 'repositories'}</span>
                         <span className="flex items-center gap-3 tabular-nums">
                           <span className="text-status-merged">M {organization.merged}</span>
@@ -505,11 +500,11 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
 
       <section aria-label="Pull request controls" className="mt-12 border-y border-border py-5 sm:mt-16">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
-          <p aria-live="polite" className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-text-primary">
+          <p aria-live="polite" className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-primary">
             {activeOrganization ? `${activeOrganization.name} / ` : ''}{activeRepository ? `${activeRepository.name.split('/')[1]} / ` : ''}{filteredPRs.length} matches
           </p>
           {data?.lastUpdated && (
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-muted">
               Updated {new Date(data.lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
             </p>
           )}
@@ -531,7 +526,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
 
         <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-muted">
               <Filter className="h-3.5 w-3.5" />
               Filter
             </span>
@@ -540,7 +535,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => selectFilter('all')}
               aria-label="Show all pull requests"
               aria-pressed={filterStatus === 'all'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'all' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'all' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               All
             </button>
@@ -549,7 +544,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => selectFilter('merged')}
               aria-label="Show merged pull requests"
               aria-pressed={filterStatus === 'merged'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'merged' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'merged' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               Merged
             </button>
@@ -558,14 +553,14 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => selectFilter('open')}
               aria-label="Show open pull requests"
               aria-pressed={filterStatus === 'open'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'open' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${filterStatus === 'open' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               Open
             </button>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted">
+            <span className="mr-1 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-muted">
               <ArrowDownUp className="h-3.5 w-3.5" />
               Sort
             </span>
@@ -574,7 +569,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => toggleSort('depth')}
               aria-label={sortLabel('pull request volume', 'depth')}
               aria-pressed={sortBy === 'depth'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'depth' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'depth' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               Volume {sortBy === 'depth' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
@@ -583,7 +578,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => toggleSort('date')}
               aria-label={sortLabel('recent activity', 'date')}
               aria-pressed={sortBy === 'date'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'date' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'date' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               Recent {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
@@ -592,7 +587,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               onClick={() => toggleSort('repo')}
               aria-label={sortLabel('repository', 'repo')}
               aria-pressed={sortBy === 'repo'}
-              className={`min-h-11 rounded-control border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'repo' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
+              className={`min-h-11 rounded-control border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${sortBy === 'repo' ? 'border-accent bg-accent-muted text-accent' : 'border-border text-text-secondary hover:border-border-strong hover:text-text-primary'}`}
             >
               Repository {sortBy === 'repo' && (sortOrder === 'asc' ? '↑' : '↓')}
             </button>
@@ -603,11 +598,10 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
       <section aria-label="Pull requests" className="mt-10 border-t border-border sm:mt-12">
         <header className="flex flex-wrap items-end justify-between gap-6 border-b border-border py-7 sm:py-9">
           <div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-[0.17em] text-accent">Contribution trace</p>
-            <h2 className="mt-2 text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">
+            <h2 className="text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">
               {activeRepository?.name ?? (activeOrganization ? `${activeOrganization.name} repositories` : 'Every repository')}
             </h2>
-            <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.13em] text-text-muted">
+            <p className="mt-3 font-mono text-[0.7rem] uppercase tracking-[0.13em] text-text-muted">
               {filteredPRs.length} pull requests / {repositoryGroups.length} {repositoryGroups.length === 1 ? 'repository' : 'repositories'}
             </p>
           </div>
@@ -616,7 +610,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               <button
                 type="button"
                 onClick={() => selectRepository(null)}
-                className="min-h-11 rounded-control border border-accent bg-accent-muted px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-accent transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+                className="min-h-11 rounded-control border border-accent bg-accent-muted px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-accent transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
               >
                 Clear {activeRepository.name.split('/')[1]} ×
               </button>
@@ -625,7 +619,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
               <button
                 type="button"
                 onClick={() => selectOrganization(null)}
-                className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-text-secondary transition-[border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-accent hover:text-accent active:scale-[0.97]"
+                className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-secondary transition-[border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-accent hover:text-accent active:scale-[0.97]"
               >
                 Clear {activeOrganization.name} ×
               </button>
@@ -657,7 +651,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
             <button
               type="button"
               onClick={resetControls}
-              className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
+              className="min-h-11 rounded-control border border-border px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent"
             >
               Reset to all
             </button>
@@ -665,7 +659,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
         ) : (
           <div className="lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
             <details className="group border-b border-border lg:hidden [&>summary::-webkit-details-marker]:hidden">
-              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-4 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-primary">
                 <span className="min-w-0 truncate">{activeRepository ? activeRepository.name : `Repository index / ${repositories.length}`}</span>
                 <ChevronDown className="h-4 w-4 shrink-0 text-text-muted transition-transform duration-150 group-open:rotate-180" />
               </summary>
@@ -677,24 +671,23 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
             <aside className="hidden border-r border-border lg:block">
               <div className="sticky top-28 max-h-[calc(100svh-8rem)] overflow-y-auto overscroll-contain">
                 <div className="border-b border-border px-4 py-4">
-                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.15em] text-text-muted">Repository index / {repositories.length.toString().padStart(2, '0')}</p>
+                  <p className="font-mono text-[0.7rem] uppercase tracking-[0.15em] text-text-muted">Repository index / {repositories.length.toString().padStart(2, '0')}</p>
                 </div>
                 {renderRepositoryIndex()}
               </div>
             </aside>
 
             <div className="min-w-0">
-              {repositoryGroups.map((repository, groupIndex) => {
+              {repositoryGroups.map((repository) => {
                 const repositoryId = `repository-${repository.name.replace(/[^a-z0-9]+/gi, '-').toLocaleLowerCase()}`;
 
                 return (
                   <section key={repository.name} aria-labelledby={repositoryId} className="scroll-mt-24">
                     <header className="sticky top-20 z-20 flex flex-wrap items-end justify-between gap-4 border-b border-border bg-background/95 px-4 py-4 backdrop-blur-xl sm:px-6 lg:top-24">
                       <div>
-                        <p className="font-mono text-[0.56rem] uppercase tracking-[0.15em] text-text-muted">Repository / {String(groupIndex + 1).padStart(2, '0')}</p>
-                        <h3 id={repositoryId} className="mt-1 text-lg font-medium tracking-[-0.025em] text-text-primary sm:text-xl">{repository.name}</h3>
+                        <h3 id={repositoryId} className="text-lg font-medium tracking-[-0.025em] text-text-primary sm:text-xl">{repository.name}</h3>
                       </div>
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[0.58rem] uppercase tracking-[0.11em] text-text-muted">
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[0.7rem] uppercase tracking-[0.11em] text-text-muted">
                         <span>{repository.pullRequests} PRs</span>
                         <span className="flex items-center gap-3 tabular-nums">
                           <span className="text-status-merged">M {repository.merged}</span>
@@ -727,14 +720,14 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                               aria-label={`Open ${pr.title} on GitHub`}
                               className="grid grid-cols-[auto_minmax(0,1fr)_2.5rem] gap-x-3 gap-y-3 px-4 py-5 sm:px-6 md:grid-cols-[5rem_7rem_minmax(0,1fr)_minmax(9rem,0.35fr)_2.5rem] md:items-center md:gap-5"
                             >
-                              <span className="flex items-center gap-2 font-mono text-[0.64rem] tabular-nums tracking-[0.08em] text-text-muted">
+                              <span className="flex items-center gap-2 font-mono text-[0.7rem] tabular-nums tracking-[0.08em] text-text-muted">
                                 <span aria-hidden="true">{branch}</span>
                                 <span className="text-text-secondary">#{number}</span>
                               </span>
 
                               <span className="flex items-center gap-3 md:block">
-                                <span className={`block font-mono text-[0.6rem] uppercase tracking-[0.13em] ${statusClass}`}>{pr.status}</span>
-                                <span className="block font-mono text-[0.56rem] uppercase tracking-[0.09em] text-text-muted md:mt-1.5">{pr.date}</span>
+                                <span className={`block font-mono text-[0.7rem] uppercase tracking-[0.13em] ${statusClass}`}>{pr.status}</span>
+                                <span className="block font-mono text-[0.7rem] uppercase tracking-[0.09em] text-text-muted md:mt-1.5">{pr.date}</span>
                               </span>
 
                               <span className="col-span-3 min-w-0 md:col-span-1">
@@ -743,7 +736,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                               </span>
 
                               <span className="col-span-2 flex flex-wrap items-center gap-x-3 gap-y-1 md:col-span-1 md:block">
-                                <span className="flex gap-2 font-mono text-[0.62rem] tabular-nums">
+                                <span className="flex gap-2 font-mono text-[0.7rem] tabular-nums">
                                   <span className="text-status-open">+{pr.additions.toLocaleString()}</span>
                                   <span className="text-status-closed">−{pr.deletions.toLocaleString()}</span>
                                 </span>
@@ -751,7 +744,7 @@ const PullRequests = ({ initialData }: { initialData?: PRData }) => {
                                   <span className="h-full bg-status-open" style={{ width: `${additionsWidth}%` }} />
                                   <span className="h-full bg-status-closed" style={{ width: `${deletionsWidth}%` }} />
                                 </span>
-                                <span className="font-mono text-[0.55rem] uppercase tracking-[0.09em] text-text-muted md:mt-2 md:block md:truncate">{pr.languages.slice(0, 2).join(' / ')}</span>
+                                <span className="font-mono text-[0.7rem] uppercase tracking-[0.09em] text-text-muted md:mt-2 md:block md:truncate">{pr.languages.slice(0, 2).join(' / ')}</span>
                               </span>
 
                               <span className="col-start-3 row-start-1 flex h-10 w-10 items-center justify-center justify-self-end rounded-control border border-border text-text-primary transition-[border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-accent group-hover:text-accent md:col-start-auto md:row-start-auto">

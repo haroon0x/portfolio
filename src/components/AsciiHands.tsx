@@ -696,9 +696,6 @@ export default function AsciiHands({ onExplore }: AsciiHandsProps) {
             </Fragment>
           ))}
         </pre>
-        <span aria-hidden="true" className="pointer-events-none absolute left-0 top-5 hidden font-mono text-[0.58rem] uppercase tracking-[0.18em] text-text-muted sm:block">
-          ASCII field / live
-        </span>
       </button>
     </motion.div>
   );

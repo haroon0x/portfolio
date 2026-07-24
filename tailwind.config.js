@@ -27,9 +27,9 @@ export default {
         },
       },
       fontFamily: {
-        heading: ['var(--font-heading)', 'Georgia', 'serif'],
-        body: ['Manrope', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        heading: 'var(--font-heading)',
+        body: 'var(--font-body)',
+        mono: 'var(--font-mono)',
       },
       fontSize: {
         'display': ['clamp(2.75rem, 8vw, 4.75rem)', { lineHeight: '1.08', letterSpacing: '0.01em' }],

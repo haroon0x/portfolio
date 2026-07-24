@@ -33,8 +33,8 @@ test.describe('core routes', () => {
 
   test('unknown route shows custom 404 page', async ({ page }) => {
     await page.goto('/this-route-does-not-exist');
-    await expect(page.getByRole('heading', { level: 1, name: /page not found/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /go back home/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /this page does not exist/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /back to the homepage/i })).toBeVisible();
   });
 
   test('mobile menu opens and navigates', async ({ page, isMobile }) => {

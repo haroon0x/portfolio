@@ -37,5 +37,8 @@ dist-ssr
 playwright-report/
 test-results/
 
+# Generated knowledge graph
+graphify-out/
+
 # Resume
 haroon-resume.html

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -92,15 +93,12 @@ export default function Work() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 flex items-end justify-between gap-8 sm:mb-14"
+          className="mb-10 sm:mb-14"
         >
-          <div>
-            <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Selected work</p>
-            <h2 className="text-[clamp(2.25rem,4vw,4.75rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">
-              Built to work in the real world.
-            </h2>
-          </div>
-          <span className="hidden font-mono text-[0.68rem] uppercase tracking-[0.18em] text-text-muted sm:block">2023—2026</span>
+          <p className="mb-4 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-text-muted">Selected work</p>
+          <h2 className="max-w-4xl text-[clamp(2.25rem,4vw,4.75rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">
+            Built to work in the real world.
+          </h2>
         </motion.div>
 
         <div className="space-y-16 sm:space-y-24">
@@ -110,10 +108,7 @@ export default function Work() {
         </div>
 
         <div className="mt-24 sm:mt-32">
-          <div className="mb-6 flex items-center justify-between gap-6">
-            <h3 className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Project archive</h3>
-            <span className="font-mono text-[0.64rem] tabular-nums tracking-[0.14em] text-text-muted">04—08</span>
-          </div>
+          <h3 className="mb-6 text-2xl font-medium tracking-[-0.03em] text-text-primary sm:text-3xl">Everything else</h3>
           <div className="border-t border-border">
             {archiveProjects.map((project, index) => (
               <ProjectRow key={project.title} project={project} index={index + featuredProjects.length} />
@@ -122,15 +117,14 @@ export default function Work() {
         </div>
       </section>
 
-      <section id="about" className="safe-x mx-auto max-w-[96rem] scroll-mt-24 pb-24 sm:px-8 sm:pb-32 lg:px-12 lg:pb-40">
+      <section id="about" aria-label="About" className="safe-x mx-auto max-w-[96rem] scroll-mt-24 pb-24 sm:px-8 sm:pb-32 lg:px-12 lg:pb-40">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="grid gap-10 border-y border-border py-14 sm:py-20 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20"
+          className="border-y border-border py-14 sm:py-20"
         >
-          <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">About</p>
           <div>
             <figure>
               <blockquote cite="https://www.nba.com/watch/video/2017/12/19/20171218-kobe-jersey-retirement-ceremony-kobe-bryant">
@@ -141,7 +135,7 @@ export default function Work() {
                   </span>
                 </p>
               </blockquote>
-              <figcaption className="mt-8 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-text-muted">
+              <figcaption className="mt-8 flex items-center gap-4 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-text-muted">
                 <span aria-hidden="true" className="h-px w-10 bg-border-strong" />
                 <a
                   href="https://www.nba.com/watch/video/2017/12/19/20171218-kobe-jersey-retirement-ceremony-kobe-bryant"
@@ -178,10 +172,41 @@ export default function Work() {
   );
 }
 
-function FeaturedProjectCaseStudy({ project, index }: { project: FeaturedProject; index: number }) {
+function ProjectLinks({ project }: { project: FeaturedProject }) {
   const primaryUrl = project.link ?? project.github;
 
   return (
+    <div className="flex items-center gap-5">
+      {project.link && (
+        <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-accent">
+          View code
+        </a>
+      )}
+      <a href={primaryUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:text-accent">
+        {project.link ? 'Open project' : 'View repository'}
+        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </a>
+    </div>
+  );
+}
+
+function ProofList({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-3 space-y-2">
+      {items.map((item) => (
+        <li key={item} className="font-mono text-[0.7rem] uppercase leading-5 tracking-[0.1em] text-text-secondary">{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+const detailLabel = 'font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted';
+
+function FeaturedProjectCaseStudy({ project, index }: { project: FeaturedProject; index: number }) {
+  const number = String(index + 1).padStart(2, '0');
+  const mirrored = index === 2;
+
+  const article = (children: ReactNode) => (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -189,47 +214,84 @@ function FeaturedProjectCaseStudy({ project, index }: { project: FeaturedProject
       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
       className="border-t border-border pt-7 sm:pt-9"
     >
-      <div className="grid gap-8 lg:grid-cols-[4rem_minmax(16rem,0.8fr)_minmax(0,1.2fr)] lg:gap-10">
-        <span className="font-mono text-xs tabular-nums tracking-[0.12em] text-text-muted">{String(index + 1).padStart(2, '0')}</span>
-        <div>
-          <p className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-accent">Featured system</p>
-          <h3 className="mt-3 text-[clamp(2rem,3.4vw,4rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">{project.title}</h3>
-          <p className="mt-5 max-w-md text-lg leading-8 text-text-secondary">{project.description}</p>
-          <p className="mt-5 font-mono text-[0.64rem] uppercase leading-5 tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
-          <div className="mt-8 flex items-center gap-5">
-            {project.link && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-accent">
-                View code
-              </a>
-            )}
-            <a href={primaryUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-primary transition-colors hover:text-accent">
-              {project.link ? 'Open project' : 'View repository'}
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
-          </div>
+      {children}
+    </motion.article>
+  );
+
+  if (index === 0) {
+    return article(
+      <>
+        <div className="flex items-baseline gap-5 sm:gap-8">
+          <span className="font-mono text-xs tabular-nums tracking-[0.12em] text-text-muted">{number}</span>
+          <h3 className="text-[clamp(2.6rem,6vw,6rem)] font-medium leading-none tracking-[-0.05em] text-text-primary">{project.title}</h3>
         </div>
-        <div className="border-l border-border pl-6 sm:pl-8">
-          <dl className="space-y-8">
-            <div>
-              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Problem</dt>
-              <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.problem}</dd>
+        <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+          <div>
+            <p className="max-w-lg text-xl leading-9 text-text-secondary sm:text-2xl sm:leading-10">{project.description}</p>
+            <p className="mt-6 font-mono text-[0.7rem] uppercase leading-5 tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
+            <div className="mt-8">
+              <ProjectLinks project={project} />
+            </div>
+          </div>
+          <dl className="grid gap-8 sm:grid-cols-2 lg:gap-10">
+            <div className="sm:col-span-2">
+              <dt className={detailLabel}>Problem</dt>
+              <dd className="mt-3 leading-7 text-text-secondary">{project.problem}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">System</dt>
-              <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.system}</dd>
+              <dt className={detailLabel}>System</dt>
+              <dd className="mt-3 leading-7 text-text-secondary">{project.system}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">Engineering proof</dt>
-              <dd className="mt-4 flex flex-wrap gap-2">
-                {project.proof.map((item) => (
-                  <span key={item} className="border border-border px-3 py-2 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-text-secondary">{item}</span>
-                ))}
+              <dt className={detailLabel}>Engineering proof</dt>
+              <dd>
+                <ProofList items={project.proof} />
               </dd>
             </div>
           </dl>
         </div>
+      </>,
+    );
+  }
+
+  const summary = (
+    <div className={mirrored ? 'lg:col-start-3' : ''}>
+      <h3 className="text-[clamp(2rem,3.4vw,4rem)] font-medium leading-none tracking-[-0.045em] text-text-primary">{project.title}</h3>
+      <p className="mt-5 max-w-md text-lg leading-8 text-text-secondary">{project.description}</p>
+      <p className="mt-5 font-mono text-[0.7rem] uppercase leading-5 tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
+      <div className="mt-8">
+        <ProjectLinks project={project} />
       </div>
-    </motion.article>
+    </div>
+  );
+
+  const detail = (
+    <div className={mirrored ? 'lg:col-start-2 lg:row-start-1 lg:border-r lg:border-border lg:pr-8' : 'lg:border-l lg:border-border lg:pl-8'}>
+      <dl className="space-y-8">
+        <div>
+          <dt className={detailLabel}>Problem</dt>
+          <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.problem}</dd>
+        </div>
+        <div>
+          <dt className={detailLabel}>System</dt>
+          <dd className="mt-3 max-w-2xl leading-7 text-text-secondary">{project.system}</dd>
+        </div>
+        <div>
+          <dt className={detailLabel}>Engineering proof</dt>
+          <dd>
+            <ProofList items={project.proof} />
+          </dd>
+        </div>
+      </dl>
+    </div>
+  );
+
+  return article(
+    <div className={`grid gap-8 lg:gap-10 ${mirrored ? 'lg:grid-cols-[4rem_minmax(0,1.2fr)_minmax(16rem,0.8fr)]' : 'lg:grid-cols-[4rem_minmax(16rem,0.8fr)_minmax(0,1.2fr)]'}`}>
+      <span className="font-mono text-xs tabular-nums tracking-[0.12em] text-text-muted lg:col-start-1 lg:row-start-1">{number}</span>
+      {mirrored ? detail : summary}
+      {mirrored ? summary : detail}
+    </div>,
   );
 }
 
@@ -250,11 +312,11 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         <h4 className="text-2xl font-medium tracking-[-0.035em] text-text-primary sm:text-3xl">{project.title}</h4>
         <div>
           <p className="max-w-lg leading-7 text-text-secondary">{project.description}</p>
-          <p className="mt-4 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
+          <p className="mt-4 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted">{project.tags.join(', ')}</p>
         </div>
         <div className="flex items-center gap-4 sm:justify-end">
           {project.link && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center font-mono text-[0.64rem] uppercase tracking-[0.14em] text-text-muted transition-colors hover:text-text-primary">
+            <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center font-mono text-[0.7rem] uppercase tracking-[0.14em] text-text-muted transition-colors hover:text-text-primary">
               Code
             </a>
           )}

@@ -12,22 +12,18 @@ export default function Footer() {
   return (
     <footer id="contact" className="border-t border-border bg-surface">
       <div className="safe-x mx-auto max-w-[96rem] py-16 sm:px-8 sm:py-24 lg:px-12 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-[1.45fr_0.55fr] lg:gap-20">
-          <div>
-            <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-text-muted">Start a conversation</p>
-            <h2 className="max-w-5xl text-[clamp(2.8rem,6vw,7rem)] font-medium leading-[0.96] tracking-[-0.055em] text-text-primary">
-              Have something ambitious in mind?
-            </h2>
+        <div>
+          <h2 className="max-w-5xl text-[clamp(2.8rem,6vw,7rem)] font-medium leading-[0.96] tracking-[-0.055em] text-text-primary">
+            Have something ambitious in mind?
+          </h2>
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-x-12 gap-y-8">
             <a
               href="mailto:haroonbmc0@gmail.com"
-              className="group mt-10 inline-flex min-h-14 items-center gap-4 border-b border-accent pb-2 text-lg text-accent transition-colors hover:text-text-primary sm:text-xl"
+              className="group inline-flex min-h-14 items-center gap-4 border-b border-accent pb-2 text-lg text-accent transition-colors hover:text-text-primary sm:text-xl"
             >
               haroonbmc0@gmail.com
               <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
             </a>
-          </div>
-
-          <div className="flex flex-col justify-end lg:items-end">
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
@@ -45,7 +41,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 flex flex-col gap-4 border-t border-border pt-6 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-text-muted sm:mt-28 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+        <div className="mt-16 flex flex-col gap-4 border-t border-border pt-6 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-text-muted sm:mt-20 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center">
           <span>© {new Date().getFullYear()} Muhammed Haroon</span>
           <VisitorCounter />
           <button
