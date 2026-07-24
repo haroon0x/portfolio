@@ -65,8 +65,8 @@
       "description": "First thing: this is not a vibe coded AI slop PR. I have added the initial benchmark suite for trainer MCP tools as mentioned in #10 . This PR focuses only on latency benchmarks...",
       "status": "Open",
       "date": "May 18, 2026",
-      "additions": 831,
-      "deletions": 0,
+      "additions": 861,
+      "deletions": 2,
       "languages": [
         "Python",
         "Makefile",
@@ -777,7 +777,7 @@
       ]
     }
   ],
-  "lastUpdated": "2026-07-19T08:24:13.193Z",
+  "lastUpdated": "2026-07-24T08:31:53.803Z",
   "total": 52,
   "open": 19,
   "merged": 9
